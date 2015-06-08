@@ -1,0 +1,350 @@
+<html>
+<head>
+<script>
+function run() {
+   var obj = document.getElementById("code");
+   Function(obj.value)();
+}
+
+</script>
+
+
+<script>
+
+/*
+Returns the string without the heading/tailing spaces.
+
+Usage: stringvar.trim()
+
+Parameters:
+stringvar 
+Must. The string to trim spaces.
+
+Returns:
+Returns the string without the heading/tailing spaces.
+*/
+String.prototype.trim = function() {
+	return this.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
+/*
+Returns the string without the heading spaces.
+
+Usage: stringvar.trimLeft()
+
+Parameters:
+stringvar 
+Must. The string to trim spaces.
+
+Returns:
+Returns the string without the heading spaces.
+*/
+String.prototype.trimLeft = function() { 
+	return this.replace(/^\s+/, ''); 
+};
+
+/*
+Returns the string without the tailing spaces.
+
+Usage: stringvar.trimRight()
+
+Parameters:
+stringvar 
+Must. The string to trim spaces.
+
+Returns:
+Returns the string without the tailing spaces.
+*/
+String.prototype.trimRight = function() { 
+	return this.replace(/\s+$/, ''); 
+};
+
+/*
+Returns the string with a substring padded on the left, right.
+
+Usage: stringvar.pad(length [, pad [, right]])
+
+Parameters:
+stringvar 
+Must. The string to concat.
+
+length 
+Must. The concatenated string's length. Not concat if the orginal string's length > specified length.
+
+pad
+Optional. substring that will be concatenated. Use default string "0" if "" or not specified. It may be cut off if pad are more than one chars.
+
+right
+Optional. Specifies the side where the concatenation will happen. false[Default]: left side; true: right side. 
+
+Returns:
+The string with a substring padded on the left, right.
+
+Samples:
+ var date = new Array("2011", "5", "18", "2", "20", "1");
+ msg += date[0] + "/" + date[1].pad(2) + "/" + date[2].pad(2) + " " + date[3].pad(2) + ":" + date[4].pad(2) + ":" + date[5].pad(2);
+*/
+String.prototype.pad = function(len, pad, right){
+	if (this.length >= len) {
+		return this;
+	}
+	len -= this.length;
+	
+	// ten zeros
+	var pads = "0000000000";
+	if (arguments.length > 1 && pad.length > 0) {
+		pads = "" + pad;
+	}
+	while (pads.length < len) {
+		pads += pads;
+	}
+	return (right)? this + pads.substr(0, len) : pads.substr(0, len) + this;
+};
+
+/*
+Tests if the substring of this string beginning starts with the specified prefix, ignoring case differences. 
+
+Usage: stringvar.startsWith(prefix [, ignoreCase ])
+
+Parameters:
+stringvar 
+Must. The string to test.
+
+prefix 
+Must. The string's prefix.
+
+ignoreCase
+Optional. ignoring case differences when compare
+
+Returns:
+true if the character sequence represented by the argument is a prefix of the substring of this object starting at index toffset; false otherwise
+
+Samples:
+  if("MM/DD/YYYY".startsWith("MM")) {
+    // ...
+  }
+  if("MM/DD/YYYY".startsWith("mm", true)) {
+    // ...
+  }
+*/
+String.prototype.startsWith = function(s, c) {
+	if (s && this.length >= s.length) {
+		var t = this.substr(0, s.length);
+		if (c) {
+			return (t.toLowerCase() == s.toLowerCase());
+		} 
+		return (t == s);
+	}
+	return false;
+};
+
+/*
+Tests if this string ends with the specified suffix, ignoring case differences. 
+
+Usage: stringvar.endsWith(suffix [, ignoreCase])
+
+Parameters:
+stringvar 
+Must. The string to test.
+
+suffix 
+Must. The string's suffix.
+
+ignoreCase
+Optional. ignoring case differences when compare
+
+Returns:
+true if the character sequence represented by the argument is a suffix of the character sequence represented by this object; false otherwise. 
+
+Samples:
+  if("MM/DD/YYYY".endsWith("YYYY")) {
+    // ...
+  }
+  if("MM/DD/YYYY".endsWith("yyyy", true)) {
+    // ...
+  }
+*/
+String.prototype.endsWith = function(s, c) {
+	if (s && this.length >= s.length) {
+		var t = this.substr(this.length - s.length);
+		if (c) {
+			return (t.toLowerCase() == s.toLowerCase());
+		}
+		return (t == s);
+	}
+	return false;
+};
+
+/*
+Tests if and only if this string contains the specified sequence of char values ignoring case differences. 
+
+Usage: stringvar.contains(sequence [, ignoreCase])
+
+Parameters:
+stringvar 
+Must. The string to test.
+
+sequence 
+Must. the sequence to search for 
+
+ignoreCase
+Optional. ignoring case differences when compare
+
+Returns:
+Returns true if and only if this string contains the specified sequence of char values. 
+
+Samples:
+  if("MM/DD/YYYY".contains("YYYY")) {
+    // ...
+  }
+  if("MM/DD/YYYY".contains("yyyy", true)) {
+    // ...
+  }
+  
+  String.prototype.pad = function(l, s, t){
+    return s || (s = " "), (l -= this.length) > 0 ? (s = new Array(Math.ceil(l / s.length)
+        + 1).join(s)).substr(0, t = !t ? l : t == 1 ? 0 : Math.ceil(l / 2))
+        + this + s.substr(0, l - t) : this;
+};
+*/
+String.prototype.contains = function(s, c) {
+	if (s && this.length >= s.length) {
+		if (c) {
+			return (this.toLowerCase().indexOf(s.toLowerCase()) > -1);
+		}
+		return (this.indexOf(s) > -1);
+	}
+	return false;
+}
+/*
+Tests if this string ends with the specified suffix, ignoring case differences. 
+
+Usage: strVariable.mid(start[, end])
+
+Parameters:
+start 
+Must. If Number type, the beginning index (0, if start<0); If String type, the string to beginning index.
+
+end 
+Not Must. If Number type, the endding index; If String type, the string to endding index from start index.
+
+Returns:
+the specified substring; "", if not found start/end string or end index < start index or start index < 0. 
+
+Samples:
+  if("MM/DD/YYYY".mid("/", "/") == "DD") {
+    // ...
+  }
+  if("MM/DD/YYYY".mid(3, "/") == "DD") {
+    // ...
+  }
+  if("MM/DD/YYYY".mid(3, 5) == "DD") {
+    // ...
+  }
+*/
+String.prototype.mid = function(s, e) {
+	var L,R;
+	//typeof value："number", "string", "boolean", "object", "function", "undefined"
+	L = (typeof(s) + "").charAt(0);
+	if (L != 'n' && L != 's') return "";
+	R = (typeof(e) + "").charAt(0);
+	if (R != 'n' && R != 's' && R != 'u') return "";
+		
+	if (L == 'n') {
+		L = (s < 0) ? 0 : s;
+	} else {
+		L=this.indexOf(s);
+		if (L < 0) return "";
+		L += s.length;
+	}
+	if (R == 'u') {
+		return this.substr(L);
+	}
+	R = (R == 'n') ? e : this.indexOf(e, L);
+	
+	if (R <= L) return "";
+	if (R > this.length) R=this.length;
+	
+	return (R < this.length) ? this.substring(L, R) : this.substr(L);
+}
+
+/*
+Replaces the lowest numbered place marker(%1, %2, ..., %9) with specified strings.
+
+Usage: strVariable.arg(arg0, [arg1...[, argN]])
+
+Parameters:
+arg0,...,argN 
+Must. the string list to replace the marker.
+
+Returns:
+A copy of this string with the lowest numbered place marker replaced by string a, i.e., %1, %2, ..., %99.
+
+Samples:
+  var date = "%1/%2/%3".arg("05").arg(18).arg(2011); // date will be "05/18/2011"
+  date = "%1/%2/%3".arg("05", 18, 2011); // date will be "05/18/2011"
+  
+  var now= new Array("05", 18, 2011);
+  date = "%1/%2/%3".arg(now); // date will be "05/18/2011"
+  date = "%1/%2/%3".arg("05", 18, "2011 %1:%2:%3").arg(12, 59, 59); // date will be "05/18/2011 12:59:59"
+  date = "%3/%2/%1".arg(18).arg("05").arg("2011"); // date will be "2011/05/18"
+  date = "%3/%2/%1".arg(18, "05", "2011"); // date will be "2011/05/18"
+  date = "%1/%2/%1".arg(18).arg("05").arg("2011"); // date will be "18/2011/05"
+  date = "%1/%2/%1".arg(18, "05", "2011"); // date will be "18/05/%1"
+  date = "%3/%2/%1".arg("18%1", "05%1", "2011%1"); // date will be "2011%1/05%1/18%1"
+  date = "%3/%2/%1".arg("18%1").arg("05%1").arg("2011%1"); // date will be "%3/%2/18052011%1"  
+*/
+String.prototype.arg = function() {
+	if (arguments.length < 1 || !this.contains("%")) return this;	
+	var args;
+	if (arguments.length == 1 && arguments[0] instanceof Array) {
+		args = arguments[0];
+	} else {
+		args = arguments;
+	}
+	var s = this;
+	var k = 0;
+	for (var i = 1; i < 10; i++) {
+		if (s.contains("%" + i)) {
+			s = s.replace("%" + i, args[k]);
+			if ((++k) == args.length) {
+				break;
+			}
+		}
+	}
+	return s; 
+};
+
+</script>
+</head>
+
+<body>
+<table>
+<tr>
+<td colspan="3">
+<textarea rows="10" id="code" cols="100">
+  // write your code here
+  var obj = document.getElementById("S1");
+  var tmp = obj.value;
+  var target = document.getElementById("S2");
+  target.value = tmp.replace(/([^"]*")(HT\d*)(">)(.+?)(<\/msg.+)/gi, "$2\t$4\n");
+  
+</textarea><br></br>
+</td>
+</tr>
+<tr>
+<td>
+<textarea rows="25" id="S1" cols="54">
+	<msg id="HT0201">Health Test</msg>
+	<msg id="HT0204">Refresh</msg>
+	<msg id="HT0205">Preview</msg>
+	<msg id="HT0206">Unknown</msg>
+</textarea>
+</td>
+<td><input type="button" value="Run" onclick="javascript:run()"></td>
+<td><textarea rows="25" id="S2" cols="54">Output Area</textarea></td>
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<html>
+<head>
+<title>File Upload</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="./css/black.css">
+<script type='text/javascript' src='./js/jquery.min.js' ></script> 
+<script type='text/javascript' src='./js/jquery.form.js' ></script> 
+</head>
+<body onbeforeunload="return checkUpload();">
+
+<form id="UploadForm" method='POST' enctype='multipart/form-data'>
+	<input type='hidden' name='fid' value='1' ></input>
+	<input type='hidden' name='uid' value='1' ></input>
+	<br/>upload file:<input type='file' size='100' name='uploadfile'>
+	<input type='submit' name='UploadBtn' value='OK' onMouseOver='this.style.cursor="hand"' />
+</form>
+<br/>
+<div id='UploadMsg'></div>
+
+<script>
+
+$(document).ready(function() {
+});
+
+function encodeAttr(attr) { 
+	if (!attr || attr.length < 1) {
+		return "";
+	}
+	if (attr.match(/(&amp;|&lt;|&gt;|&#34;|&#39;|&#47;|&#92;)/g)) {
+		return attr;
+	}
+	attr = attr.replace(/&/gi, "&amp;");
+	attr = attr.replace(/\</gi, "&lt;");
+	attr = attr.replace(/\>/gi, "&gt;");
+	attr = attr.replace(/\\/gi, "&#92;");
+	attr = attr.replace(/\//gi, "&#47;");
+	attr = attr.replace(/"/gi, "&#34;");
+	attr = attr.replace(/'/gi, "&#39;");	
+	return attr;
+}
+function checkUpload() {
+	var finished = true;
+	
+	for (var i = 0; i < AjaxFiles.length; i++) {
+		if (AjaxFiles[i] == null) {
+			continue;
+		}
+		finished = false;
+		break;
+	}
+	if(!finished) { 
+		return "Upload task is not finished, close any way?";
+	} 
+
+}
+var appname = "";
+var uploadCount = 0;
+var AjaxFiles = new Array();
+$("[name=UploadBtn]").live('click', function () {
+	var form = this.parentNode;
+	while(form && form.nodeName != "FORM") {
+		form = form.parentNode;
+	}
+	if (!form) {
+		return;
+	}
+	var now = new Date();
+	now = (Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())) - 1305692580000;
+	
+	var fid = now + "." + uploadCount;
+	
+	AjaxFiles[AjaxFiles.length] = fid;
+	setTimeout("AjaxFilesUpdate()", 1000); /* update ervery second. */
+	var target = "hiddenframe" + uploadCount;
+	$(form).attr("target", target);
+	$(form).find("[name=fid]").val(fid);
+	if (appname.length < 1) {
+		appname = document.location.href.split("/", 4)[3];
+		$(form).attr("action", "/" + appname + "/upload");
+	}
+	var dd = document.body.insertBefore(document.createElement("div"), $("#hiddenframe")[0]);
+	dd.innerHTML = "<iframe id='" + target + "' name='" + target + "' style='display:none'></iframe>";
+	uploadCount++;
+});
+
+function AjaxFilesUpdate() {
+	var needupdate = false;
+	
+	for (var i = 0; i < AjaxFiles.length; i++) {
+		if (AjaxFiles[i] == null) {
+			continue;
+		}
+		needupdate = true;
+		$.get($("#UploadForm").attr("action"),{"ActionId": "upload.status","Tid": "T1001","FileId": AjaxFiles[i]}, function(data){
+			if (showUploadStatus(data)) {
+				for (var i = 0; i < AjaxFiles.length; i++) {
+					if (data.indexOf("<Id>" + AjaxFiles[i] + "</Id>") > -1) {
+						delete AjaxFiles[i];
+						break;
+					}
+				}
+			}
+		});
+	}
+	if (needupdate) {
+		setTimeout("AjaxFilesUpdate()", 1000); /* update ervery second. */
+	}
+}
+
+function showUploadStatus(xml) {
+	var done = false;
+	var fid = getTagValue(xml, "Id");
+	var percent = getTagValue(xml, "Percent");
+	var totalsize = getTagValue(xml, "TotalSize");
+	var donesize = getTagValue(xml, "Donesize");
+	var message = getTagValue(xml, "Message");
+	var filename = getTagValue(xml, "Src");
+	var href = getTagValue(xml, "Href");
+	
+	var obj = "hiddenframe" + fid.substr(fid.lastIndexOf(".") + 1);
+	var hh = $("#" + obj).contents().find("body");
+	if (hh && hh.html() && hh.html().indexOf("successful") > -1) {
+		donesize = totalsize;
+		percent = 100;
+		message = "DONE";
+	}
+	
+	if (message == "DONE") {
+		done = true;
+	}
+	var htm = filename + " : " + percent + "% of " + getKMGTB(totalsize) + "  status: " + message;
+	var status = document.getElementById(fid + "_status");
+	if (status == null) {
+		htm = "<hr/>\n<span id='" + fid + "_status'>" + htm + "</span><br/>\n";	
+		
+		htm += "<span id='" + fid + "_href'>" + encodeAttr(filename + " : <a href='" + href + "'>" + href + "</a>\n");
+		if (isImg(filename)) {
+			htm += encodeAttr("<br/><img src='" + href + "' />\n") ;
+		} 
+		htm += "</span><br/><br/>\n";
+		var upMsg = document.getElementById("UploadMsg");
+		upMsg.innerHTML = htm + upMsg.innerHTML;	
+	} else {
+		status.innerHTML = htm; 
+	}
+	return done;
+
+}
+function getTagValue(xml, tag) {
+	if (!xml || !tag) {
+		return "";
+	}
+	var s = "<" + tag + ">";
+	var e = "</" + tag + ">";
+	return xml.substring(xml.indexOf(s) + s.length, xml.indexOf(e));
+}
+
+function isImg(name) {
+	if (name.indexOf(".") < 0) {
+		return false;
+	}
+	var pend = name.substr(name.lastIndexOf(".") + 1);
+	var pic = false;
+	if (pend.length > 2 && pend.length < 4) {
+		switch(pend) {
+			case "avi":
+			case "bmp":
+			case "emf":
+			case "gif":
+			case "jpg":
+			case "jpeg":
+			case "mov":
+			case "mpg":
+			case "mpeg":
+			case "png":
+			case "wmf":
+			case "xbmd ":
+				pic = true;
+				break;
+			default:
+				break;
+		}
+	}
+	return pic;
+}
+function getKMGTB(size) {
+	if (!size || size.length < 1) {
+		return "0 bytes)";
+	}
+	var len = Math.floor((size.length - 1)/ 3);
+	if (len < 0) {
+		len = 0;
+	}
+	var unit = "";
+	switch(len) {
+		case 0:
+			unit = "bytes)";
+			break;
+		case 1:
+			unit = "KB";
+			break;
+		case 2:
+			unit = "MB";
+			break;
+		case 3:
+			unit = "GB";
+			break;
+		default:
+			unit = "TB";
+			break;		
+	}
+	while(len > 0) {
+		size = (size / 1024);
+		len --;
+	}
+	size += "";
+	if (size.indexOf(".") > -1) {
+		size = size.substring(0, size.indexOf(".") + 2);
+	}
+	
+	return size + " " + unit;
+}
+
+</script>
+<iframe id='hiddenframe' name='hiddenframe' style='display:none'></iframe>
+</body>
+</html>

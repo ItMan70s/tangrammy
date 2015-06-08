@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>Home - Tangrammy</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+	<link rel="icon" type="image/ico" href="/img/favicon.ico">
+	<link rel='stylesheet' href='/css/bootstrap.min.css' />
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+	<link rel='stylesheet' href='/css/font-awesome.css' />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="/css/font-awesome-ie7.min.css">
+	<![endif]-->
+	<link rel='stylesheet' href='/css/style.css' />
+	<script src="/js/jquery.js"></script>
+	<script src="/js/jquery.cookie.js"></script>
+	<script src="/js/jquery.hotkeys.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-richtext.js"></script>
+    <script src="/js/bootstrap.file-input.js"></script>
+	<script src="/js/tangrammy.js"></script>
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+			<a name="top" />
+          <a class="navbar-brand" href="/tangrammy">Tangrammy</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav tops">
+            			<li class='active'><a href='/' title=''>Home</a></li>
+			<li><a href='/todo/list' title=''>Todo</a></li>
+
+          </ul>
+          <ul class="nav navbar-nav pull-right">
+<% if (request && request.u.user.name)  { %>
+        <li class="dropdown" name="userinfo">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= request.u.user.name %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="<%= request.u.userurl %>">Detail</a></li>
+            <li><a href="javascript:changePassword('<%= request.u.userurl.substring(request.u.userurl.indexOf("=") + 1) %>', 'F2')">Change Password</a></li>
+            <li><a href="/i/logout">Logout</a></li>
+          </ul>
+        </li>
+<% } else  {%>
+            <li><a href="javascript:;" url='/i/login' name="login">Login</a></li>
+            <li><a href="javascript:reg()" name="reg">Regester</a></li>
+        <li class="dropdown hidden" name="userinfo">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">uname<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="userurl">Detail</a></li>
+            <li><a href="javascript:changePassword('rid', 'F2')">Change Password</a></li>
+            <li><a href="/i/logout">Logout</a></li>
+          </ul>
+        </li>
+<% }%>
+          </ul>
+        </div><!--/.nav-collapse -->
+		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
+      </div>
+    </div>
+	
+	<div id="container" class="container">
+	<div class="jumbotron homepage">
+		<h1>Welcome!</h1>
+		<p>This a sample of tangrammy system. </p>
+</div>
+<div class="col-md-12"><div class="row">
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/todo/list">Todo</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>Todo list for Tangrammy tasks. <br />
+To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
+		<p class="text-right"><a href="/todo/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF1/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/users/list">Users</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>Users in current system</p></div>
+		<p class="text-right"><a href="/users/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+</div></div>
+
+
+	<div class="row"></div>
+	<div class="go-top">
+	<div class="btn-group">
+		<a href="#" class="btn btn-default hidden"></a>
+		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
+		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
+		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
+		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
+		<a href="#" class="btn btn-default hidden"></a>
+	</div>
+	</div>
+<script>
+	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
+	
+</script>
+	<div id="ModalView">
+	</div>
+<div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="glyphicon glyphicon-remove list-item win-close" title="Close" close="modal"></button>
+		<h3 class="modal-title">Modal title</h3>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
+        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+	<a name="bottom" > </a>
+	<hr />
+	<footer>
+	<div class="col-md-12 form-group small">
+		<ul class="pager nomargin pull-left">
+		<li><label>Dependencies：</label></li>
+		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
+		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
+		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
+		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
+		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
+		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		</ul>
+	</div>
+	<div class="col-md-12 right">
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+	</div>
+	</footer>
+	</div>
+</body>
+</html>
+

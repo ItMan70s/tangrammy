@@ -1,0 +1,38 @@
+L: 32x32
+M: 24x24
+S: 16x16
+
+ 驱动器 C 中的卷是 PC COE
+ 卷的序列号是 127A-2206
+
+ C:\z\node.js\app\web\img 的目录
+
+05/25/2015  09:52 PM    <DIR>          .
+05/25/2015  09:52 PM    <DIR>          ..
+03/12/2014  07:27 PM               387 add.png
+08/25/2014  11:07 PM               239 between.png
+03/12/2014  07:26 PM             1,063 copy.png
+03/12/2014  07:26 PM               570 delete.png
+03/12/2014  07:27 PM               394 edit.png
+03/12/2014  07:26 PM               318 favicon.ico
+04/29/2014  06:59 PM             4,352 glyphicons-halflings-white.png
+04/29/2014  06:59 PM             4,352 glyphicons-halflings.png
+06/27/2014  10:35 PM               546 home.png
+03/12/2014  07:26 PM             1,039 hp.png
+05/25/2015  09:53 PM    <DIR>          l
+03/12/2014  07:26 PM               759 linux.png
+05/25/2015  09:54 PM                32 list.txt
+07/21/2014  01:11 PM               647 logo_g.png
+07/21/2014  01:11 PM               564 logo_w.png
+05/25/2015  09:52 PM    <DIR>          m
+08/25/2014  11:00 PM               324 next.png
+03/12/2014  07:26 PM               933 redhat.png
+03/12/2014  07:26 PM               570 remove.png
+10/28/2014  03:02 PM             3,534 running.gif
+05/25/2015  09:52 PM    <DIR>          s
+08/25/2014  06:51 PM               401 search.png
+03/12/2014  07:27 PM             1,120 setting.png
+11/14/2014  09:54 PM               859 upload.png
+03/12/2014  07:26 PM             1,065 win.png
+              22 个文件         24,068 字节
+               5 个目录 363,083,870,208 可用字节

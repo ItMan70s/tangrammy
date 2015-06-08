@@ -1,0 +1,327 @@
+<html><head>
+	<title>HEAD_TITLE - Tangram</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+	<script src="/js/jquery.js"></script>
+	<script src="/js/jquery.cookie.js"></script>
+	<script src="/js/tangrammy.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+<style id="clearly_highlighting_css" type="text/css">/* selection */ html.clearly_highlighting_enabled ::-moz-selection { background: rgba(246, 238, 150, 0.99); } html.clearly_highlighting_enabled ::selection { background: rgba(246, 238, 150, 0.99); } /* cursor */ html.clearly_highlighting_enabled {    /* cursor and hot-spot position -- requires a default cursor, after the URL one */    cursor: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--cursor.png") 14 16, text; } /* highlight tag */ em.clearly_highlight_element {    font-style: inherit !important; font-weight: inherit !important;    background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow.png");    background-repeat: repeat-x; background-position: top left; background-size: 100% 100%; } /* the delete-buttons are positioned relative to this */ em.clearly_highlight_element.clearly_highlight_first { position: relative; } /* delete buttons */ em.clearly_highlight_element a.clearly_highlight_delete_element {    display: none; cursor: pointer;    padding: 0; margin: 0; line-height: 0;    position: absolute; width: 34px; height: 34px; left: -17px; top: -17px;    background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite.png"); background-repeat: no-repeat; background-position: 0px 0px; } em.clearly_highlight_element a.clearly_highlight_delete_element:hover { background-position: -34px 0px; } /* retina */ @media (min--moz-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {    em.clearly_highlight_element { background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow@2x.png"); }    em.clearly_highlight_element a.clearly_highlight_delete_element { background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite@2x.png"); background-size: 68px 34px; } } </style><style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style></head>
+<body style="">
+<a name="top">
+	</a><div class="navbar navbar-inverse navbar-fixed-top" role="navigation"><a name="top">
+      </a><div class="container"><a name="top">
+        </a><div class="navbar-header"><a name="top">
+          </a><a class="navbar-brand" href="/">Microblog name</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+			<li class="active">ATITLE</li>
+          </ul>
+          <ul class="nav navbar-nav pull-right">
+			
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Applications<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+			<li><a href="/T/List">Defines</a></li>
+           <li><a href="/users/list">Users</a></li>
+<li><a href="/links/list">Links</a></li>
+<li><a href="/mytodo/list">My Todo</a></li>
+<li><a href="/Money/list">Money</a></li>
+<li><a href="/lend/list">lend</a></li>
+<li><a href="/lend3/list">brother lend</a></li>
+<li><a href="/books/list">Books</a></li>
+<li><a href="/words/list">Words</a></li>
+
+          </ul>
+        </li>
+
+
+
+        <li class="dropdown" name="userinfo">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">joyboy<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/T2/V3/show?Rid=25RMVUH">Detail</a></li>
+            <li><a href="javascript:changePassword('25RMVUH', 'F2')">Change Password</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
+
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+	
+	<div id="container" class="container">
+<h1>Edit Options</h1>
+
+	<div class="row col-md-9">
+		<div class="col-md-12"><div><label class="control-label title-label">Original Options</label><div class="controls">
+<textarea class="form-control" name="orgval" rows=4></textarea></div></div></div>
+	<div>
+		<div class="col-md-3"><label class="control-label title-label">Value</label></div>
+		<div class="col-md-3"><label class="control-label title-label">Label</label></div>
+		<div class="col-md-3"><label class="control-label title-label">icon</label></div>
+		<div class="col-md-3"><label class="control-label title-label">css</label></div>
+	</div>
+	<div idx=1 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val"  placeholder="Option value"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label" placeholder="display text"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon" placeholder="/img/s/f4.png"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css"  placeholder="orange wid60"></div>
+	</div>
+	<div idx=2 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=3 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=4 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=5 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=6 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=7 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=8 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=9 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=10 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=11 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=12 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=13 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=14 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=15 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=16 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=17 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=18 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=19 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+	<div idx=20 >
+		<div class="col-md-3"><input type="text" class="form-control" name="val" ></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="label"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="icon"></div>
+		<div class="col-md-3"><input type="text" class="form-control" name="css" ></div>
+	</div>
+<div class="col-md-12">
+<hr>
+<div><button type="button" class="btn btn-primary createbtn">Create</button></div></div>
+
+		<div class="col-md-12"><div><label class="control-label title-label">New Options</label><div class="controls">
+<textarea class="form-control" name="newval" rows=5></textarea></div></div></div>
+</div>
+
+
+	<div class="row"></div>
+	<div class="go-top" style="left: 19.5px;">
+	<div class="btn-group">
+		<a href="#" class="btn btn-default hidden"></a>
+		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
+		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
+		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
+		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
+		<a href="#" class="btn btn-default hidden"></a>
+	</div>
+	</div>
+<script>
+var types = {};
+var chks = " required unique trim exist pk htm multiple ";
+
+$(document).on("click", ".createbtn", onCreate);
+$(document).on("keyup", "[name='val']", function(e){
+	//ctrl + V
+	if (e.ctrlKey && e.keyCode == 86) {
+		var idx = 0;
+		var rows = $("[name='val']");
+		for (var i = 0; $("[name='val']")[i]; i++) {
+			if ($("[name='val']")[i] == this) {
+				idx = i;
+				break;
+			}
+		}
+		fillRowsWithCsv($(this).val(), idx);
+	}
+});
+
+function fillRowsWithCsv(csv, idx) {
+	var rows = csv.split(" "); // \n
+	var vs = $("[name='val']");
+	var ls = $("[name='label']");
+	var is = $("[name='icon']");
+	var cs = $("[name='css']");
+	for (var i in rows) {
+		var cells = rows[i].split("	"); // \t
+		if (!vs[idx]) {
+			alert("not engouth rows");
+			break;
+		}
+		$(vs[idx]).val(cells[0] || "");
+		$(ls[idx]).val(cells[1] || cells[0] || "");
+		$(is[idx]).val(cells[2] || "");
+		$(cs[idx]).val(cells[3] || "");
+		idx++;
+	}
+}
+function fillRowsWithJson(json) {
+	var rows = ('"F0" :' + json).toJSON()["F0"];
+	var vs = $("[name='val']");
+	var ls = $("[name='label']");
+	var is = $("[name='icon']");
+	var cs = $("[name='css']");
+	var idx = 0;
+	for (var i in rows) {
+		if (!vs[idx]) {
+			alert("not engouth rows");
+			break;
+		}
+		$(vs[idx]).val(rows[i]["value"] || "");
+		$(ls[idx]).val(rows[i]["caption"] || rows[i]["value"] || "");
+		$(is[idx]).val(rows[i]["icon"] || "");
+		$(cs[idx]).val(rows[i]["css"] || "");
+		idx++;
+	}
+}
+$(document).on("change", "[name='orgval']", init);
+function init() {
+	fillRowsWithJson($("[name='orgval']").val());
+}
+function onCreate() {
+	var json = '[';
+	var vs = $("[name='val']");
+	var ls = $("[name='label']");
+	var is = $("[name='icon']");
+	var cs = $("[name='css']");
+	for (var i in vs) {
+		if (!$(vs[i])[0] || $(vs[i]).val().trim() == "") {
+			break;
+		}
+		json += '{"caption": "' + ($(ls[i]).val() || $(vs[i]).val() || "") + '", ';
+		json += '"value": "' + ($(vs[i]).val() || "") + '", ';
+		if ($(is[i]).val().trim() != "") {
+			json += '"icon": "' + ($(is[i]).val() || "") + '", ';
+		}
+		if ($(cs[i]).val().trim() != "") {
+			json += '"css": "' + ($(cs[i]).val() || "") + '", ';
+		}
+		json += '}, ';
+	}
+	json += ']';
+	json = json.replace(/, \}/g, "}").replace(/, \]/g, "]");
+	$("[name=newval]").val(json);
+	$("[name=newval]").focus();
+	
+}
+
+</script>
+	<div id="ModalView">
+	</div>
+<div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Modal title</h3>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
+        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+	<hr>
+	<footer>
+	<a name="bottom"> </a>
+		<p><a href="_blank" target="_blank">By Boa</a> 2014</p>
+	</footer>
+	</div>
+
+
+
+</body></html>
