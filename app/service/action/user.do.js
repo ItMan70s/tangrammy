@@ -155,7 +155,7 @@ function register(req, res) {
 			mongo.list(utid, uvid, null, con, "", {}, function (recorder) {
 				__login(recorder.data[0], req, res);
 				if (recorder.data[0] && recorder.data[0]["Rid"]) {
-					res.redirect("" + uurl + "/update?Rid=" + recorder.data[0]["Rid"]);
+					res.redirect("/i/show?Rid=" + recorder.data[0]["Rid"]);
 					log.info("ssid[" + req.u.ssid + "] " + req.method + " " + req.url + " " + res.statusCode + " " + ((new Date()).now() - res.starttime) + "ms ");
 				} else {
 					A.welcome(req, res, "User Not Found! Try to reset your password or register again.");
@@ -186,7 +186,6 @@ function register(req, res) {
 		var mail = {
 			from: uData["email"],
 			to: uData["email"],
-			cc: "Job <zao-bao.zhang@hp.com>",
 			subject: "[Booking] reset password",
 			text: "" + con,
 		}
@@ -196,7 +195,7 @@ function register(req, res) {
 			con["UpdateR"] = con[umail];
 			var url = (new Buffer('{"email": "' + uData["email"] + '", "pass": "' + pass + '", "expired": ' + ((new Date().now()) + 288 * 3600 * 1000) + '}')).toString('base64'); // 7 * 24
 			url = url.replace(/\+/gi, "_").replace(/\//gi, "!").replace(/\=/gi, "#");
-			url = "http://" + req.headers.host + "/i/reg?code=" + url;
+			url = "http://" + req.headers.host + "/i/register?code=" + url;
 			
 			var htm = "Please click following link to change your password now: <br/>";
 			htm += "<a href='" + url + "'>" + url + "</a><br/>";
@@ -257,7 +256,7 @@ function register(req, res) {
 			
 			var url = (new Buffer(util.inspect(con) + "")).toString('base64'); // 7 * 24
 			url = url.replace(/\+/gi, "_").replace(/\//gi, "!").replace(/\=/gi, "#");
-			url = "http://" + req.headers.host + "/i/reg?code=" + url;
+			url = "http://" + req.headers.host + "/i/register?code=" + url;
 			
 			htm += "Please click following link to active your account: <br/>";
 			htm += "<a href='" + url + "'>" + url + "</a><br/>";

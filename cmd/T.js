@@ -49,7 +49,8 @@ if(process.argv.length < 3) {
 	console.log('    backupdb - backup DB data.');
 	console.log('    backup - backup DB data and application files.');
 	console.log('    restore filenmame - restore DB data.');
-	console.log('    install - inital DB and application.');
+	console.log('    install - inital DB and application, and start services.');
+	console.log('    uninstall - stop and remove DB service and tangrammy service.');
 }
 
 for(var idx = 2; idx < process.argv.length; idx++) {
@@ -65,17 +66,28 @@ for(var idx = 2; idx < process.argv.length; idx++) {
 			idx++;
 			if (process.argv[idx]) {
 				restoreDB(process.argv[idx]);
+			} else {
+				console.error('Usage: node T restore filenmame');
+				console.error('  filenmame - the file is zip file created by backup/backupDB command.');
 			}
 		break;
 		case "install":
 			install();
+		break;
+		case "uninstall":
+			uninstall();
 		break;
 		default:
 		break;
 	}
 }
 
-
+function uninstall() {
+	exec('nssm stop Tangrammy');
+	exec('nssm stop TangrammyDB');
+	exec('nssm remove Tangrammy confirm');
+	exec('nssm remove TangrammyDB confirm');
+}
 	// ('x-www-browser google.com')
 function install() {
 	mkdir(db);
@@ -85,9 +97,8 @@ function install() {
 		var status = exec('sc query tangrammydb');
 		var newDB = false;
 		if ((status + "").indexOf("SERVICE_NAME:") < 0) { 
-			var cfg = path + "\tangrammydb.cfg";
-			var md = fs.realpathSync("./mongod.exe");
-			exec('nssm install TangrammyDB "' + md + '" --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
+			fs.writeFileSync("../logs/mongodb.log", "");
+			exec('nssm install TangrammyDB "' + fs.realpathSync("./mongod.exe") + '" --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
 			status = exec('sc query tangrammydb');
 			newDB = true;
 		}

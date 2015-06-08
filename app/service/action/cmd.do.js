@@ -73,6 +73,9 @@ function run(req, res) {
 function sendMail(mail, req, res) {
 	try {
 	var smtp = mailer.createTransport("SMTP", settings.SMTP);
+	if (settings.SMTP.cc) {
+		mail["cc"] = settings.SMTP.cc;
+	}
 	smtp.sendMail(mail, function(error, response){
 		if(error){
 			res.end(error);
