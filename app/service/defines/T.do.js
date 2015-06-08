@@ -342,6 +342,14 @@ function __fillDefault(uData) {
 	return uData;
 }
 function refreshAppList(req, res, lst) {
+	try {
+		if (template == "") {
+			template = fs.readFileSync(settings.defines.template, {encoding: 'utf8'});
+		}
+	} catch(e) {
+		log.error(err);
+		res.end(err);
+	}
 	if (!lst) {
 		mongo.list("T", "V", null, {}, "", {"sort": {"Title": -1}}, function (recorder) {
 			__refreshAppList(recorder.data);
