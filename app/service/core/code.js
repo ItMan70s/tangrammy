@@ -6,18 +6,7 @@ module.exports = {
 };
 
 function toHex(source) {
-	var hexChars = "0123456789ABCDEF";
-	var text = "";
-	for(i=0; i< source.length; i++) {
-		var oneChar = source.charAt(i);
-		var asciiValue = symbols.indexOf(oneChar) + 32;
-		var index1 = asciiValue % 16;
-		var index2 = (asciiValue - index1)/16;
-		if ( text != "" ) text += ":";
-		text += hexChars.charAt(index2);
-		text += hexChars.charAt(index1);
-	}
-	return text;
+	return (new Number(this)).toString(16).toUpperCase();
 }
 var Base64 = {
  

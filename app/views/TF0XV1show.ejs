@@ -61,27 +61,29 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
 <h1>Show Roles</h1>
 
-<div class='well col-md-12'>
+<div class='fields-section well col-md-12'>
 <div class='row'>
-<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='roles'></div>		<div class='col-md-12'><label class='control-label title-label'>Role<B class='red'>*</B></label>
+<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='roles'></div><div class='col-md-12'><label class='control-label title-label'>Role<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%= ((data["F0"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Application<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Application<B class='red'>*</B></label>
 <div class='form-show' readonly=true><% var val = data["F1"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "*" + ",")) { %> <span class='pull-left wid100' alt='All' title='All'>All</span> <% } %><% if (val.contains( "," + "T2/V1" + ",")) { %> <span class='pull-left wid100' alt='Users' title='Users'>Users</span> <% } %><% if (val.contains( "," + "T2/V3" + ",")) { %> <span class='pull-left wid100' alt='UserLogin' title='UserLogin'>UserLogin</span> <% } %><% if (val.contains( "," + "T3/V1" + ",")) { %> <span class='pull-left wid100' alt='Links' title='Links'>Links</span> <% } %><% if (val.contains( "," + "T4/V1" + ",")) { %> <span class='pull-left wid100' alt='Todo' title='Todo'>Todo</span> <% } %><% if (val.contains( "," + "T5/V1" + ",")) { %> <span class='pull-left wid100' alt='Money' title='Money'>Money</span> <% } %><% if (val.contains( "," + "T5/V2" + ",")) { %> <span class='pull-left wid100' alt='lend' title='lend'>lend</span> <% } %><% if (val.contains( "," + "T5/V4" + ",")) { %> <span class='pull-left wid100' alt='brotherlend' title='brotherlend'>brotherlend</span> <% } %><% if (val.contains( "," + "T6/V1" + ",")) { %> <span class='pull-left wid100' alt='books' title='books'>books</span> <% } %><% if (val.contains( "," + "T7/V1" + ",")) { %> <span class='pull-left wid100' alt='Words' title='Words'>Words</span> <% } %><% if (val.contains( "," + "T9/V1" + ",")) { %> <span class='pull-left wid100' alt='Booking' title='Booking'>Booking</span> <% } %><% if (val.contains( "," + "T9/V2" + ",")) { %> <span class='pull-left wid100' alt='Servers' title='Servers'>Servers</span> <% } %><% if (val.contains( "," + "TA/V1" + ",")) { %> <span class='pull-left wid100' alt='VMs' title='VMs'>VMs</span> <% } %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Enable</label>
+<div class='col-md-12'><label class='control-label title-label'>Enable</label>
 <div class='form-show' readonly=true><% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left wid120' alt='Enable' title='Enable'>Enable</span> <% } %><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left wid120' alt='Disable' title='Disable'>Disable</span> <% } %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Default Role</label>
+<div class='col-md-12'><label class='control-label title-label'>Default Role</label>
 <div class='form-show' readonly=true><% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left wid120' alt='Yes' title='Yes'>Yes</span> <% } %><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left wid120' alt='No' title='No'>No</span> <% } %></div></div>
-<div class='col-md-12'>
-<hr></hr>
-<div><a  class="btn btn-primary col-md-2" href="/roles/list">OK</a><a  class="btn btn-default" href="/roles/update?Rid=<%= data["Rid"] %>"><img src="/img/edit.png" alt="Edit" title="Edit">Edit</a><a  class="btn btn-default" href="/roles/copy?Rid=<%= data["Rid"] %>"><img src="/img/copy.png" alt="Copy&Create" title="Copy&Create">Copy&Create</a><a  class="btn btn-default" href="/roles/new"><img src="/img/add.png" alt="Add new" title="Add new">Add new</a></div></div><div name='history' ></div>
+<div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
+<div class="col-md-0"><a class="btn btn-primary col-md-2"  href="/roles/list" style="min-width:80px;" title="">OK</a></div>
+<div class="col-md-0"><a class="btn btn-default"  href="/roles/update?Rid=<%= data["Rid"] %>" style="min-width:80px;" title=""><img src="/img/edit.png">Edit</a></div>
+<div class="col-md-0"><a class="btn btn-default"  href="/roles/copy?Rid=<%= data["Rid"] %>" style="min-width:80px;" title=""><img src="/img/copy.png">Copy&Create</a></div>
+<div class="col-md-0"><a class="btn btn-default"  href="/roles/new" style="min-width:80px;" title=""><img src="/img/add.png">Add new</a></div>
+</div></div>
+<span name='history' class='col-md-12'></span>
 <script type='text/javascript'>getOPLogs('TF0', 'V1', '<%= data["Rid"] %>');</script>	</div></div>
 
-
-	<div class="row"></div>
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -96,8 +98,7 @@
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -107,8 +108,8 @@
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -128,7 +129,7 @@
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

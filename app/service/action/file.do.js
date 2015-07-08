@@ -171,7 +171,7 @@ function get(req, res) {
 		res.setHeader("last-modified", lastModified);
 	}
 
-	if (req.headers["if-modified-since"] && lastModified == req.headers["if-modified-since"]) {
+	if (req.headers["if-modified-since"] && lastModified == req.headers["if-modified-since"] && !pathname.contains(".js")) {
 		res.writeHead(304, "Not Modified");
 		res.end();
 		log.info("ssid[" + req.u.ssid + "] " + req.method + " " + req.url + " " + res.statusCode + " " + req.ms());

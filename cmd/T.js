@@ -83,10 +83,16 @@ for(var idx = 2; idx < process.argv.length; idx++) {
 }
 
 function uninstall() {
-	exec('nssm stop Tangrammy');
-	exec('nssm stop TangrammyDB');
-	exec('nssm remove Tangrammy confirm');
-	exec('nssm remove TangrammyDB confirm');
+	if (windows) {
+		exec('nssm stop Tangrammy');
+		exec('nssm stop TangrammyDB');
+		exec('nssm remove Tangrammy confirm');
+		exec('nssm remove TangrammyDB confirm');
+	} else {
+		exec('killall -9 mongod' );
+		exec('killall -9 node' );
+		exec("echo '' > " + fs.realpathSync("..") + "/cmd/tangrammy.sh");
+	}
 }
 	// ('x-www-browser google.com')
 function install() {
@@ -95,45 +101,66 @@ function install() {
 	var path = fs.realpathSync(db);
 	if (windows) {
 		var status = exec('sc query tangrammydb');
-		var newDB = false;
+		var newDB = fs.existsSync(db + '/local.ns');
+		
 		if ((status + "").indexOf("SERVICE_NAME:") < 0) { 
 			fs.writeFileSync("../logs/mongodb.log", "");
 			exec('nssm install TangrammyDB "' + fs.realpathSync("./mongod.exe") + '" --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
 			status = exec('sc query tangrammydb');
-			newDB = true;
 		}
 		
 		if ((status + "").indexOf( "4  RUNNING") < 0) { 
 			exec('nssm restart TangrammyDB');
 		}
+		
 		if (newDB) {
 			restoreDB("dat/TangramDB.7z");
 		}
 		
 		status = exec('sc query Tangrammy');
 		if ((status + "").indexOf("SERVICE_NAME:") < 0) {  
-			exec(cmds["unzip"].replace("name", "dat/node_modules.7z").replace("folder", modules));
+			exec(cmds["unzip"].replace("name", "dat/node_modules.zip").replace("folder", modules));
 			exec("nssm install Tangrammy " + fs.realpathSync("node.exe") + " index.js");
 			exec("nssm set Tangrammy AppDirectory " + fs.realpathSync(app));
 		}
 		exec('nssm restart Tangrammy');
 	} else {
-	}
-	//restoreDB("dat/TangramDB.7z");
-//  /home/Tangram/bin/mongod --smallfiles --dbpath /home/Tangram/booking/DB --logpath /home/Tangram/booking/service/logs/mongodb.log
+		exec(fs.realpathSync("./mongod") + ' --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
+		restoreDB("dat/TangramDB.zip");
+		
+		exec(fs.realpathSync("./node") + ' --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
+		var script = "#!/bin/bash\n" + 
+"# start mongo db service\n" + 
+"folder/cmd/mongod --smallfiles  --dbpath folder/db  --logpath folder/logs/mongodb.log &\n" + 
+"\n" + 
+"# start node service\n" + 
+"cd folder/app\n" + 
+"folder/cmd/node folder/app/index.js &\n";
+		var folder = fs.realpathSync("../");
+		script = script.replace(/folder/gi, folder);
+		var shname = folder + "/cmd/tangrammy.sh";
+		fs.writeFileSync(shname, script);
+		exec("chmod 777 " + shname);
 
-/*
-[root@ZaoBaoRHEL booking]# cat /etc/rc.d/rc.local
-#!/bin/sh
-/home/Tangram/booking/sss.sh >> /home/Tangram/booking/sss.log  2>&1 &
-*/
+		var ts = fs.readFileSync("/etc/rc.d/rc.local", {encoding: 'utf8'});
+		if (ts.indexOf("tangrammy.sh") > -1) {
+			if (ts.indexOf(shname) > -1) {
+				console.warn('Found same start script in /etc/rc.d/rc.local');
+			} else {
+				console.error('Found different start script in /etc/rc.d/rc.local, please update it manually.');
+			}
+		} else {
+			exec('echo "' + shname + '" >> ' + folder + '/logs/script.log  2>&1 &" >> /etc/rc.d/rc.local');
+		}
+		exec('sh "' + shname + '" &');
+	}
 }
 
 function backupAll() {
 	var folder = tmpfolder();
 	exportDB(folder);
 	mkdir(bak);
-	_zip([app, folder + "/DB"], bak + "/Tangram_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
+	_zip([app, folder + "/DB"], bak + "/Tangram_" + format(new Date(), "yyyyMMddhhmm") + ".zip");
 	remove(folder);
 }
 
@@ -141,7 +168,7 @@ function backupDB() {
 	var folder = tmpfolder();
 	exportDB(folder);
 	mkdir(bak);
-	_zip([folder + "/DB"], bak + "/Tangram_DB_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
+	_zip([folder + "/DB"], bak + "/Tangram_DB_" + format(new Date(), "yyyyMMddhhmm") + ".zip");
 	remove(folder);
 }
 

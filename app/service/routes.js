@@ -122,7 +122,9 @@ function init(req, res) {
 
 	req.u.ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) + "";
 	req.u.ssid = req.cookies['__sessionid'] || req.u.ip.replace(/[\.\:]/g, "i");
-	
+	if (!req.cookies['__sessionid']) {
+		// check unsupported browser
+	}
 	var url = req._parsedUrl.pathname;
 	if (url[0] == "/") {
 		url = url.substr(1);
@@ -168,7 +170,7 @@ function init(req, res) {
 			req.u.op = tokens[1] || "search";
 			break;
 		default:
-			if (tokens[0].match(/.+\.htm(l)$/gi)) {
+			if (tokens[0].match(/.+\.htm[l]?$/gi)) {
 				tid = "web";
 			} else if (tokens[0].match(/^T[\dA-Z]{1,2}$/g) && (tokens[1] || "V1").match(/^V[\dA-Z]{1,2}$/g)) {
 				tid = tokens[0];

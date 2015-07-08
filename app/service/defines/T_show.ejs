@@ -30,7 +30,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/' title=''>Home</a></li>
+			<li><a href='/issues/list' title=''>Issues</a></li>
 			<li><a href='/todo/list' title=''>Todo</a></li>
+			<li><a href='/booking/list' title=''>Booking</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -60,128 +62,158 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
 <!-- start -->
-	<a name="Summary"></a>
-	<h1><%= title %></h1>
-	<div class='left-toolbar'>
-	  <ul class="nav navbar-nav">
-		<li><a href="#Summary">Summary</a></li>
-		<li><a href="#Defines">Defines</a></li>
-		<li><a href="#Scripts">Scripts</a></li>
-		<li><a href="#Layout">Layout</a></li>
-		<li><a href="#Emails">Emails</a></li>
-		<li><a href="#Others">Others</a></li>
-	  </ul>
-	</div>
-	<div class='col-md-12'>
-	<div class='col-md-12'> <legend class="">Summary
-		<a class='btn-xs btn btn-success' name="onemsg" href="javascript:;" url="/T/create?Rid=<%= data["Rid"] %>">Build Application</a></legend>
-	<div class='col-md-12'>
-		<div class='col-md-3'><div><label>Title*</label><div class='controls'><div class='panel-body'><%= data["Title"] %></div></div></div></div>
-		<div class='col-md-3'><div><label>URL</label><div class='controls'><div class='panel-body'><%= data["URL"] %></div></div></div></div>
-		<div class='col-md-2 inline'><div><label>Tid*</label><div class='controls'><div class='panel-body'><%= data["Tid"] %></div></div></div></div>
-		<div class='col-md-2 inline'><div><label>Vid*</label><div class='controls'><div class='panel-body'><%= data["Vid"] %></div></div></div></div>
-		<div class='col-md-2 inline'><div><label>Rid*</label><div class='controls'><div class='panel-body'><%= data["Rid"] %></div></div></div></div>
-	</div>
-	<div class='col-md-12'>
-		<div class='col-md-12'><div><label>Description*</label><div class='controls'><div class='panel-body'><%= data["Description"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Header in list page</label><div class='controls'><div class='panel-body'><%= data["Header"] %></div></div></div></div>
+<style>
+ .layout-zone div {
+	border: 1px solid #ccc;
+	min-height: 30px;
+ }
+ td {
+	border: 1px solid #ccc;
+	min-height: 30px;
+ }
+ .layout-zone .field-active {
+	box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	border: 1px solid rgba(81, 203, 238, 1);
+ }
+</style>
+
+<div class="well col-md-12"><div class="row">
+	<div class='col-md-12'> 
+		<div class='col-md-12'> 
+		<h1><small><%= (data["Status"] == "hidden") ? "[Hidden]" : "" %><%= (data["Status"] == "disabled") ? "[Disabled]" : "" %></small>
+			<span><%- data["Title"] %></span>
+			<small> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>  <a class='btn-xs btn btn-success' name="onemsg" href="javascript:;" url="/T/create?Rid=<%= data["Rid"] %>">Build Application</a>
+		</h1></div>
 		
-<a name="Defines"></a>	
-		<div class='col-md-12'><div><label>Footer in list page</label><div class='controls'><div class='panel-body'><%= data["Footer"] %></div></div></div></div>
-	</div>	
+		<div class='col-md-4'><small><a href="/<%= data["URL"] %>/list">http://~/<%= data["URL"] %>/list </a> </small></div>
+		<div class='col-md-2'> </div>
+		<div class='col-md-6 tab-content hide'><%= data["Help"] %></div>
 	</div>
-	<div class='col-md-12'> <legend class="">Defines</legend>
-		<div class='col-md-12'><div><label>Fields*</label><div class='controls'><div class='panel-body'><%= data["Fields"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Keys</label><div class='controls'><div class='panel-body'><%= data["Keys"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Condition*</label><div class='controls'><div class='panel-body'><%= data["Condition"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Advance Condition</label><div class='controls'><div class='panel-body'><%= (data["AdvanceCondition"] || "") %></div></div></div></div>
-		
-		<div class="col-md-12"><div><label class='control-label title-label'>Disable Operations</label><div class='form-show' readonly=true>
-<div class="min-h20">
-<%= data["NoAction"] || "" %>
-			</div></div></div></div>
-			
-		<div class='col-md-12'><div><label>New Data*</label><div class='controls'><div class='panel-body'><%= data["New"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Copy & Create Data*</label><div class='controls'><div class='panel-body'><%= data["Copy"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Update Data*</label><div class='controls'><div class='panel-body'><%= data["Edit"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Show Data*</label><div class='controls'><div class='panel-body'><%= data["Show"] %></div></div></div></div>
-		
-		<a name="Scripts"></a>
-		<div class='col-md-12'><div><label>Delete Data*</label><div class='controls'><div class='panel-body'><%= data["Remove"] %></div></div></div></div>
-	</div>
-	<div class='col-md-12'><legend class="">Scripts</legend>
-		<div class='col-md-12'><div><label>JS before New/Copy</label><div class='controls'><div class='panel-body'><%= data["JSNew"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>JS before Edit</label><div class='controls'><div class='panel-body'><%= data["JSEdit"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>JS before Show Dat</label><div class='controls'><div class='panel-body'><%= data["JSShow"] %></div></div></div></div>
-		<a name="Layout"></a>
-		<div class='col-md-12'><div><label>JS before Save Data</label><div class='controls'><div class='panel-body'><%= data["JSSave"] %></div></div></div></div>
-	</div>
-	<div class='col-md-12'><legend class="">Layout</legend>
-		<div class='col-md-12'><div><label>New</label><div class='controls'><div class='panel-body'><%= data["LNew"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Edit</label><div class='controls'><div class='panel-body'><%= data["LEdit"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Show</label><div class='controls'><div class='panel-body'><%= data["LShow"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>List</label><div class='controls'><div class='panel-body'><%= data["LList"] %></div></div></div></div>
-		
-		<a name="Emails"></a>
-		<div class='col-md-12'><div><label>Filter</label><div class='controls'><div class='panel-body'><%= data["Filter"] %></div></div></div></div>
-	</div>
-	<div class='col-md-12'><legend class="">Emails</legend>
-		<div class='col-md-12'><div><label>To</label><div class='controls'><% var val = data["EmailTo"] || "";  val = "," + val.toString() + ",";%>
-			<div class='panel-body'><% if (val.contains( "," + "me" + ",")) { %> <span class='pull-left input-small'>Owner</span> <% } %><% if (val.contains( "," + "F0" + ",")) { %> <span class='pull-left input-small'>F0</span> <% } %><% if (val.contains( "," + "F1" + ",")) { %> <span class='pull-left input-small'>F1</span> <% } %>
-			</div></div></div></div>
-		<div class='col-md-12'><div><label>Cc</label><div class='controls'><div class='panel-body'><%= data["EmailCc"] %></div></div></div></div>
-		<div class='col-md-12'><div><label>Title</label><div class='controls'><div class='panel-body'><%= data["EmailTitle"] %></div></div></div></div>
-	</div>	
-		<a name="Others"></a>
-	<div class='col-md-12'><legend class="">Others</legend>
-		<div class='col-md-12'><div><label>Order By</label>
-		<div class='panel-body'>
-		<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
-		for (var i = 0; i < oby.length && i < 3; i++) {
-			for (var fid in fields) { 
-				if(oby[i] == fid) { %>
-				<span class='pull-left input-medium'><%= fields[fid] + ": " + ("-1" != order[i]? "Ascending" : "Descending") %></span>
-			<% } 
-			}
-		} %>
+	<div class='col-md-12'> 
+		<div class='col-md-12'> 
+			<%- data["Description"] %>
 		</div>
-		</div></div>
-		<div class='col-md-12'><div><label>Group By Above first order item</label><div class='controls'><% var val = data["Group"] || "";  val = "," + val.toString() + ",";%>
-			<div class='panel-body'><% if (val.contains( "," + "on" + ",")) { %> <span class='pull-left input-small'>Yes</span> <% } else { %> <span class='pull-left input-small'>No</span> <% } %>
-			</div></div></div></div>
-		<div class='col-md-12'><div><label>History in Edit page</label><div class='controls'><% var val = data["History"] || "";  val = "," + val.toString() + ",";%>
-			<div class='panel-body'><% if (val.contains( "," + "on" + ",")) { %> <span class='pull-left input-small'>Show</span> <% } %><% if (val.contains( "," + "off" + ",")) { %> <span class='pull-left input-small'>Hide</span> <% } %>
-			</div></div></div></div>
-		
-		<div class='col-md-12'><div><label>Visible in Home page</label><div class='controls'><% var val = data["Visible"] || "";  val = "," + val.toString() + ",";%>
-			<div class='panel-body'><% if (val.contains( "," + "on" + ",")) { %> <span class='pull-left input-small'>Yes</span> <% } %><% if (val.contains( "," + "off" + ",")) { %> <span class='pull-left input-small'>No</span> <% } %>
-			</div></div></div></div>
-		<div class='col-md-12'><div><label>Enable this view</label><div class='controls'><% var val = data["Enable"] || "";  val = "," + val.toString() + ",";%>
-			<div class='panel-body'><% if (val.contains( "," + "on" + ",")) { %> <span class='pull-left input-small'>Yes</span> <% } %><% if (val.contains( "," + "off" + ",")) { %> <span class='pull-left input-small'>No</span> <% } %>
-			</div></div></div></div>
-		<div class='col-md-12'><div><label>Help Link</label><div class='controls'><div class='panel-body'><%= data["Help"] %></div></div></div></div>
 	</div>
+
+	<div class='col-md-12'>
+		<div class="col-md-12">
+			<ul class="pagination tab">
+				<li class="btn-info text-center active"><a class="wid200 font170" href="#panel-defines" data-toggle="tab">Defines</a></li>
+				<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-single" data-toggle="tab">Layout: Single</a></li>
+				<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-list" data-toggle="tab">Layout: List</a></li>
+			</ul>
+		</div>
+		<div class="tab-content">
+			<div class="tab-pane active" id="panel-defines">
+			
+				<div class='col-md-12'><label>Fields*</label></div>
+				<div class='col-md-12'><%- data["Fields"] %></div>
+				<div class='col-md-12'><div><label>Keys</label><div class='controls'><%- data["Keys"] %></div></div></div>
+				<div class="col-md-12"><div><label class="control-label title-label">Disable Actions</label><div class="controls">
+					<div class="form-control min-h34"><div class="min-h20"><%= data["NoAction"] || "" %>
+				</div></div></div></div></div>
+
+				<div class='col-md-12'>
+					<div class="tabbable">
+						<ul class="nav nav-tabs">
+							<li class="padding2"><label>Scripts</label></li>
+							<li class="active"><a href="#panel-script-new" data-toggle="tab">New/Copy</a></li>
+							<li><a href="#panel-script-edit" data-toggle="tab">Edit</a></li>
+							<li><a href="#panel-script-show" data-toggle="tab">Show</a></li>
+							<li><a href="#panel-script-save" data-toggle="tab">Save</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="panel-script-new">
+								<div class='col-md-12'><div><div class='controls'><%= data["JSNew"] %></div></div></div>
+							</div>
+							<div class="tab-pane" id="panel-script-edit">
+								<div class='col-md-12'><div><div class='controls'><%= data["JSEdit"] %></div></div></div>
+							</div>
+							<div class="tab-pane" id="panel-script-show">
+								<div class='col-md-12'><div><div class='controls'><%= data["JSShow"] %></div></div></div>
+							</div>
+							<div class="tab-pane" id="panel-script-save">
+								<div class='col-md-12'><div><div class='controls'><%= data["JSSave"] %></div></div></div>
+							</div>
+						</div>	
+					</div>	
+				</div>
+				<div class='col-md-12'><label>Notification</label>
+					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">From:<%= (data["EmailFrom"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">To:<%= (data["EmailTo"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">Cc:<%= (data["EmailCc"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">Subject:<%= (data["EmailTitle"] || "") %></span></div></div></div>
+				</div>
+				
+			</div>
+			<div class="tab-pane" id="panel-layout-single">
+				
+				<h2 class='col-md-12'><small>[New Data]</small> <%- data["TitleLN"] %></h2>
+				<div class='col-md-12'><%- data["LayoutN"] %></div>
+				<div class='col-md-12'> <%- data["ActionLN"] %></div>
+				
+				<h2 class='col-md-12'><small>[Edit Data]</small> <%- data["TitleLE"] %></h2>
+				<div class='col-md-12'><%- data["LayoutE"] %></div>
+				<div class='col-md-12'> <%- data["ActionLE"] %></div>
+				
+				<h2 class='col-md-12'><small>[Show Data]</small> <%- data["TitleLS"] %></h2>
+				<div class='col-md-12'><%- data["LayoutS"] %></div>
+				<div class='col-md-12'> <%- data["ActionLS"] %></div>
+				
+				<div class='col-md-12'><div class='col-md-11'>
+					<label class="radio col-md-11"> <%= data["History"] == "on" ? "Show operation history in Edit/Show page" : "Hide operation history in Edit/Show page" %></label>
+				</div></div>
+
+			</div>
+			<div class="tab-pane" id="panel-layout-list">
+
+				<h2 class='col-md-12'><span class='col-md-0'><%- data["Title"] %></span> <small> <%- (data["New"] || "") %></small></h2>
+				<div class='col-md-12'><%- data["Header"] || ""  %></div>
+				<div class='col-md-12 min-h34'><div><label>Filter</label><div class='controls'><%- (data["Filter"] || "") %></div></div></div>
+				<div class='col-md-12' style='margin-top: 25px'><div><label>Layout</label><div class='controls'><%- data["LayoutL"] %></div></div></div>
+				
+				<div class='col-md-12'><div><label>Condition</label><div class='controls'><%= data["Condition"] %></div></div></div>
+				
+				<div class='col-md-12'><div><label>Order By</label>
+				<div class='input-group'>
+				<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
+				for (var i = 0; i < oby.length && i < 3; i++) {
+				%>
+				<div class='col-md-auto'>
+					<% for (var fid in fields) { %>
+						<%= (oby[i] == fid) ? fields[fid] : "" %>
+					<% } %>	
+					 <%= ("-1" != order[i]) ? " Ascending" : " Descending" %>
+					<% if(i == 0) { %>
+						<%= ("on" == data["Group"]) ? " Grouping" : " no group" %>
+					<% } %>
+				  </div>
+				<% } %>
+				</div>
+				</div></div>
+				<div class='col-md-12'><%- data["Footer"] || "" %></div>
+					
+			</div>
+		</div>
+	</div>
+
 	<div class='col-md-12 error'>
 	 <% if ((code || 0) != 200) { %>
 	 <label><%= message %></label>
 	 <% } %>
 	</div>
-	<div class="container section-action">
-	<div class='panel-footer col-md-12'>
+	<div class='col-md-12'><div class='panel-footer' style='padding-top:20px;'>
 		<a class='btn btn-primary col-md-2' href='/tangrammy'>OK</a>
 		<a class='btn btn-default col-md-1' href="/T/update?Rid=<%= data["Rid"] %>"><img class="icon15" src="/img/edit.png" title="Edit">Edit</a>
-		<a name="onemsg" href="javascript:;" url="/T/create?Rid=<%= data["Rid"] %>">Build Application</a>
-	</div>
-	</div>
+		<a class='btn btn-link' name="onemsg" href="javascript:;" url="/T/create?Rid=<%= data["Rid"] %>">Build Application</a>
+	</div></div>
 	
-	</div>
+</div></div>
 	
 <!-- end -->
-
-	<div class="row"></div>
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -196,8 +228,7 @@
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -207,8 +238,8 @@
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -218,17 +249,36 @@
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		<li><label>Inner Sites:</label></li>
+		<li><a href="http://ent244.sharepoint.hp.com/teams/hpsum/default.aspx"  title="Share Point">HPSUM</a></li>
+		<li><a href="http://ent232.sharepoint.hp.com/teams/hpsumbcs/offline/default.aspx"  title="HPSUM China team Share Point">SPI-China</a></li>
+		<li><a href="ftp://gstl.rose.hp.com/pub/"  title="FTP to download Firmwares">FWs FTP</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/kauai/"  title="Share Point">Kauai</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/Tiger/"  title="Share Point">Tiger</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/Sentosa/"  title="Share Point">Sentosa</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/Marina/"  title="Share Point">Coyote</a></li>
+		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/Recipe/default.aspx"  title="Share Point">SkyMaster SD2</a></li>
+		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/default.aspx"  title="Share Point">Buccaneer</a></li>
+		<li><a href="http://quix-tt.atlanta.hp.com/tmtrack/tmtrack.dll?" >Quix</a></li>
+		<li><a href="https://matrix.cce.hp.com/app/DesktopDefault.aspx?tabindex=2&tabid=8" >Morpheus</a></li>
+		<li><a href="https://csvnhou-pro.houston.hp.com:18490/svn/ess-hpsum/branches/"  title="HPSUM source codes">SVN</a></li>
 		</ul>
 	</div>
+	<div class="col-md-12">
+		Click 
+		<a href="http://fstldb.fc.hp.com/mhwr/systemInv/findSys.asp" >HERE</a> to find DH servers. If DH server is down, 
+		<a href="http://fstl2c.fc.hp.com/ttx.cgi" >file a ticket</a>.
+		
+		Find proliant servers at <a href="http://vartan.cce.hp.com/listall.php" >vartan.cce</a>.
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

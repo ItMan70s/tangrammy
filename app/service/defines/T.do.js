@@ -6,7 +6,7 @@ var fs = require('fs');
 var mongo = require('../core/mongo.db.js');
 var log = require('../core/log.js')('Z');
 var mongo = require('../core/mongo.db.js');
-var fnames = {"Title": "", "URL": "", "Fields": "", "New": "", "Copy": "", "Edit": "", "Remove": "", "Help": "", "Email": "", "OrderBy": "", "Order": "", "Group": "", "Filter": "", "History": "", "Visible": "", "Enable": "", "Header": "", "Footer": "", "Active": "", "update": "", "updater": ""};
+var fnames = {"Title": "", "URL": "", "Fields": "", "New": "", "Copy": "", "Edit": "", "Remove": "", "Help": "", "Email": "", "OrderBy": "", "Order": "", "Group": "", "Filter": "", "History": "", "Status": "", "Header": "", "Footer": "", "Active": "", "update": "", "updater": ""};
 
 var vpath = "./views/";
 var tpath = "service/defines/";
@@ -108,6 +108,9 @@ function __new(res, recorder) {
 	}
 	recorder.app = "/tangrammy";
 	recorder.fields = __fields(recorder.data["Tid"]);
+	recorder.total = recorder.fields["total"] + 4;
+	recorder.total = recorder.total > 15 ? 15 : recorder.total;
+	delete recorder.fields["total"];
 	recorder.request = res.req;
 	recorder.request.u.userurl = res.req.u.userurl || "/i/show?Rid=" + res.req.u.user["Rid"];
 	if (! recorder.message) {
@@ -131,6 +134,8 @@ function __show(res, recorder) {
 		recorder.warning = "";
 	}
 	recorder.fields = __fields(recorder.data["Tid"]);
+	recorder.total = recorder.fields["total"];
+	delete recorder.fields["total"];
 	return res.render(tpath + "T_show.ejs", recorder);
 }
 
@@ -149,16 +154,20 @@ function __getAppName(url) {
 function __fields(tid) {
 	var def = mongo.defines();
 	var fds = {};
+	var total = 0;
 	if (tid + "V1" in def) {
 		def = (def[tid + "V1"]["Fields"] + "").toJSON();
 		for (var i in def) {
 			fds[i] = def[i]["label"];
+			total++;
 		}
 	} else {
 		for (var i=0; i < 10; i++) {
 			fds["F" + i] = "F" + i;
+			total++;
 		}
 	}
+	fds["total"] = total;
 	return fds;
 }
 
@@ -224,8 +233,16 @@ function modify(req, res) {
 	var uData = getUData(req);
 	var condition = {};
 	condition["Rid"] = uData["Rid"];
-	if ("Title" in uData) {
+	if ("Title" in uData || "Description" in uData) {
 		uData = __fillDefault(uData);
+		// TODO tmp changes for old data
+		/*
+		if ("LayoutE" in uData && uData["LayoutE"] != "") {
+			uData["LNew"] = "";
+			uData["LEdit"] = "";
+			uData["LShow"] = "";
+		}
+		*/
 		mongo.update("T", "V", condition, uData, function (recorder) {
 			if ((recorder.code) != 200 || recorder.num < 1) {
 				log.error(recorder.message);
@@ -250,10 +267,277 @@ function modify(req, res) {
 			} else {
 				recorder.title = "Edit Application";
 				recorder.action = "/T/update";
+				// TODO tmp changes for old data
+				if (!recorder.data["LayoutL"]) {
+					var layout = tmpconvert(recorder.data["LNew"]);
+					recorder.data["TitleLN"] = layout["Title"];
+					recorder.data["LayoutN"] = layout["Layout"];
+					recorder.data["ActionLN"] = layout["Action"];
+					recorder.data["FieldsLN"] = layout["Fields"];
+					
+					layout = tmpconvert(recorder.data["LEdit"]);
+					recorder.data["TitleLE"] = layout["Title"];
+					recorder.data["LayoutE"] = layout["Layout"];
+					recorder.data["ActionLE"] = layout["Action"];
+					recorder.data["FieldsLE"] = layout["Fields"];
+					
+					layout = tmpconvert(recorder.data["LShow"]);
+					recorder.data["TitleLS"] = layout["Title"];
+					recorder.data["LayoutS"] = layout["Layout"];
+					recorder.data["ActionLS"] = layout["Action"];
+					recorder.data["FieldsLS"] = layout["Fields"];
+					
+					layout = tmpconvertlist(recorder.data["LList"]);
+					recorder.data["LayoutL"] = layout["Layout"];
+					recorder.data["FieldsLL"] = layout["Fields"];
+					if (recorder.data["LayoutE"] == "") {
+						var lout = "";
+						var tds = "";
+						var fds = (recorder.data["Fields"] + "").toJSON();
+						for (var j in fds) {
+							lout += "<div class='col-md-12' field='" + j + "'>" + fds[j]["label"] + "(" + j + ")</div>\n";
+							tds += "<td field='" + j + "'>" + fds[j]["label"] + "(" + j + ")</td>\n";
+						}
+						recorder.data["LayoutN"] = lout;
+						recorder.data["LayoutE"] = lout;
+						recorder.data["LayoutS"] = lout;
+						recorder.data["LayoutL"] = recorder.data["LayoutL"].replace("<tr>\n", "<tr>\n" + tds);						
+					}
+					var act = "New";
+					if (!recorder.data[act] || recorder.data[act] == "") {
+						recorder.data[act] = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;" name="new" style="min-width:80px;"><b><img src="/img/add.png">New Data</b></a></div>'
+					} else {
+						layout = recorder.data[act].toJSON();
+						recorder.data[act] = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;" name="new" style="min-width:80px;">' + (layout["icon"] ? '<img src="/img/' + layout["icon"] + '">' : '') + '' + (layout["label"] || "") + '</a></div>'
+					}
+					recorder.data["Filter"] = recorder.data["Filter"].replace(/<\/a>/gi, "</a>\n").replace(/(.+<a )([^>]+>.+<\/a>)(.+)/gi, "<a class='filter' $2").replace(/<[\/]?ul[^>]*>\r?\n?/gi, "");
+				}
+				
 				return __new(res, recorder);
 			}
 		});
 	}
+}
+
+// TODO tmp changes for old data
+function tmpconvertlist(data) {
+	var json = {"Title": "", "Layout": "", "Fields": ""};
+	
+	var tds = (data + "").toJSON(); 
+	if (typeof tds == "string") {
+		return json;		
+	}
+	json["Title"] = tds["Title"] || "";
+	delete tds["Title"];
+	
+	function _convertListOne(j, data) {
+		if ((j + "").match(/f[0-9][0-9]?/gi) || j == "Update" || j == "UpdateR" || j == "Create" || j == "CreateR") {
+			json["Fields"] += (json["Fields"].length > 0 ? ',':'') + '"' + j + '": {';
+			var label = "";
+			if (data[j]["label"] && data[j]["label"].length > 0) {
+				label = data[j]["label"];
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"displayas": "' + data[j]["label"] + '"';
+			}
+			if (data[j]["Title"] && data[j]["Title"].length > 0) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"title": "' + data[j]["Title"] + '"';
+			}
+			if ("readonly" in data[j]) {
+				label = "[ReadOnly] " + label;
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"readonly": true';
+			} 
+			if ("clickable" in data[j]) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"clickable": true';
+			} 
+			if ("show" in data[j]) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"iconly": true';
+			} 
+			
+			var wid = "";
+			if (data[j]["width"] && (data[j]["width"].contains("col-") || data[j]["width"].contains("wid"))) {
+				wid = "class=\"" + data[j]["width"] + "\" ";
+			}
+			if (data[j]["colspan"]) {
+				wid += "colspan=" + data[j]["colspan"] + " ";
+			}
+			json["Layout"] += "<td " + wid + " field='" + j + "'>" + label + "(" + j + ")</td>\n";
+			json["Fields"] += '}';
+		} 
+		if (j.match(/(submit|list|new|copy|edit|show|remove)/gi)) {
+			var css = data[j]["css"] || "";
+			if (css.contains("btn-")) {
+				css = css.replace("btn ", "");
+			}
+			if (data[j]["type"] == "link") {
+				css = "btn-link";
+			}
+			var img = "";
+			if ((data[j]["icon"] || "") != "") {
+				img = '<img src="/img/' + data[j]["icon"] + '">';
+			}
+			
+			var wid = "";
+			if (data[j]["width"] && (data[j]["width"].contains("col-") || data[j]["width"].contains("wid"))) {
+				wid = "class=\"" + data[j]["width"] + "\" ";
+			}
+			if (data[j]["colspan"]) {
+				wid += "colspan=" + data[j]["colspan"] + " ";
+			}
+			json["Layout"] += '<td ' + wid + 'field="' + j.toLowerCase() + '" LSAction="' + j.toLowerCase() + '"><LSAction class="btn-group-xs"><a class="btn ' + css + '" href="javascript:;" name="' + j.toLowerCase() + '" title="">' + img + data[j]["label"] + '</a></LSAction></td>\n';
+
+			json["Fields"] += (json["Fields"].length > 0 ? ',':'') + '"' + j + '": {';
+			if (data[j]["Title"] && data[j]["Title"].length > 0) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"title": "' + data[j]["Title"] + '"';
+			}
+			json["Fields"] += '}';
+		}
+		if (j.match(/diy.*/gi)) {
+			var link = (new Buffer(data[j]["label"], 'base64')).toString();
+			link = ("<a " + link.mid("<a ", link.lastIndexOf("</a>")) + "</a>").replace(/[\r\n]/g, "").replace(/<\/a>/g, "</a>\n").replace(/(.*)(<a .+<\/a>)(.*)/gi, '$2');
+			link = link.replace(/(<%=|%>)/g, '');
+			link = link.replace(/(.*)(url=)(["'])([^'"]+json.)([^'"]+)(["'])(.+>.*)/g, "$1val=$3$5$3$7");
+			link = link.replace(/(.*)(href=["'][^'"]+["'])(>.*)/g, "$1val=''$3");
+			link = link.replace(/.+class="caret".+/g, '&#20;<span class="caret" val="caret"></span>');
+			link = link.replace(/<a /g, '<LSAction class="btn-group-xs"><a ').replace(/\/a>/g, '/a></LSAction>');
+			
+			var wid = "";
+			if (data[j]["width"] && (data[j]["width"].contains("col-") || data[j]["width"].contains("wid"))) {
+				wid = "class=\"" + data[j]["width"] + "\" ";
+			}
+			if (data[j]["colspan"]) {
+				wid += "colspan=" + data[j]["colspan"] + " ";
+			}
+			var url = ' url="' + link.mid('href="', '"') + '"';
+			json["Layout"] += '<td ' + wid + ' field="diy" LSAction="' + j + '">' + link + '</td>\n';
+			json["Fields"] += (json["Fields"].length > 0 ? ',':'') + '"' + "diy" + '": {';
+			if (data[j]["Title"] && data[j]["Title"].length > 0) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"title": "' + data[j]["Title"] + '"';
+			}
+			json["Fields"] += '}'
+		}
+		if (j == "TR") {
+			json["Layout"] += '</tr><tr>';
+		}
+	}
+	for (var i in tds) {
+		if (i.startsWith("Section")) {
+			json["Layout"] += "<td>";
+			
+			/*
+			if ("Title" in tds[i]) {
+				json["Layout"] += "	<legend>" + tds[i]["Title"] + "</legend>\n";
+				delete tds[i]["Title"];
+			}
+			*/
+			for (var j in tds[i]) {
+				_convertListOne(j, tds[i]);
+			}
+			json["Layout"] += "</td>\n";
+		} else if (i.startsWith("Action")) {
+			for (var j in tds[i]) {
+				_convertListOne(j, tds[i]);
+			}
+		} else {
+			_convertListOne(i, tds);
+		}
+	}
+	var ends = "<td></td>\n";
+	if (json["Layout"].endsWith(ends)) {
+		json["Layout"] = json["Layout"].mid(0, json["Layout"].length - ends.length);
+	}
+	json["Layout"] = "<table class=‘table’><tr>\n" + json["Layout"].replace('name="remove"', 'name="delete"') + "</tr></table>";
+	return json;
+}
+// TODO tmp changes for old data
+function tmpconvert(data) {
+	var json = {"Title": "", "Layout": "", "Action": "", "Fields": ""};
+	
+	var tds = (data + "").toJSON(); 
+	if (!tds["Title"]) {
+		return json;		
+	}
+	json["Title"] = tds["Title"] || "";
+	delete tds["Title"];
+	
+	function _convertOne(j, data) {
+		if ((j + "").match(/f[0-9][0-9]?/gi) || j == "Update" || j == "UpdateR" || j == "Create" || j == "CreateR") {
+			json["Fields"] += (json["Fields"].length > 0 ? ',':'') + '"' + j + '": {';
+			var label = "";
+			if (data[j]["label"] && data[j]["label"].length > 0) {
+				label = data[j]["label"];
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"displayas": "' + data[j]["label"] + '"';
+			}
+			if ("readonly" in data[j]) {
+				label = "[ReadOnly] " + label;
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"readonly": true';
+			} 
+			if ("clickable" in data[j]) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"clickable": true';
+			} 
+			if ("show" in data[j]) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"iconly": true';
+			} 
+			if (data[j]["Title"] && data[j]["Title"].length > 0) {
+				json["Fields"] += (json["Fields"].endsWith("{") ? '':',') + '"title": "' + data[j]["Title"] + '"';
+			}
+			
+			if (data[j]["width"] && data[j]["width"].contains("col-")) {
+				json["Layout"] += "<div class='" + data[j]["width"] + "' field='" + j + "'>" + label + "(" + j + ")</div>\n";
+			} else {
+				json["Layout"] += "<div class='col-md-12' field='" + j + "'>" + label + "(" + j + ")</div>\n";
+			}
+			json["Fields"] += '}';
+		} 
+		if (j.match(/(submit|list|new|copy|edit|show|remove)/gi)) {
+			var css = data[j]["css"];
+			if (css.contains("btn-")) {
+				css = css.replace("btn ", "");
+			}
+			if (data[j]["type"] == "link") {
+				css = "btn-link";
+			}
+			var img = "";
+			if ((data[j]["icon"] || "") != "") {
+				img = '<img src="/img/' + data[j]["icon"] + '">';
+			}
+			json["Action"] += '<div class="col-md-0"><a class="btn ' + css + '" href="javascript:;" name="' + j.toLowerCase() + '" style="min-width:80px;" title="">' + img + data[j]["label"] + '</a></div>\n';
+		}
+		if (j.match(/diy.*/gi)) {
+			var link = (new Buffer(data[j]["label"], 'base64')).toString();
+			link = link.replace('<%= data["Rid"] %>', 'RID');
+			var label = link.mid('>', '<');
+			var url = ' url="' + link.mid('href="', '"') + '"';
+			json["Action"] += '<div class="col-md-0"><a class="btn btn-link" href="javascript:;" name="diy"' + url + ' style="min-width:80px;" title="">' + label + '</a></div>\n';
+		}
+	}
+	for (var i in tds) {
+		'<div class="col-md-0"><a class="btn btn-danger" href="javascript:;" name="submit" style="min-width:80px;" title=""><img src="/img/add.png">New Action</a></div>'
+		
+		if (i.startsWith("Section")) {
+			json["Layout"] += "<div class='col-md-12'>";
+			
+			if ("Title" in tds[i]) {
+				json["Layout"] += "	<legend>" + tds[i]["Title"] + "</legend>\n";
+				delete tds[i]["Title"];
+			}
+			
+			for (var j in tds[i]) {
+				_convertOne(j, tds[i]);
+			}
+			json["Layout"] += "</div>\n";
+		} else if (i.startsWith("Action")) {
+			for (var j in tds[i]) {
+				_convertOne(j, tds[i]);
+			}
+		} else {
+			_convertOne(i, tds);
+		}
+	}
+	var ends = "<div class='col-md-12'></div>\n";
+	if (json["Layout"].endsWith(ends)) {
+		json["Layout"] = json["Layout"].mid(0, json["Layout"].length - ends.length);
+	}
+	json["Layout"] = json["Layout"].replace('name="remove"', 'name="delete"');
+	return json;
 }
 function remove(req, res) {
 	var uData = getUData(req);
@@ -363,7 +647,7 @@ function __refreshAppList(lst) {
 	var defines = '<div class="col-md-12"><div class="row">\r\n';
 	var cols = 0;
 	for (var it = lst.length - 1; it > -1; it--) {
-		if (lst[it]["Visible"] != "on" || lst[it]["Enable"] != "on") {
+		if (lst[it]["Status"] == "disabled" || lst[it]["Status"] == "hidden") {
 			continue; 
 		}
 		
@@ -382,9 +666,9 @@ function __refreshAppList(lst) {
 	for (var it = lst.length - 1; it > -1; it--) {
 		// items for Tangrammy page
 		defines += '<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("' + lst[it]["Tid"] + '/' + lst[it]["Vid"] + '")) { %>\r\n	<div class="list-app">\r\n' + 						
-'		<h3><small>' + (lst[it]["Enable"].contains("on") ? (lst[it]["Visible"].contains("on") ? "" : "[Hidden]") : "[Disabled]") + '</small>' + lst[it]["Title"] + ' <small>(' + lst[it]["Tid"] + '.' + lst[it]["Vid"] + ')</small> </h3>\r\n' + 
+'		<h3>' + (lst[it]["Status"] == "disabled" ? "<small>[Disabled]</small>" : (lst[it]["Status"] == "hidden" ? "<small>[Hidden]</small>" : "")) + '<span name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Title=" contenteditable="true">' + lst[it]["Title"] + '</span> <small>(' + lst[it]["Tid"] + '.' + lst[it]["Vid"] + ')</small> </h3>\r\n' + 
 '		<small><a href="/' + lst[it]["URL"] + '/list">http://~/' + lst[it]["URL"] + '/list </a> </small> <br /> \r\n' + 
-'		<p>' + lst[it]["Description"] + '</p>\r\n' + 
+'		<p name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Description=" contenteditable="true">' + lst[it]["Description"] + '</p>\r\n' + 
 '		<div class="text-right">\r\n' + 
 '			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
 '			<a href="/T/show?Rid=' + lst[it]["Rid"] + '" title="View define detail of application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/detail.png"></a>\r\n' + 
@@ -453,7 +737,7 @@ function create(req, res) {
 		mongo.list("T", "V", null, condition, "", {"sort": {"Title": -1}}, function (recorder) {
 			var lst = recorder.data;
 			for (var it = lst.length - 1; it > -1; it--) {
-				if (lst[it]["Enable"] != "on") {
+				if (lst[it]["Status"] == "disabled") {
 					continue; 
 				}
 				recorder.data = lst[it];
@@ -492,11 +776,13 @@ function createOneByRecorder(recorder) {
 		fdata["LEdit"] = (recorder.data["LNew"] + "").toJSON();
 		fdata["LShow"] = (recorder.data["LShow"] + "").toJSON();
 		fdata["LList"] = (recorder.data["LList"] + "").toJSON();
+		/*
 		fdata["New"] = (recorder.data["New"] + "").toJSON();
 		fdata["Copy"] = (recorder.data["Copy"] + "").toJSON();
 		fdata["Show"] = (recorder.data["Show"] + "").toJSON();
 		fdata["Edit"] = (recorder.data["Edit"] + "").toJSON();
 		fdata["Remove"] = (recorder.data["Remove"] + "").toJSON();
+		*/
 		fdata.raw = recorder.data;
 
 		if ((recorder.data["URL"] || "").length < 1) {
@@ -514,24 +800,37 @@ function createOneByRecorder(recorder) {
 		}
 		var data = template.replace("TOP_LINKS", links).replace("HEAD_TITLE", recorder.data["Title"]);
 		var name = vpath + recorder.data["Tid"] + "X" + recorder.data["Vid"] + 'new.ejs';
-		fdata.title = "NEW " + recorder.data["Title"];
+		fdata["Layout"] = recorder.data["LayoutN"];
+		fdata["TitleL"] = recorder.data["TitleLN"];
+		fdata["ActionL"] = recorder.data["ActionLN"];
+		fdata["FieldsL"] = recorder.data["FieldsLN"];
 		fdata.url = recorder.data["URL"];
 		fdata.action = "/" + recorder.data["URL"] + "/new";
 		fs.writeFile(name, data.replace("FIELDS", field.toEdit(fdata, 4)).replace('<%= data["Rid"] %>', ''), function(err){ if (err) log.error(err); });
 		
-		fdata["LEdit"] = fdata["LNew"];
+		fdata["Layout"] = recorder.data["LayoutE"];
+		fdata["TitleL"] = recorder.data["TitleLE"];
+		fdata["ActionL"] = recorder.data["ActionLE"];
+		fdata["FieldsL"] = recorder.data["FieldsLE"];
 		fdata.title = "Edit " + recorder.data["Title"];
 		fdata.action = "/" + recorder.data["URL"] + "/update";
 		name = vpath + recorder.data["Tid"] + "X" + recorder.data["Vid"] + 'edit.ejs';
 		fs.writeFile(name, data.replace("FIELDS", field.toEdit(fdata, 4)), function(err){ if (err) log.error(err); });
 		
+		fdata["Layout"] = recorder.data["LayoutS"];
+		fdata["TitleL"] = recorder.data["TitleLS"];
+		fdata["ActionL"] = recorder.data["ActionLS"];
+		fdata["FieldsL"] = recorder.data["FieldsLS"];
 		fdata.title = "SHOW " + recorder.data["Title"];
 		fdata.action = "/" + recorder.data["URL"];
 		name = vpath + recorder.data["Tid"] + "X" + recorder.data["Vid"] + 'show.ejs';
 		fs.writeFile(name, data.replace("FIELDS", field.toShow(fdata, 4)), function(err){ if (err) log.error(err); });
 		
-		fdata.title = "List " + recorder.data["Title"];
+		fdata.title = recorder.data["Title"];
 		fdata.action = "/" + recorder.data["URL"];
+		fdata["Layout"] = recorder.data["LayoutL"];
+		fdata["ActionL"] = recorder.data["ActionLL"];
+		fdata["FieldsL"] = recorder.data["FieldsLL"];
 		fdata["Group"] = recorder.data["Group"];
 		fdata["OrderBy"] = recorder.data["OrderBy"];
 		fdata["Order"] = recorder.data["Order"];

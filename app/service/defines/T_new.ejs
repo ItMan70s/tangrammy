@@ -30,7 +30,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/' title=''>Home</a></li>
+			<li><a href='/issues/list' title=''>Issues</a></li>
 			<li><a href='/todo/list' title=''>Todo</a></li>
+			<li><a href='/booking/list' title=''>Booking</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -60,144 +62,1276 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
 <!-- start -->
-	<div class='left-toolbar'>
-	  <ul class="nav navbar-nav">
-		<li><a href="#Summary">Summary</a></li>
-		<li><a href="#Defines">Defines</a></li>
-		<li><a href="#Scripts">Scripts</a></li>
-		<li><a href="#Layout">Layout</a></li>
-		<li><a href="#Emails">Emails</a></li>
-		<li><a href="#Others">Others</a></li>
-	  </ul>
-	</div>
-	<a name="Summary"></a>
-	<h1><%= title %></h1>
-	
-
+<style>
+ .layout-zone div {
+	border: 1px solid #ccc;
+	min-height: 30px;
+ }
+ .layout-zone td {
+	border: 1px solid #ccc;
+	min-height: 30px;
+ }
+ .layout-zone .field-active {
+	box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	border: 1px solid rgba(81, 203, 238, 1);
+ }
+</style>
 <form class="well col-md-12" method="post" action="<%= action %>" >
 	<div class="row">
-	<div class='col-md-12'> <legend class="">Summary</legend>
-		<div class='col-md-3'><div><label>Title*</label><div class='controls'><div class='input-group'><input type='text' class='form-control' name='Title' value='<%= data["Title"] %>' required=true placeholder='Application Title - could be different from name'></div></div></div></div>
-		<div class='col-md-3'><div><label>URL</label><div class='controls'><div class='input-group'><input type='text' class='form-control' name='URL' value='<%= data["URL"] %>' placeholder='Application URL'></div></div></div></div>
-		<div class='col-md-2'><div><label>Tid*</label><div class='controls'><div class='input-group'><input type='text' class='form-control' name='Tid' value='<%= data["Tid"] %>' readonly=true required=true placeholder='Application name'></div></div></div></div>
-		<div class='col-md-2'><div><label>Vid*</label><div class='controls'><div class='input-group'><input type='text' class='form-control' name='Vid' value='<%= data["Vid"] %>' readonly=true required=true placeholder='Application name'></div></div></div></div>
-		<div class='col-md-2'><div><label>Rid*</label><div class='controls'><div class='input-group'><input type='text' class='form-control' name='Rid' value='<%= data["Rid"] %>' readonly=true required=true placeholder='Application name'></div></div></div></div>
-		<div class='col-md-12'><div><label>Description*</label><div class='controls'><textarea class='form-control' name='Description'  cols=100 rows=5 required=true ><%= data["Description"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Header in list page</label><div class='controls'><textarea class='form-control' name='Header'  cols=100 rows=2><%= data["Header"] %></textarea></div></div></div>
-		
-		<a name="Defines"></a>
-		<div class='col-md-12'><div><label>Footer in list page</label><div class='controls'><textarea class='form-control' name='Footer'  cols=100 rows=2><%= data["Footer"] %></textarea></div></div></div>
-	</div>	
-	<div class='col-md-12'><legend class="">Defines</legend>
-		<div class='col-md-12'><div><label>Fields*</label><div class='controls'><textarea class='form-control' name='Fields'  cols=100 rows=10 required=true placeholder='Application Fields defines'><%= data["Fields"] %></textarea><label>To add all applications as options: "options": ['APP_OPTIONS'], </label></div></div></div>
-		<div class='col-md-12'><div><label>Keys</label><div class='controls'><input type='text' class='form-control' name='Keys' value='<%= data["Keys"] %>' placeholder='Key field names joined by ","'></div></div></div>
-		<div class='col-md-12'><div><label>Condition</label><div class='controls'><textarea class='form-control' name='Condition'  cols=100 rows=10 required=true placeholder='Condition to list data'><%= data["Condition"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Advance Condition</label><div class='controls'><textarea class='form-control' name='AdvanceCondition'  cols=100 rows=10 placeholder='Advance options to show'><%= (data["AdvanceCondition"] || "") %></textarea></div></div></div>
-		<div class="col-md-12"><div><label class="control-label title-label">Disable Operations</label><div class="controls">
-<div class="form-control min-h34"><div class="min-h20">
-<% var val = data["NoAction"] || "";  val = "," + val.toString() + ",";%>
-<input type="checkbox" name="NoAction" value="" checked=true class="hidden" >
-			<label class="checkbox-inline col-md-2 "><input type="checkbox" name="NoAction" value="new" <%= (val.contains( "," + "new" + ",")) ? "checked=true" : "" %> >New</label>
-			<label class="checkbox-inline col-md-2 "><input type="checkbox" name="NoAction" value="copy" <%= (val.contains( "," + "copy" + ",")) ? "checked=true" : "" %> >Copy</label>
-			<label class="checkbox-inline col-md-2 "><input type="checkbox" name="NoAction" value="update" <%= (val.contains( "," + "update" + ",")) ? "checked=true" : "" %> >Edit</label>
-			<label class="checkbox-inline col-md-2 "><input type="checkbox" name="NoAction" value="remove" <%= (val.contains( "," + "remove" + ",")) ? "checked=true" : "" %> >Remove</label>
-			<label class="checkbox-inline col-md-1 "><input type="checkbox" name="NoAction" value="show" <%= (val.contains( "," + "show" + ",")) ? "checked=true" : "" %> >Show</label>
-			<label class="checkbox-inline col-md-1 "><input type="checkbox" name="NoAction" value="search" <%= (val.contains( "," + "search" + ",")) ? "checked=true" : "" %> >Search</label>
-			<label class="checkbox-inline col-md-1 "><input type="checkbox" name="NoAction" value="list" <%= (val.contains( "," + "list" + ",")) ? "checked=true" : "" %> >List</label>
-			</div></div></div></div></div>
-		<div class='col-md-12'><div><label>New Data*</label><div class='controls'><textarea class='form-control' name='New'  cols=100 rows=2 required=true placeholder='Action New defines'><%= data["New"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Copy & Create Data*</label><div class='controls'><textarea class='form-control' name='Copy'  cols=100 rows=2 required=true placeholder='Action Copy defines'><%= data["Copy"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Update Data*</label><div class='controls'><textarea class='form-control' name='Edit'  cols=100 rows=2 required=true placeholder='Action Edit defines'><%= data["Edit"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Show Data*</label><div class='controls'><textarea class='form-control' name='Show'  cols=100 rows=2 required=true placeholder='Action Show defines'><%= data["Show"] %></textarea></div></div></div>
-		<a name="Scripts"></a>
-		<div class='col-md-12'><div><label>Delete Data*</label><div class='controls'><textarea class='form-control' name='Remove'  cols=100 rows=2 required=true placeholder='Action Remove defines'><%= data["Remove"] %></textarea></div></div></div>
-	</div>	
-	<div class='col-md-12'><legend class="">Scripts</legend>
-		<div class='col-md-12'><div><label>JS before New/Copy</label><div class='controls'><textarea class='form-control' name='JSNew'  cols=100 rows=10 placeholder="JavaScript to run before New/New, 'data' to refer recorder and must end with return data;"><%= data["JSNew"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>JS before Edit</label><div class='controls'><textarea class='form-control' name='JSEdit'  cols=100 rows=10 placeholder="JavaScript to run before Edit, 'data' to refer recorder and must end with return data;"><%= data["JSEdit"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>JS before Show Data</label><div class='controls'><textarea class='form-control' name='JSShow'  cols=100 rows=10 placeholder="JavaScript to run before Show Data, 'data' to refer recorder and must end with return data;"><%= data["JSShow"] %></textarea></div></div></div>
-		<a name="Layout"></a>
-		<div class='col-md-12'><div><label>JS before Save Data</label><div class='controls'><textarea class='form-control' name='JSSave'  cols=100 rows=10 placeholder="JavaScript to run before Save Data, 'data' to refer recorder and must end with return data;"><%= data["JSSave"] %></textarea></div></div></div>
-	</div>	
-	<div class='col-md-12'><legend class="">Layout</legend>
-		<div class='col-md-12'><div><label>New</label><div class='controls'><textarea class='form-control' name='LNew'  cols=100 rows=10 placeholder=""><%= data["LNew"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Edit</label><div class='controls'><textarea class='form-control' name='LEdit'  cols=100 rows=10 placeholder=""><%= data["LEdit"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>Show</label><div class='controls'><textarea class='form-control' name='LShow'  cols=100 rows=10 placeholder=""><%= data["LShow"] %></textarea></div></div></div>
-		<div class='col-md-12'><div><label>List</label><div class='controls'><textarea class='form-control' name='LList'  cols=100 rows=10 placeholder=""><%= data["LList"] %></textarea>
-		<label>, "TR": {}, "Head": {"Title": ""}, "F3": {"Title": "-", "colspan": 6}<br/>
-		&lt;a href='javascript:;' filter='key words' class='wid100' &gt;In progress&lt;/a&gt;
-		</label>
-		</div></div></div>
-		<a name="Emails"></a>
-		<div class='col-md-12'><div><label>Filter</label><div class='controls'><textarea class='form-control' name='Filter'  cols=100 rows=10 placeholder="<a href='javascript:;' filter='filter key words' class='width100' >In progress</a>"><%= data["Filter"] %></textarea></div></div></div>
-	</div>	
-	<div class='col-md-12'><legend class="">Emails</legend>
-		<div class='col-md-12'><div><label>Email To</label><div class='controls'><% var val = data["EmailTo"] || "";  val = "," + val.toString() + ",";%>
-			<select class='form-control' name='EmailTo'  size=2 multiple=true >
-			<option value='me'  <%= (val.contains( "," + "me" + ",")) ? "selected=true" : "" %>  >Owner</option>
-			<option value='F0'  <%= (val.contains( "," + "F0" + ",")) ? "selected=true" : "" %>  >F0</option>
-			<option value='F1'  <%= (val.contains( "," + "F1" + ",")) ? "selected=true" : "" %>  >F1</option>
-			</select></div></div></div>
-		<div class='col-md-12'><div><label>Cc</label><div class='controls'><input type='text' class='form-control' name='EmailCc' value='<%= data["EmailCc"] %>' placeholder='email addresses in cc list'></div></div></div>
-		<div class='col-md-12'><div><label>Title</label><div class='controls'><input type='text' class='form-control' name='EmailTitle' value='<%= data["EmailTitle"] %>' placeholder='Title in email'></div></div></div>
-	</div>	
-		<a name="Others"></a>
-	<div class='col-md-12'><legend class="">Others</legend>
-		<div class='col-md-12'><div><label>Order By</label>
-		<div class='input-group'>
-		<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
-		for (var i = 0; i < oby.length && i < 3; i++) {
-		%>
-		<div class='col-md-4'>
-			<select name='OrderBy' class='input-sm'>
-			<option value='null'>Select Order on Fields</option>
-			<% for (var fid in fields) { %>
-				<option value='<%= fid %>'  <%= (oby[i] == fid) ? "selected=true" : "" %>  ><%= fields[fid] %></option>
-			<% } %>
-			</select>			
-			<select name='Order' class='input-sm'>
-				<option value='1'  <%= ("-1" != order[i]) ? "selected=true" : "" %>  >ascending</option>
-				<option value='-1'  <%= ("-1" == order[i]) ? "selected=true" : "" %>  >descending</option>
+	<div class='col-md-12'> 
+		<div class='col-md-12'> <h2>
+			<input type='hidden' class="divinput col-md-auto text-nowrap" name='Title' value='<%= data["Title"] %>' placeholder="title for application">
+			<small class="col-md-auto"> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>
+				<input type='hidden' name='Tid' value='<%= data["Tid"] %>'>
+				<input type='hidden' name='Vid' value='<%= data["Vid"] %>' >
+				<input type='hidden' name='Rid' value='<%= data["Rid"] %>' >
+			<select name='Status' class='input-sm col-md-auto'>
+				<option value='available'  <%= (data["Status"] != "disabled" && data["Status"] != "hidden") ? "selected=true" : "" %>  >Available</option>
+				<option value='disabled'  <%= (data["Status"] == "disabled") ? "selected=true" : "" %>  >Disabled</option>
+				<option value='hidden'  <%= (data["Status"] == "hidden") ? "selected=true" : "" %>  >Hidden</option>
 			</select>
-          </div>
-		<% } %>
+		</h2></div>
+		<div class='col-md-4'><div class='controls'><div class="input-group"><span class="input-group-addon"><a href="javascript:;">http://localhost:3000/</a></span><input type='text' class='form-control' name='URL' value='<%= data["URL"] %>' title='URL'><span class="input-group-addon"><a href="javascript:;">/list</a></span></div></div></div>
+		<div class='col-md-2'> </div>
+		<div class='col-md-6 tab-content hide'>
+			<input type='text' class='form-control richtextcodeline' name='Help' value='<%= data["Help"] %>' placeholder='Help file link'>
 		</div>
-		</div></div>
-		<div class='col-md-12'><div><label>Group By Above first order item</label><div class='controls'><% var val = data["Group"] || "";  val = "," + val.toString() + ",";%><label class='inline'> </label>
-			<label class='radio-inline col-md-1'><input type='radio' name='Group' value='on'  <%= (val.contains( "," + "on" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='radio-inline col-md-1'><input type='radio' name='Group' value='off'  <%= (val.contains( "," + "off" + ",")) ? "checked=true" : "" %> >No</label></div></div></div>
-		<div class='col-md-12'><div><label>History in Edit page</label><div class='controls'><% var val = data["History"] || "";  val = "," + val.toString() + ",";%><label class='inline'> </label>
-			<label class='radio-inline col-md-1'><input type='radio' name='History' value='on'  <%= (val.contains( "," + "on" + ",")) ? "checked=true" : "" %> >Show</label>
-			<label class='radio-inline col-md-1'><input type='radio' name='History' value='off'  <%= (val.contains( "," + "off" + ",")) ? "checked=true" : "" %> >Hide</label></div></div></div>
-		<div class='col-md-12'><div><label>Visible in Home page</label><div class='controls'><% var val = data["Visible"] || "";  val = "," + val.toString() + ",";%><label class='inline'> </label>
-			<label class='radio-inline col-md-1'><input type='radio' name='Visible' value='on'  <%= (val.contains( "," + "on" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='radio-inline col-md-1'><input type='radio' name='Visible' value='off'  <%= (val.contains( "," + "off" + ",")) ? "checked=true" : "" %> >No</label></div></div></div>
-		<div class='col-md-12'><div><label>Enable this view</label><div class='controls'><% var val = data["Enable"] || "";  val = "," + val.toString() + ",";%><label class='inline'> </label>
-			<label class='radio-inline col-md-1'><input type='radio' name='Enable' value='on'  <%= (val.contains( "," + "on" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='radio-inline col-md-1'><input type='radio' name='Enable' value='off'  <%= (val.contains( "," + "off" + ",")) ? "checked=true" : "" %> >No</label></div></div></div>
-		<div class='col-md-12'><div><label>Help Link</label><div class='controls'><input type='text' class='form-control' name='Help' value='<%= data["Help"] %>' placeholder='Help file link'></div></div></div>
 	</div>
+	<div class='col-md-12'> 
+		<div class='col-md-12'> 
+			<textarea class='form-control richtextcode' name='Description' cols=100 rows=2 validate="required"  placeholder="description for application"><%= data["Description"] %></textarea>
+		</div>
+	</div>
+<div class='col-md-12'>
+	<div class="col-md-12">
+		<ul class="pagination tab">
+			<li class="btn-info text-center active"><a class="wid200 font170" href="#panel-defines" data-toggle="tab">Defines</a></li>
+			<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-single" data-toggle="tab">Layout: Single</a></li>
+			<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-list" data-toggle="tab">Layout: List</a></li>
+		</ul>
+	</div>
+	<div class="tab-content">
+		<div class="tab-pane active" id="panel-defines">
+		
+			<div class='col-md-12'><label>Fields*</label></div>
+			<div class='col-md-12'> 
+				<div class='controls'><textarea class='form-control preview' preview='yes' onview='showFields' name='Fields' cols=100 rows='<%= total + 4 %>' validate="required" ><%= data["Fields"] %></textarea></div>
+			</div>
+			<div class='col-md-12'><div><label>Keys</label><div class='controls'><input type='text' class='form-control' name='Keys' value='<%= data["Keys"] %>' placeholder='Key field names joined by ","'></div></div></div>
+			<div class="col-md-12"><div><label class="control-label title-label">Disable Actions</label><div class="controls">
+				<div class="form-control min-h34"><div class="min-h20">
+				<input type="checkbox" name="NoAction" value="" checked=true class="hidden" >
+				<% var val = data["NoAction"] || "";  val = "," + val.toString() + ",";%>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="new" <%= (val.contains( "," + "new" + ",")) ? "checked=true" : "" %> >New</label>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="copy" <%= (val.contains( "," + "copy" + ",")) ? "checked=true" : "" %> >Copy</label>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="update" <%= (val.contains( "," + "update" + ",")) ? "checked=true" : "" %> >Edit</label>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="remove" <%= (val.contains( "," + "remove" + ",")) ? "checked=true" : "" %> >Remove</label>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="show" <%= (val.contains( "," + "show" + ",")) ? "checked=true" : "" %> >Show</label>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="search" <%= (val.contains( "," + "search" + ",")) ? "checked=true" : "" %> >Search</label>
+				<label class="checkbox-inline col-md-auto "><input type="checkbox" name="NoAction" value="list" <%= (val.contains( "," + "list" + ",")) ? "checked=true" : "" %> >List</label>
+			</div></div></div></div></div>
+
+			<div class='col-md-12'>
+				<div class="tabbable">
+					<ul class="nav nav-tabs">
+						<li class="padding2"><label>Scripts</label></li>
+						<li class="active"><a href="#panel-script-new" data-toggle="tab">New/Copy</a></li>
+						<li><a href="#panel-script-edit" data-toggle="tab">Edit</a></li>
+						<li><a href="#panel-script-show" data-toggle="tab">Show</a></li>
+						<li><a href="#panel-script-save" data-toggle="tab">Save</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="panel-script-new">
+							<div class='col-md-12'><div><div class='controls'><textarea class='form-control' name='JSNew'  cols=100 rows=5 placeholder="JavaScript to run before New/New, 'data' to refer recorder and must end with return data;"><%= data["JSNew"] %></textarea></div></div></div>
+						</div>
+						<div class="tab-pane" id="panel-script-edit">
+							<div class='col-md-12'><div><div class='controls'><textarea class='form-control' name='JSEdit'  cols=100 rows=5 placeholder="JavaScript to run before Edit, 'data' to refer recorder and must end with return data;"><%= data["JSEdit"] %></textarea></div></div></div>
+						</div>
+						<div class="tab-pane" id="panel-script-show">
+							<div class='col-md-12'><div><div class='controls'><textarea class='form-control' name='JSShow'  cols=100 rows=5 placeholder="JavaScript to run before Show Data, 'data' to refer recorder and must end with return data;"><%= data["JSShow"] %></textarea></div></div></div>
+						</div>
+						<div class="tab-pane" id="panel-script-save">
+							<div class='col-md-12'><div><div class='controls'><textarea class='form-control' name='JSSave'  cols=100 rows=5 placeholder="JavaScript to run before Save Data, 'data' to refer recorder and must end with return data;"><%= data["JSSave"] %></textarea></div></div></div>
+						</div>
+					</div>	
+				</div>	
+			</div>
+			<div class='col-md-12'><label>Notification</label>
+				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>From:</b></span><input type='text' class='form-control' name='EmailFrom' value='<%= (data["EmailFrom"] || "") %>' placeholder='email address to send'></div></div></div>
+				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>To:</b></span><% var val = data["EmailTo"] || "";  val = "," + val.toString() + ",";%>
+					<select class='form-control' name='EmailTo'  size=1 multiple=true >
+					<option value='me'  <%= (val.contains( "," + "me" + ",")) ? "selected=true" : "" %>  >Owner</option>
+					<option value='F0'  <%= (val.contains( "," + "F0" + ",")) ? "selected=true" : "" %>  >F0</option>
+					<option value='F1'  <%= (val.contains( "," + "F1" + ",")) ? "selected=true" : "" %>  >F1</option>
+					</select></div></div></div>
+				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>Cc:</b></span><input type='text' class='form-control' name='EmailCc' value='<%= (data["EmailCc"] || "") %>' placeholder='email addresses in cc list'></div></div></div>
+				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>Subject:</b></span><input type='text' class='form-control' name='EmailTitle' value='<%= (data["EmailTitle"] || "") %>' placeholder='subject of email'></div></div></div>
+			</div>
+			
+		</div>
+		<div class="tab-pane" id="panel-layout-single">
+			
+			<h2 class='col-md-12'>
+				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLN' value='<%= data["TitleLN"] %>' placeholder="title for new data">
+			</h2>
+			<div class='col-md-12'> 
+				<input type='hidden' name='FieldsLN' value='<%= data["FieldsLN"] %>' >
+				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutN' cols=100 rows='<%= total %>' validate="required" ><%= data["LayoutN"] %></textarea>
+			</div>
+			<div class='col-md-12'> 
+				<textarea class='form-control preview' preview='yes' onview='viewAction' name='ActionLN' cols=100 rows='2' validate="required"  placeholder="Click preview to add new action"><%= data["ActionLN"] %></textarea>
+			</div>
+			
+			<h2 class='col-md-12'>
+				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLE' value='<%= data["TitleLE"] %>' placeholder="title for new data">
+			</h2>
+			<div class='col-md-12'>
+				<input type='hidden' name='FieldsLE' value='<%= data["FieldsLE"] %>' >
+				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutE' cols=100 rows='<%= total %>' validate="required" ><%= data["LayoutE"] %> </textarea>
+			</div>
+			<div class='col-md-12'> 
+				<textarea class='form-control preview' preview='yes' onview='viewAction' name='ActionLE' cols=100 rows='2' validate="required"  placeholder="Click preview to add new action"><%= data["ActionLE"] %></textarea>
+			</div>
+			
+			<h2 class='col-md-12'>
+				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLS' value='<%= data["TitleLS"] %>' placeholder="title for new data">
+			</h2>
+			<div class='col-md-12'> 
+				<input type='hidden' name='FieldsLS' value='<%= data["FieldsLS"] %>' >
+				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutS' cols=100 rows='<%= total %>' validate="required" ><%= data["LayoutS"] %></textarea>
+			</div>
+			<div class='col-md-12'> 
+				<textarea class='form-control preview' preview='yes' onview='viewAction' name='ActionLS' cols=100 rows='2' validate="required"  placeholder="Click preview to add new action"><%= data["ActionLS"] %></textarea>
+			</div>
+			<div class='col-md-12'><div class='col-md-11'>
+				<label class="radio col-md-11"><input type="radio" name="History" value="on" <%= data["History"] == "on" ? "checked=true" : "" %> >Show operation history in Edit/Show page</label>
+				<label class="radio col-md-11"><input type="radio" name="History" value="off" <%= data["History"] != "on" ? "checked=true" : "" %> >Hide operation history in Edit/Show page</label>
+			</div></div>
+
+		</div>
+		<div class="tab-pane" id="panel-layout-list">
+
+			<h2 class='col-md-12'>
+				<div class="col-md-auto text-nowrap" name='TitleLL'><%= data["Title"] %> </div>
+				<input type='hidden' class="divinput col-md-auto text-nowrap" name='New' value='<%= (data["New"] || "").contains("<a ") ? data["New"] : " " %>' placeholder="Click to modify action button">
+			</h2>
+			<div class='col-md-12'>
+				<textarea class='form-control richtextcode' name='Header' cols=100 rows=2 validate="required" placeholder="Message in list page" ><%= data["Header"] || ""  %></textarea>
+			</div>
+			<div class='col-md-12 min-h34'><label>Filter</label></div>
+			<div class='col-md-12'>
+				<textarea class='form-control preview' preview='yes' onview='viewFilter' name='Filter' cols=100 rows='3' validate="required" placeholder="<a href='javascript:;' filter='filter key words' class='width100' >In progress</a>"><%= (data["Filter"] || "") %></textarea>
+			</div>
+			<div class='col-md-12 hide'><div><label>Advance Condition</label><div class='controls'><textarea class='form-control' name='AdvanceCondition'  cols=100 rows=10 placeholder='Advance options to show'><%= (data["AdvanceCondition"] || "") %></textarea></div></div></div>
+			<div class='col-md-12' style='margin-top: 15px'><span>Click table to edit Field detail, click action button/link to edit its detail. </span></div>
+			<div class='col-md-12'>
+				<input type='hidden' name='FieldsLL' value='<%= data["FieldsLL"] %>' >
+				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutL' cols=100 rows='<%= total %>'  validate="required" ><%= data["LayoutL"] %> </textarea>
+			</div>
+			
+			<div class='col-md-12'><div><label>Condition</label><div class='controls'><textarea class='form-control' name='Condition'  cols=100 rows=3 required=true placeholder='Condition to list data'><%= data["Condition"] %></textarea></div></div></div>
+			
+			<div class='col-md-12'><div><label>Order By</label>
+			<div class='input-group'>
+			<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
+			for (var i = 0; i < oby.length && i < 3; i++) {
+			%>
+			<div class='col-md-auto'>
+				<select name='OrderBy' class='input-sm'>
+				<option value='null'>Select on Fields</option>
+				<% for (var fid in fields) { %>
+					<option value='<%= fid %>'  <%= (oby[i] == fid) ? "selected=true" : "" %>  ><%= fields[fid] %></option>
+				<% } %>
+				</select>			
+				<select name='Order' class='input-sm'>
+					<option value='1'  <%= ("-1" != order[i]) ? "selected=true" : "" %>  >ascending</option>
+					<option value='-1'  <%= ("-1" == order[i]) ? "selected=true" : "" %>  >descending</option>
+				</select>
+				<% if(i == 0) { %>
+					<select name='Group' class='input-sm'>
+						<option value='1'  <%= ("on" == data["Group"]) ? "selected=true" : "" %>  >grouping</option>
+						<option value='-1'  <%= ("on" != data["Group"]) ? "selected=true" : "" %>  >no group</option>
+					</select>
+				<% } %>
+			  </div>
+			<% } %>
+			</div>
+			</div></div>
+			<div class='col-md-12'>
+				<textarea class='form-control richtextcode' name='Footer' cols=100 rows=2 validate="required" title="Message in list page"><%= data["Footer"] || "" %></textarea>
+			</div>
+				
+		</div>
+	</div>
+</div>
+
 	<div class='col-md-12 error'>
 	 <% if ((code || 0) != 200) { %>
 	 <label><%= message %></label>
 	 <% } %>
 	</div>
-	
-	<div class="container section-action">
-	<div class='panel-footer col-md-12'>
-		<button type='submit' class='btn btn-primary col-md-2'>Save Changes</button>
-		<a class='btn btn-default col-md-1' href='/tangrammy'>Back</a>
-	</div>
-	</div>
+	<div class='col-md-12'><div class='panel-footer' style='padding-top:20px;'>
+		<button type='submit' class='btn btn-success col-md-2'>Save Changes</button>
+		<a class='btn btn-link col-md-1' href='/tangrammy'>Cancel</a>
+	</div></div>
 	
 	</div>
 </form>
-<!-- end -->
 
-	<div class="row"></div>
+<div class="modal" id="FieldEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:900px;top:60px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="glyphicon glyphicon-remove list-item win-close" title="Close" data-dismiss="modal"></button>
+		<h3 class="modal-title">Modal title</h3>
+      </div>
+      <div class="modal-body" style="min-height: 450px">
+	  
+<div class="col-md-12">
+	<div class="row col-md-12">
+		<div class="col-md-2 kid"><div><label class="control-label title-label">ID<b class="red">*</b></label><div class="controls">
+			<input type="text" class="form-control" name="kid" value="" required="true" unique="true" readonly="true" placeholder="Key id"></div></div></div>
+		<div class="col-md-3"><div><label class="control-label title-label">Field</label><div class="controls">
+			<input type="text" class="form-control" name="label" value=""></div></div></div>
+		<div class="col-md-2"><div><label class="control-label title-label">type</label><div class="controls">
+			<select class="form-control" name="type">
+			<option value="String">String</option>
+			<option value="Number">Number</option>
+			</select>
+		</div></div></div>
+		<div class="col-md-2 default"><div><label class="control-label title-label">Default</label><div class="controls">
+			<input type="text" class="form-control" name="default" value=""></div></div></div>
+		<div class="col-md-3"><div><label class="control-label title-label">Form</label><div class="controls">
+			<select class="form-control" name="form">
+			<option value="hidden">hidden</option>
+			<option value="id">id</option>
+			<option value="number">number</option>
+			<option value="password">password</option>
+			<option value="text">text</option>
+			<option value="richtext">richtext</option>
+			<option value="textarea">textarea</option>
+			<option value="radio">radio</option>
+			<option value="checkbox">checkbox</option>
+			<option value="select">select</option>
+			<option value="date">date</option>
+			<option value="time">time</option>
+			<option value="datetime">datetime</option>
+			<option value="reservation">reservation</option>
+			</select>
+		</div></div></div>
+	</div>
+	<div>
+		<div class="col-md-2 f-minlength"><div><label class="control-label title-label">MinLength</label><div class="controls">
+			<input type="text" class="form-control" name="minlength" value=""></div></div></div>
+		<div class="col-md-2 f-length"><div><label class="control-label title-label">Length</label><div class="controls">
+			<input type="text" class="form-control" name="length" value=""></div></div></div>
+		<div class="col-md-2 f-maxlength"><div><label class="control-label title-label">MaxLength</label><div class="controls">
+			<input type="text" class="form-control" name="maxlength" value=""></div></div></div>
+		<div class="col-md-2 f-min"><div><label class="control-label title-label">Min</label><div class="controls">
+			<input type="text" class="form-control" name="min" value=""></div></div></div>
+		<div class="col-md-2 f-max"><div><label class="control-label title-label">Max</label><div class="controls">
+			<input type="text" class="form-control" name="max" value=""></div></div></div>
+		<div class="col-md-2 f-rows"><div><label class="control-label title-label">rows</label><div class="controls">
+			<input type="text" class="form-control" name="rows" value="5"></div></div></div>
+		<div class="col-md-2 f-cols"><div><label class="control-label title-label">cols</label><div class="controls">
+			<input type="text" class="form-control" name="cols" value="100"></div></div></div>
+		<div class="col-md-2 f-key"><div><label class="control-label title-label">key</label><div class="controls">
+			<input type="text" class="form-control" name="key" value=""></div></div></div>
+		<div class="col-md-2 f-val"><div><label class="control-label title-label">val</label><div class="controls">
+			<input type="text" class="form-control" name="val" value=""></div></div></div>
+		<div class="col-md-2 f-format"><div><label class="control-label title-label">format</label><div class="controls">
+			<input type="text" class="form-control" name="format" value=""></div></div></div>
+		<div class="col-md-2 f-size"><div><label class="control-label title-label">size</label><div class="controls">
+			<input type="text" class="form-control" name="size" value=""></div></div></div>
+		<div class="col-md-4 f-regexp"><div><label class="control-label title-label">RegExp</label><div class="controls">
+			<input type="text" class="form-control" name="regexp" value=""></div></div></div>
+	</div><div>
+		<div class="col-md-8 f-placeholder"><div><label class="control-label title-label">Placeholder</label><div class="controls">
+			<input type="text" class="form-control" name="placeholder" value=""></div></div></div>
+		<div class="col-md-4 f-css"><div><label class="control-label title-label">Css</label><div class="controls">
+			<input type="text" class="form-control" name="css" value=""></div></div></div>
+	</div><div>
+	
+		<div class="col-md-12 controls f-options"><label class="control-label title-label">Options </label>
+		<div class='col-md-12 tab-content'>
+			<div class="switch-icon">
+				<a class="btn active" href="#Options-v" data-toggle="tab">view</a>
+				<a class="btn" href="#Options-m" data-toggle="tab">code</a>
+			</div>
+			<div class="editable min-h34 tab-pane mvc-group-v active" id="Options-v" style="height:154px;overflow-y: scroll;">
+			</div>
+			<div class="tab-pane" id="Options-m">
+				<div class='controls'><textarea class='form-control mvc-group-m' name='options' cols=100 rows=7 ></textarea></div>
+			</div>
+		</div>
+		</div>
+		
+	</div><div>
+	<div class="col-md-12 f-msg"><div><label class="control-label title-label">Msg</label><div class="controls">
+		<input type="text" class="form-control" name="msg" value=""></div></div></div>
+	</div><div>
+	<div class="col-md-12 attribute"><label class="control-label title-label">Attributes</label><div class="col-md-12 controls"><div class="min-h20">
+		<label class="checkbox-inline col-md-auto f-required"><input type="checkbox" name="attribute" value="required" >Required</label>
+		<label class="checkbox-inline col-md-auto f-unique"><input type="checkbox" name="attribute" value="unique" >Unique</label>
+		<label class="checkbox-inline col-md-auto f-hidden"><input type="checkbox" name="attribute" value="hidden" >Hidden</label>
+		<label class="checkbox-inline col-md-auto f-disabled"><input type="checkbox" name="attribute" value="disabled" >Disabled</label>
+		<label class="checkbox-inline col-md-auto f-readonly"><input type="checkbox" name="attribute" value="readonly" >Read Only</label>
+		<label class="checkbox-inline col-md-auto f-trim"><input type="checkbox" name="attribute" value="trim">Trim</label>
+		<label class="checkbox-inline col-md-auto f-multiple"><input type="checkbox" name="attribute" value="multiple">Multiple</label>
+		<label class="checkbox-inline col-md-auto f-htm"><input type="checkbox" name="attribute" value="htm">Html</label>
+		<label class="checkbox-inline col-md-auto f-pk"><input type="checkbox" name="attribute" value="pk">Primary Key</label>
+	</div></div></div>
+	</div>
+</div>
+	  </div>
+      <div class="modal-footer">
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">Save</a>
+        <a href="#" class="btn confirm-cancelbtn" data-dismiss="modal">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+var fds = null;
+
+function showFields() {	
+	if (fds == null) {
+		fds = $("#Fields-m").find(".mvc-group-m-preview").val().toJSON();
+	}
+	var htm = "<table class='table'>\n";
+	htm += "<thead><tr><th>ID</th><th>Field</th><th>Type</th><th>Form</th><th>Default</th><th>Attribute</th><th>PlaceHolder</th></tr></thead>\n<tbody>\n";
+	var no = 0;
+	for (var i in fds) {
+		no++;
+		htm += "	<tr class='clickable' onclick='editField(\"" + i + "\")' title='Click to edit field[" + (fds[i]["label"] + "").encodeAttr() + "]'><td>" + i + 
+		"</td><td>" + fds[i]["label"] + "</td><td>" + fds[i]["type"] + "</td><td>" + fds[i]["form"] + "</td><td>" + fds[i]["default"] + "</td><td>" + fds[i]["attribute"] + 
+		"</td><td class='auto-fit text-nowrap'>" + (fds[i]["placeholder"] || "NA") + "</td></tr>\n";
+	}
+	while (fds["F" + no]) {
+		no++;
+	}
+	//no = no.toHex();
+	htm += "	<tr class='clickable' onclick='editField(\"F" + no + "\")' title='new field[F" + no + "]'><td colspan=7 class='text-center'>new field[F" + no + "].</td></tr>\n";
+	
+	htm += "</tbody>\n</table>\n";
+	$("#Fields-v-e").html(htm);
+}
+function editField(fid) {
+	var title = fds[fid] ? "Field[" + fds[fid]["label"] + "]": "New Field";
+	$('#FieldEditModal').find('.modal-header h3').html(title);
+	var json = {};
+	json[fid] = fds[fid];
+	init(json);
+	
+	$('#FieldEditModal').find('.confirm-btn').unbind();
+	$('#FieldEditModal').find('.confirm-btn').bind( 'click', function(e){ onCreate(); });
+	$('#FieldEditModal').find('.confirm-cancelbtn').unbind();
+	$('#FieldEditModal').find('.confirm-cancelbtn').bind( 'click', function(){ $('#FieldEditModal').modal("hide"); });
+	$('#FieldEditModal').modal("show");
+}
+					
+					
+var types = {"hidden": ["minLength", "length", "maxLength", "min", "max", "options", "trim", "exist", "exist0", "placeholder", "css", "rows", "cols", "key", "val", "format", "size", "multiple"],
+"id": ["minLength", "length", "maxLength", "min", "max", "options", "trim", "exist", "exist0", "placeholder", "css", "rows", "cols", "size", "multiple"],
+"number": ["minLength", "length", "size", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "format", "multiple"],
+"password": ["min", "max", "options", "trim", "exist", "exist0", "placeholder", "css", "rows", "cols", "key", "val", "format", "multiple"],
+"text": ["min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "format", "multiple"],
+"richtext": ["min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "format", "multiple"],
+"textarea": ["min", "max", "options", "trim", "exist", "exist0", "key", "val", "format", "multiple"],
+"radio": ["minLength", "length", "maxLength", "min", "max", "trim", "exist", "exist0", "placeholder", "css","regexp", "rows", "size", "key", "val", "format", "multiple"],
+"checkbox": ["minLength", "length", "maxLength", "min", "max", "trim", "exist", "exist0", "placeholder", "css","regexp", "rows", "size", "key", "val", "format", "multiple"],
+"select": ["minLength", "length", "maxLength", "min", "max", "trim", "exist", "exist0", "placeholder", "css","regexp", "rows", "cols", "key", "val", "format", ],
+"date": ["minLength", "length", "maxLength", "min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "size", "multiple"],
+"time": ["minLength", "length", "maxLength", "min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "size", "multiple"],
+"datetime": ["minLength", "length", "maxLength", "min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "size", "multiple"],
+"reservation": ["minLength", "length", "maxLength", "min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "size", "multiple"]};
+
+var chks = " required unique hidden readonly disabled trim exist pk htm multiple ";
+
+$(document).on("change", "[name='form']", onChangeForm);
+function init(json) {
+	var fields = {};
+	for (var i in json) {
+		$("[name=kid]").val(i);
+		$("[name=kid]").attr("org", i);
+		fields = json[i];
+	}
+	for (var i in fields) {
+		if (chks.indexOf(i) > 0) {
+			if ($("[value=" + i + "]")[0]) $("[value=" + i + "]")[0].checked=true;
+		} else if (i == "attribute") {
+			//if ($("[value=" + i + "]")[0]) $("[value=" + i + "]")[0].checked=true;
+			$("[name=attribute]").each(function() {
+				if (fields[i].indexOf("," + this.value + ",") > -1) {
+					$(this.parentNode).removeClass("hidden");
+					this.checked = true;
+				} else {
+					$(this.parentNode).addClass("hidden");
+					this.checked = false;
+				}
+			});
+			
+		} else {
+			if (i == "options") {
+				showOptions(fields[i], fields["form"], fields["cols"]);
+			} else {
+				$("[name=" + i + "]").val(fields[i]);
+			}
+		}
+	}
+	onChangeForm();
+}
+
+function showOptions(opts, form, cols) {
+
+	var htm = "";
+	for (var i in opts) {
+		htm += '{"value": "' + opts[i]["value"] + '", "caption": "' + (opts[i]["icon"] ? "<img src='" + opts[i]["icon"] + "'>" : "") +
+			(opts[i]["css"] ? "<span class='" + opts[i]["css"] + "'>" : "") + (opts[i]["caption"] || "") + (opts[i]["css"] ? "</span>" : "")  + '"},\n';
+	}
+	$('[name="options"]').val("[" + htm + "]");
+	htm = "";
+	
+	var vals = ",";
+	if (form == "select") {
+		for (var i in opts) {
+			vals += opts[i]["value"] + ",";
+			htm += "<div class='col-md-12'><div class='col-md-0'>[" + opts[i]["value"] + "]</div><div class='editable col-md-11 min-h34 def-options' contenteditable='true' val=" + opts[i]["value"] + ">" + opts[i]["caption"] + "</div></div>\n";
+		}
+		var count = vals.split(",").length - 2;
+		htm += "<div class='col-md-12 min-h34'> </div>";
+		for (var i = 0; i < 3; i++) {
+			while (vals.indexOf("," + count + ",") > -1) {
+				count++;
+			}
+			vals += count + ",";
+			htm += "<div class='col-md-12'><div class='col-md-0'>[" + count + "]</div><div class='editable col-md-11 min-h34 def-options' contenteditable='true' val=" + count + "></div></div>\n";
+		}
+		$("#Options-v").html(htm);
+		return;
+	}
+	if (form != "radio" && form != "checkbox") {
+		return;
+	}
+	
+	cols = (cols > 0 && cols < 999) ? cols : 10;
+	var cnt = 1;
+	vals = ",";
+	htm += "<div class='col-md-12'><span id='common-toolbar'></div>";
+	for (var i in opts) {
+		if (cnt == 1) {
+			htm += "<div class='col-md-12'>";
+		}
+		vals += opts[i]["value"] + ",";
+		htm += "<div class='col-md-0'>[" + opts[i]["value"] + "]</div><div class='editable col-md-auto def-options def-options-rich' contenteditable='true' val=" + opts[i]["value"] + ">" + 
+			(opts[i]["icon"] ? "<img src='" + opts[i]["icon"] + "'>" : "") +
+			(opts[i]["css"] ? "<span class='" + opts[i]["css"] + "'>" : "") + (opts[i]["caption"] || "") + (opts[i]["css"] ? "</span>" : "") + "</div><div class='col-md-auto'></div>\n";
+		
+		cnt++;
+		if (cnt > cols) {
+			cnt = 1;
+			htm += "</div>\n";
+		}
+	}
+	var count = vals.split(",").length - 2;
+	htm += "<div class='col-md-12' style='padding-top:10px;'><label>To add new options, edit following input text:</label></div><div class='col-md-12' >";
+	for (var i = 0; i < 6; i++) {
+		while (vals.indexOf("," + count + ",") > -1) {
+			count++;
+		}
+		vals += count + ",";
+		htm += "<div class='col-md-0'>[" + count + "]</div><div class='editable col-md-auto min-h34 def-options def-options-rich' contenteditable='true' val=" + count + "></div>";
+	}
+	htm += "</div>\n";
+	$("#Options-v").html(htm);
+
+	var userOptions = {"icons": ["/img/s/b1.png", "/img/s/b2.png", "/img/s/b3.png", "/img/s/b4.png", "/img/s/b5.png", "/img/s/b6.png", "/img/s/b7.png", "/img/s/b8.png", "/img/s/f1.png", "/img/s/f2.png", "/img/s/f3.png", "/img/s/f4.png", "/img/s/f5.png", "/img/s/f6.png", "/img/s/f7.png", "/img/s/f8.png", "/img/s/os.hp.png", "/img/s/os.linux.png", "/img/s/os.redhat.png", "/img/s/os.win.png", "/img/s/s4.png", "/img/s/s5.png", "/img/s/s7.gif", "/img/s/t1.png", "/img/s/t2.png", "/img/s/t3.png", "/img/s/t4.png", "/img/s/t5.png", "/img/s/t6.png", "/img/s/t7.png", "/img/s/t8.png", "/img/add.png", "/img/copy.png", "/img/detail.png", "/img/edit.png", "/img/remove.png", "/img/search.png"]};
+	userOptions["p"] = "no";
+	userOptions["link"] = "no";
+	userOptions["img"] = "no";
+	userOptions["undo"] = "no";
+	userOptions["autohide"] = "no";
+	initRichTextToolbarBindings("#common-toolbar", userOptions);
+	var tt = $($("#common-toolbar")[0].parentNode);
+	tt.html(tt.html().replace(/data\-edit/gi, "command"));
+	$("#common-toolbar").hide();
+	$(document).on("click", "[command]", function() {
+		var commandArr = $(this).attr("command").split(' ');
+		var command = commandArr.shift();
+		var args = commandArr.join(' ');
+		restoreSelection();
+		richtext_editor.focus();
+		document.execCommand(command, 0, args);
+		saveSelection();
+	});
+	$(document).on("blur", ".def-options", function() {
+		var htm = "";
+		$(".def-options").each(function() {
+			if ($(this).html().length > 0) {
+				htm += '{"value": "' + $(this).attr("val") + '", "caption": "' + $(this).html().replace(/"/gi, '\\"') + '"},\n';
+			}
+		});
+		$('[name="options"]').val("[" + htm + "]");
+	});
+	 
+	$(document).on("blur", '[name="options"]', function() {
+		var json = ("{options: " + $(this).val() + "}").toJSON();
+		if (!json["options"]) {
+			error("Failed to parse options into JSON! <br />Close current page to drop changes then try to make change in view mode.<br />or Find out what's wrong at <a target='_blank' href='http://jsonlint.com/' >JsonLint</a>.");
+		} else {
+			showOptions(json["options"], form, cols);
+		}
+	});
+}
+
+function syncOptions() {
+	$(document).on('click', '.def-options-rich', function(){
+		var target = $(this.parentNode).find(".mvc-group-m")[0];
+		var self = this;
+		editWithRichText(self, function() {syncOptions();});
+	})
+	var options = "";
+	$(".def-options").each(function() {
+		$(this).attr("val");
+	});
+
+}
+function onChangeForm() {
+	var typ = types[$("[name='form']").val()];
+	if (!typ) return;
+	$(".hidden").each(function() {
+		$(this).removeClass("hidden");
+	});
+	for (var i in typ) {
+		$(".f-" + typ[i].toLowerCase()).addClass("hidden");
+	}
+		
+	var attrs = "," + typ.join(",") + ",";
+	$("[name=attribute]").each(function() {
+		if (attrs.indexOf("," + this.value + ",") > -1) {
+			$(this.parentNode).addClass("hidden");
+			this.checked = false;
+		} else {
+			$(this.parentNode).removeClass("hidden");
+		}
+	});
+}
+
+function onCreate() {
+	var cells = ["type", "form", "label", "required", "unique", "hidden", "readonly", "disabled", "PK", "minLength", "length", "maxLength", "min", "max", "options", "default", "regexp", "trim", "exist", "exist0", "placeholder", "css","msg", "htm", "rows", "cols", "key", "val", "format", "size", "multiple"];
+	var strings = " type form label default regExp placeholder css msg key val format";
+	var chks = " required unique hidden readonly disabled trim exist pk htm multiple ";
+	var json = '"' + $("[name=kid]").val() + '": {';
+	for (var i in cells) {
+		var key = cells[i].toLowerCase();
+		if ($(".f-" + key)[0] && $(".f-" + key).hasClass("hidden")) {
+			continue;
+		}
+		var val = $("[name=" + key + "]").val();
+		if (chks.indexOf(key) > 0  || !val || val.length < 1) {
+			// $("." + key + " input:checked").val() 
+			//val = ($("." + key + " input:checked")) ? "true" : "false";
+			continue;
+		}
+		if (strings.indexOf(key) > 0) {
+			val = (val)? '"' + val.replace(/"/g, '\\"') + '"' : '""';
+		}
+
+		json += '"' + key + '": ' + val + ', ';
+	}
+	// var val = $("[name=attribute]").val();
+	json += '"attribute": ",';
+	$("[name=attribute]").each(function() {
+		if (this.checked) {
+			json += this.value + ',';
+		}
+	});
+	json += '"';
+	json += '}';
+	json = json.replace(/, \}/g, "}");
+	var id = $("[name=kid]").val();
+	var oid = $("[name=kid]").attr("org");
+	var htm = $("[name='Fields']").val();
+	var reg  = new RegExp('"' + oid + '": *\\{([^{}])*(\\{.*\\})*([^{}])*\\},?', "g");
+	if (oid != id) {
+		htm = htm.replace(reg, "");
+		if (htm.indexOf('"' + id + '":') > 0) {
+			//alert("Field ID is found at current application, try others.");
+		} else {
+			htm = htm.substring(0, htm.lastIndexOf("}", htm.lastIndexOf("}") - 1)) + "},\n" + json + "}";
+		}
+	} else {
+		if (htm.indexOf('"' + id + '":') > 0) {
+			htm = htm.replace(reg, json + ',');
+		} else {
+			htm = htm.substring(0, htm.lastIndexOf("}", htm.lastIndexOf("}") - 1)) + "},\n" + json + "}";
+		}
+	}
+	fds= htm.toJSON();
+	showFields();
+	$("[name='Fields']").val(htm);
+}
+
+function viewLayout(source, target) {
+	var height = $(target).attr("style").replace("height", "overflow: auto;height");
+	var stype = (source.contains("name") ? source.mid("out", "'") : source.mid("out"));
+	var htm = '<div class="col-md-12 padding0 layout-parent" stype="' + stype + '"><div class="col-md-10 padding1 layout-zone" style="' + height + '">' + $(source).val() + '</div><div class="col-md-2 well padding0 attr-zone">' + 
+'<h3>Field Attribute</h3>\n' + 
+'<div class="">\n' + 
+'	<select name="Field_Ids" class="col-md-12 input-sm">\n' + 
+'	<option value="">N/A</option>\n';
+	<% for (var fid in fields) { %>
+htm += '		<option value="<%= fid %>" ><%= fid + ": " + fields[fid] %></option>\n';
+	<% } %>
+htm += '	<option value="Update">Update timestamp</option>\n';
+htm += '	<option value="UpdateR">Updater</option>\n';
+htm += '	<option value="Create">Create timestamp</option>\n';
+htm += '	<option value="CreateR">Creater</option>\n';
+if (stype == "L") {
+htm += '	<option value="Show">Action: Detail</option>\n';
+htm += '	<option value="Copy">Action: Copy</option>\n';
+htm += '	<option value="Edit">Action: Edit</option>\n';
+htm += '	<option value="Remove">Action: Remove</option>\n';
+htm += '	<option value="diy">Action: One Click</option>\n';
+}
+htm += '	</select>\n' + 
+'</div>\n' + 
+'<div class="Field_Dispaly"><label title="Show default label or typed text"><input type="text" class="form-control" name="Field_Dispaly" value="" placeholder=""></label></div>\n';
+if (stype == "L") {
+	htm += '<div class=""><label title="Header for list"><input type="text" class="form-control" name="Field_Title" value="" placeholder="Head text"></label></div>\n';
+}
+htm += '<div class="">\n<label title="Width for field section">';
+
+if (stype == "L") {
+	htm += '<input type="text" class="form-control" name="div_width" value="" placeholder="ex: 30% 30px col-md-1">';
+} else {
+	htm += '	<select name="div_width" class="col-md-12 input-sm">\n' + 
+'	<option value="col-md-auto">Auto</option>\n' + 
+'	<option value="col-md-12">col-md-12 (100%)</option>\n' + 
+'	<option value="col-md-11">col-md-11 (91.7%)</option>\n' + 
+'	<option value="col-md-10">col-md-10 (83.3%)</option>\n' + 
+'	<option value="col-md-9">col-md-9 (75%)</option>\n' + 
+'	<option value="col-md-8">col-md-8 (66.7%)</option>\n' + 
+'	<option value="col-md-7">col-md-7 (58.3%)</option>\n' + 
+'	<option value="col-md-6">col-md-6 (50%)</option>\n' + 
+'	<option value="col-md-5">col-md-5 (41.7%)</option>\n' + 
+'	<option value="col-md-4">col-md-4 (33.3%)</option>\n' + 
+'	<option value="col-md-3">col-md-3 (25%)</option>\n' + 
+'	<option value="col-md-2">col-md-2 (16.7%)</option>\n' + 
+'	<option value="col-md-1">col-md-1 (8.3%)</option>\n' + 
+'	</select>\n';
+}
+
+htm += '</label>\n' + 
+'</div>\n';
+	
+	if (attrN == null) {
+		attrN = $("[name='FieldsLN']").val().toJSON();
+	}
+	if (attrE == null) {
+		attrE = $("[name='FieldsLE']").val().toJSON();
+	}
+	if (attrS == null) {
+		attrS = $("[name='FieldsLS']").val().toJSON();
+	}
+	if (attrL == null) {
+		attrL = $("[name='FieldsLL']").val().toJSON();
+	}
+	if (fields == null) {
+		fields = ($('[name="Fields"]').val() + "").toJSON();
+	}
+	switch(stype) {
+		case "N":
+		break;
+		case "E":
+			htm += '<label class="col-md-12" title="Not editable in edit page"><input type="checkbox" name="Field_Readonly" value=true >Read Only</label>\n';
+		break;
+		case "S":
+		break;
+		case "L":
+			htm += '<label class="col-md-12 Field_Iconly"  title="Only show icon in list page"><input type="checkbox" name="Field_Iconly" value=true >Icon Only</label>\n' + 
+					'<label class="col-md-12 Field_Clickable"  title="Show in link and move to detail page if clicked"><input type="checkbox" name="Field_Clickable" value=true >Click for detail?</label>\n';
+			htm += '<div class="col-md-12 padding0 aclick hide">\n' + 
+					'<div class="col-md-12 padding0 aclick-fids"><label>Click to update: </label><select name="aclick_fids" class="col-md-12 input-sm">';
+			for (var i in fields) {
+				if (!(fields[i]["options"] && fields[i]["options"].length > 0)) continue;
+				htm += '	<option value="' + i + '">' + i + ': ' + fields[i]["label"] + '</option>\n';
+			}
+			htm += '</select></div>\n' + 
+					'<div class="col-md-12 padding0 aclick-vals"></div></div>\n';
+		break;
+		default:
+		break;
+	}
+	htm += '<a class="col-md-12 btn btn-danger fremove" href="javascript:;" pos="">Remove</a>' + 
+			'<a class="col-md-12 btn btn-success fappend" href="javascript:;" pos="">Append</a>\n';
+			
+	htm += '</div></div>\n';
+	$(target).html(htm);
+	var sty = ($(target).attr("style") + "").replace("overflow-y: scroll;", "");
+	$(target).attr("style", sty);
+	$(target).find(".fremove").hide();
+	$(target).find(".fappend").hide();
+	var root = $(target).find(".layout-parent");
+	
+	$(target).find('[field]').each(function(){
+		if ($(this).attr("LSAction")) {
+			return;
+		}
+		fillLayoutField(root, $(this).attr("field"));
+	});
+}
+
+function fillLayoutField(root, fid) {
+	var attr = getAttrObj(root);
+	if (!attr[fid]) return;
+	var label = attr[fid]["displayas"] || "";
+	if (label.length < 1 && fields[fid]) {
+		label = fields[fid]["label"] || "";
+	}
+	var htm = (attr[fid]["readonly"] ? "[ReadOnly] " : "") + label + "(" + fid + ")";
+	$('[field="' + fid + '"]').html(htm);
+}
+
+$(document).on("change", '[name="aclick_fids"]', function() {
+	var self = this;
+	fillOneClickOptions($(self).parents(".aclick"));
+});
+function fillOneClickOptions(root) {
+	var fid = root.find('[name="aclick_fids"]').val();
+	if (!fid || !fields[fid]) return;
+	
+	var htm = '<div class="col-md-12 padding0" style="padding-top: 15px;"><label>One click actions:</label></div>\n<div class="col-md-12 padding0 aclicked-opts"></div>\n' + 
+			'<div class="col-md-12 padding0" style="padding-top: 15px;"><label>Selectable actions:</label></div>\n<div class="col-md-12 padding0 aclick-opts">' + 
+			'<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'caret" ><span class="caret"></span></a></initLSAction>\n' + 
+			'<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'edit" >More</a></initLSAction></div>';
+	var optzone = root.find(".aclick-vals");
+	optzone.html(htm);
+	var aopts = optzone.find(".aclick-opts");
+	var opts = fields[fid]["options"];
+	for (var i in opts) {
+		aopts.append('<initLSAction class="btn-group-xs"><a class="btn btn-link" name="oneupdate" val="' + fid + '=' + opts[i]["value"] + '" >' + opts[i]["caption"] + '</a></initLSAction>\n');
+	}
+	
+	opts = root.parents(".layout-parent").find('[field="diy"]');
+	htm = opts.html() || "";
+	if (htm.indexOf("val='" + fid) < 0 && htm.indexOf("val=\"" + fid) < 0) {
+		return;
+	}
+	root.find(".aclicked-opts").html(htm.replace(/LSAction/gi, "initLSAction").replace('<span class="caret" val="caret"></span>', '<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'caret" ><span class="caret"></span></a></initLSAction>'));
+	
+	opts.find("[val]").each(function(){
+		var self = this;
+		var val = $(self).attr("val");
+		if (val == "") {
+			val = "edit";
+		} else if (val == "caret") {
+			val = "caret";
+		} else {
+			val = val.mid("=");
+		}
+		var alink = aopts.find('[val="' + fid + '=' + val + '"]')[0];
+		if (!alink) return;
+		alink.parentNode.removeChild(alink);
+	});
+}
+
+$(document).on("click", 'initLSAction', function() {
+	var self = this;
+	var root = $(self).parents(".aclick");
+	if ($(self.parentNode).attr("class").indexOf("aclick-opts") > -1) {
+		root.find(".aclicked-opts").append(self);
+	} else {
+		root.find(".aclick-opts").append(self);
+	}
+	root = root.parents(".layout-parent");
+	var htm = root.find(".aclicked-opts").html().replace(/initlsaction/gi, "LSAction");
+	root.find('[field="diy"]').html(htm);
+	saveLayout(root);
+});
+
+$(document).on("click", "[field]", editLayoutField);
+$(document).on("change", '[name="Field_Ids"]', function() {
+	var self = this;
+	var root = $(self).parents(".layout-parent");
+	root.find("[field]").each(function() { $(this).removeClass("field-active"); })
+	var field = root.find('[field="' + $(self).val() + '"]');
+	fillDivWidth(field, root.find('[name="div_width"]'));
+	autofillAttr(root);
+	field.addClass("field-active");
+});
+
+$(document).on("change", '[name="div_width"]', function() {
+	var self = this;
+	var root = $(self).parents(".layout-parent");
+	var fid = root.find('[name="Field_Ids"]').val();
+	var field = root.find('[field="' + fid + '"]');
+	var css = (field.attr("class") || "").replace(/(col.md.|wid|p)\d+/gi, "");
+
+	field.attr("class", css);
+	
+	if ($(self).val().match(/^\d+.+/g)) {
+		field.attr("width", $(self).val());
+	} else {
+		field.removeProp("width");
+		field.addClass($(self).val());
+	}
+	saveLayout(root);
+});
+function editLayoutField() {
+	var self = this;
+	var root = $(self).parents(".layout-parent");
+	fillDivWidth($(self), root.find('[name="div_width"]'));
+	var ids = root.find('[name="Field_Ids"]');
+	if (!$(self).attr("field") || ids.html().contains('value="' + $(self).attr("field") + '"')) {
+		ids.val($(self).attr("field"));
+	} else {
+		ids.append('<option value="' + $(self).attr("field") + '" selected="selected">' + $(self).attr("field").toUpperCase() + '</option>');
+	}
+	root.find("[field]").each(function() { $(this).removeClass("field-active"); })
+	$(self).addClass("field-active");
+	autofillAttr(root);
+}
+function fillDivWidth(field, div) {
+	var wid = (field.attr("class") || "");
+	if (wid.match(/(col.md.|wid|p)\d+/gi)) {
+		wid = wid.replace(/(.*)(col.md.|wid|p)(\d+)(.*)/gi, "$2$3");
+	} else {
+		wid = (field.attr("width") || "");
+	}
+	div.val(wid);
+}
+var fields = null;
+var attrN = null;
+var attrE = null;
+var attrS = null;
+var attrL = null;
+
+function getAttrObj(root, fid) {
+	var attr = {};
+	switch(root.attr("stype")) {
+		case "N":
+			attr = attrN;
+		break;
+		case "E":
+			attr = attrE;
+		break;
+		case "S":
+			attr = attrS;
+		break;
+		case "L":
+			attr = attrL;
+		break;
+	}
+	if (fid) {
+		attr = attr[fid] || {};
+	}
+	return attr;
+}
+function autofillAttr(root) {
+	if (!root) return;
+	if (fields == null) {
+		fields = ($('[name="Fields"]').val() + "").toJSON();
+	}
+	var fid = root.find('[name="Field_Ids"]').val();
+	if (!fid) return;
+	
+	var act = fid.match(/(submit|list|new|copy|edit|show|remove|diy)/gi);
+	if (!(fid in fields || act)) {
+		root.find('.fremove').hide();
+		root.find('.fappend').hide();
+		root.find('[name="Field_Dispaly"]').attr("placeholder", "");
+		return;
+	}
+	var fattr = getAttrObj(root, fid);
+	if (root.attr("stype") == "E") {
+		root.find('[name="Field_Readonly"]').attr("checked", (fattr["readonly"]) ? true : false);
+	}
+	
+	var dsp = root.find('[name="Field_Dispaly"]');
+	if (act) {
+		root.find('.Field_Dispaly').addClass('hide');
+	} else {
+		var label = fields[fid]["label"] || "";
+		dsp.attr("placeholder", label);
+		dsp.val(fattr["displayas"] || "");
+		root.find('.Field_Dispaly').removeClass('hide');
+	}
+	if (root.attr("stype") == "L") {
+		root.find('[name="Field_Title"]').val(fattr["title"] || "");
+		
+		root.find('.Field_Iconly').addClass('hide');
+		root.find('.Field_Clickable').addClass('hide');
+		
+		if (!act) {
+			if (fields[fid]["options"] && fields[fid]["options"].length > 0) {
+				root.find('.Field_Iconly').removeClass('hide');
+				root.find('[name="Field_Iconly"]').attr("checked", (fattr["iconly"]) ? true : false);
+			}
+			root.find('[name="Field_Clickable"]').attr("checked", (fattr["clickable"]) ? true : false);
+			root.find('.Field_Clickable').removeClass('hide');
+		}
+	}
+	var field = root.find('[field="' + fid + '"]');
+	if (field[0]) {
+		var btn = root.find('.fremove');
+		btn.attr("title", "Remove current field[" + fid + ":" + label + "] from layout");
+		btn.show();
+		
+		btn = root.find('.fappend');
+		btn.attr("pos", fid + ":" + label);
+		btn.hide();
+	} else {
+		root.find('.fremove').hide();
+		var btn = root.find('.fappend');
+		btn.attr("title", "Append current field[" + fid + ":" + label + "] " + (btn.attr("pos").length > 0 ? "after " + btn.attr("pos") : ""));
+		btn.show();
+	}
+	if (fid == "diy") {
+		if (field[0]) {
+			fid = field.html();
+			if (fid.contains("val='")) {
+				fid = fid.mid("val='", "=");
+			} else {
+				fid = fid.mid("val=\"", "=");
+			}
+			
+			var sel = root.find('.aclick').find('[name="aclick_fids"]');
+			sel.val(fid);
+			sel.change();
+		}
+		root.find('.aclick').removeClass("hide");
+	} else {
+		root.find('.aclick').addClass("hide");
+	}
+}
+$(document).on("click", '.fremove', function() {
+	var self = this;
+	var root = $(self).parents(".layout-parent");
+	var fid = root.find('[name="Field_Ids"]').val();
+	var field = root.find('[field="' + fid + '"]');
+	if (field[0]) {
+		field[0].parentNode.removeChild(field[0]);
+	}
+	root.find('[name="Field_Ids"]').val("");
+	root.find('[name="div_width"]').val("");
+	root.find('.fappend').attr("pos", "");
+	autofillAttr(root);
+	saveLayout(root);
+});
+$(document).on("click", '.fappend', function() {
+	var self = this;
+	var root = $(self).parents(".layout-parent");
+	var fid = root.find('[name="Field_Ids"]').val();
+	var wid = root.find('[name="div_width"]').val() || "";
+	var label = root.find('[name="Field_Dispaly"]');
+	label = label.val().length > 0 ? label.val() : label.attr("placeholder");
+	
+	var htm = "";
+	if (wid.match(/^\d+.+/g)) {
+		htm = "width='" + wid + "' ";
+	} else {
+		htm = "class='" + wid + "' ";
+	}
+	htm += "field='" + fid + "'>";
+	var target = $(self).attr("pos");
+	if (target.length > 0) {
+		target = target.mid(0, ":");
+	}
+	$(self).attr("pos", fid + ":" + label);
+	if (root.find("td")[0]) {
+		if (fid.match(/copy|show|edit|remove|diy/gi)) {
+			var alink = '<lsaction class="btn-group-xs"><a class="btn btn-default" href="javascript:;" name="delete" title="">delete</a></lsaction>';
+			alink = alink.replace(/delete/g, fid.toLowerCase());
+			htm = "<td field='" + fid + "'" + htm + alink + "</td>\n";
+		} else {
+			htm = "<td " + htm + label + "(" + fid + ")" + "</td>\n";
+		}
+	} else {
+		htm = "<div " + htm.replace("class=''", "class='col-md-auto'") + label + "(" + fid + ")" + "</div>\n";
+	}
+	
+	if (target.length > 0) {
+		root.find('[field="' + target + '"]').after(htm);
+	} else {
+		if (root.find("td")[0]) {
+			root.find('td:last').after(htm);
+		} else {
+			root.find('.layout-zone').append(htm);
+		}
+	}
+	saveLayout(root);
+	root.find('[field="' + fid + '"]').click();
+});
+
+function saveLayout(root) {
+	if (!root) return;
+	root.find("[field]").each(function() { $(this).removeClass("field-active"); })
+	var htm = root.find('.layout-zone').html();
+	var source = "[name='LayoutN']".replace("N", root.attr("stype"));
+	$(source).val(htm.replace("field-active", "").replace(/(\r?\n)+/gi, "\n"));
+}
+
+$(document).on("change", '[name="Field_Readonly"]', saveFieldAttr);
+$(document).on("change", '[name="Field_Dispaly"]', saveFieldAttr);
+function saveFieldAttr() {
+	var self = this;
+	var root = $(self).parents(".layout-parent");
+	var fid = root.find('[name="Field_Ids"]').val();
+	var json = {};
+	json["displayas"] = root.find('[name="Field_Dispaly"]').val();
+	if (root.find('[name="Field_Readonly"]')[0]) {
+		json["readonly"] = root.find('[name="Field_Readonly"]')[0].checked;
+	}
+	var label = root.find('[name="Field_Dispaly"]').val();
+	var readonly = root.find('[name="Field_Dispaly"]').val();
+	var attr = {};
+	switch(root.attr("stype")) {
+		case "N":
+			attr = attrN;
+		break;
+		case "E":
+			attr = attrE;
+		break;
+		case "S":
+			attr = attrS;
+		break;
+		case "L":
+			attr = attrL;
+		break;
+	}
+	attr[fid] = json;
+	$("[name='FieldsLN']".replace("N", root.attr("stype"))).val(obj2str(attr));
+	fillLayoutField(root, fid);
+}
+
+function viewAction(source, target) {
+	$(target).html($(source).val() + '<div class="col-md-0"><a class="btn btn-link" href="javascript:;"><img src="/img/add.png">New Action</a></div>');
+}
+$(document).on("focus", "[target-input=\"[name='New']\"]", function(e) {
+	var newAction = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;"><img src="/img/add.png">New Action</a></div>';
+	var self = this;
+	var t =  $(self).attr("target-input");
+	if (!$(self).html().contains("< a")) {
+		$(self).html(newAction);
+	}
+	editAction(e, $(self).find("div")[0], function () { if ($(self).html() == newAction) $(self).html(""); $(t).val($(self).html());  });
+});
+
+$(document).on("change", "[name='Title']", function() {$("[name='TitleLL']").html($(this).val());});
+$(document).on("click", "#ActionLN-v-e >div", editAction);
+$(document).on("click", "#ActionLE-v-e >div", editAction);
+$(document).on("click", "#ActionLS-v-e >div", editAction);
+$(document).on("click", "LSAction", function(e) {
+	var self = this;
+	if ($(self).prop("tagName") == "TD") {
+		editLayoutField();
+	} else {
+		editAction(e, $(self)[0], function () {  });
+	}
+});
+
+function editAction(e, act, callback) {
+	var newAction = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;"><img src="/img/add.png">New Action</a></div>';
+	var self = act ? act : this;
+	var htm = $(self).html();
+	var action = ($(self).find("a") || $(self));
+	var href = action.attr("url") || "";
+	var hint = action.attr("title") || "";
+	var label = action.html() || "";
+	var name = (action.attr("name") || "").toLowerCase();
+	var css = (action.attr("class") || "").toLowerCase();
+	var sel = "<select name='Action_Name' class='input-sm'>" + 
+			"	<option value='submit'>Submit</option>" + 
+			"	<option value='list'>List</option>" + 
+			"	<option value='new'>New</option>" + 
+			"	<option value='copy'>Copy</option>" + 
+			"	<option value='edit'>Edit</option>" + 
+			"	<option value='show'>Detail</option>" + 
+			"	<option value='delete'>Remove</option>" + 
+			"	<option value='diy'>DIY</option>" + 
+			"</select>\n";
+	sel = sel.replace("value='" + name + "'", "value='" + name + "' selected=true");
+
+	var style = "<div class='btn-group'><a name='Action_css' href='javascript:;' class='btn btn-danger'>R</a>" +
+	"<a name='Action_css' href='javascript:;' class='btn btn-warning'>O</a>" +
+	"<a name='Action_css' href='javascript:;' class='btn btn-success'>G</a>" +
+	"<a name='Action_css' href='javascript:;' class='btn btn-primary'>B</a>" +
+	"<a name='Action_css' href='javascript:;' class='btn btn-info'>S</a>" +	
+	"<a name='Action_css' href='javascript:;' class='btn btn-default'>G</a>" +	
+	"<a name='Action_css' href='javascript:;' class='btn btn-link'>NA</a></div>";
+	
+	var msg = '<div class="modal-body" style="min-height: 200px;"><div class="row">\n' +
+'		<div class="col-md-4"><div class="well col-md-12" style="height:170px;"><label>Preivew:</label><div class="controls" name="Action_html">' + htm + '</div></div></div>\n' +
+'		<div class="col-md-8 padding0"><div class="col-md-12">' + style + '</div><div class="col-md-12 action_type" style="padding: 5px 0px;"><div class="col-md-4">' + sel + '</div>' +
+"<div class='col-md-8'><div class='controls'><input type='text' class='form-control' name='Action_href' value='" + href + "' placeholder='URL like: /APP/show?Rid=RID'></div></div></div>" + 
+'		<div class="col-md-12">' + "<div class='controls'><input type='text' class='form-control richtextcodeline' name='Action_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='action label'></div>" + '</div>' + 
+"<div class='col-md-12' style='padding-top: 34px;'><div class='controls'><input type='text' class='form-control' name='Action_hint' value='" + hint + "' placeholder='hint message'></div></div>" + '</div>\n' +
+'</div>\n</div>\n';
+
+	showModalView((name == "" ? "New Action" : "Modify Action"), msg, "Save", "Cancel", 
+	function() {
+		var parent = self.parentNode;
+		if($("[name='Action_label']").val() == "") {
+			parent.removeChild(self);
+		} else {
+			$(self).html($("[name='Action_html']").html());
+		}
+		var id = $(parent).attr("id");
+		if (id && id.contains("-v-e")) {
+			if (!$(parent).html().contains(newAction)) {
+				$(parent).append(newAction);
+			}
+			var val = $(parent).html();
+			val = val.substr(0, val.lastIndexOf("<div "));
+			val = val.replace(/\<\/div\>[\n]+/gi, "</div>\n");
+			$("[name='" + id.replace("-v-e", "") + "']").val(val);
+		} else {
+			if (callback) {
+				callback();
+			}
+		}
+	},
+	function() {
+	});
+	bindRichText();
+	var obj = $("[name='Action_html']").find("a");
+	
+	var actionInList = $(self).prop("tagName").match(/(TD|LSAction)/gi);
+	if (actionInList) {
+		$(".action_type").addClass("hide");
+	} else {
+		$(".action_type").removeClass("hide");
+	}
+	$(document).on("click", "[name='Action_css']", function(){obj.attr("class", $(this).attr("class")); if (!actionInList) obj.attr("style", "min-width:80px;");});
+	$(document).on("change", "[name='Action_Name']", function(){
+		obj.attr("name", $(this).val()); 
+		if ($(this).val() == "diy") {
+			$("[name='Action_href']").show();
+		} else {
+			$("[name='Action_href']").hide();
+		}
+	});
+	$("[name='Action_Name']").change();
+	$(document).on("blur", "[name='Action_href']", function(){
+		obj.attr("url", $(this).val());
+	});
+	$(document).on("blur", "[name='Action_hint']", function(){obj.attr("title", $(this).val());});
+	$(document).on("blur change", "[name='Action_label']", function(){obj.html($(this).val());});
+}
+
+$(document).on("click", "#Filter-v-e >a", editFilter);
+function editFilter() {
+	var newFilter = '<a class="filter" href="javascript:;"><img src="/img/add.png"></a>';
+	var self = this;
+	var text = $(self).attr("filter") || "";
+	var label = $(self).html() || "";
+
+	var msg = '<div class="modal-body" style="min-height:120px;">\n' +
+"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Text:</label></div><div class='col-md-10 controls'><input type='text' class='form-control' name='filter_text' value='" + text + "' placeholder='string to find in page'></div></div>" + 
+"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Label:</label></div><div class='col-md-10 controls'><input type='text' class='form-control richtextcodeline' name='filter_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='label'></div></div>" + 
+'</div>\n';
+
+	showModalView((text == "" ? "New Filter" : "Modify Filter"), msg, "Save", "Cancel", 
+	function() {
+		var parent = self.parentNode;
+		if($("[name='filter_label']").val() == "" || $("[name='filter_text']").val() == "") {
+			self.parentNode.removeChild(self);
+		} else {
+			$(self).html($("[name='filter_label']").val());
+			$(self).attr("filter", $("[name='filter_text']").val());
+		}
+		
+		$("[name='Filter']").val($(parent).html().replace(newFilter, ""));
+		if (!$(parent).html().contains(newFilter)) {
+			$(parent).append("\n" + newFilter);
+		}
+	},
+	function() {
+	});
+	bindRichText();
+}
+function viewFilter(source, target) {
+	$(target).html($(source).val() + '\n<a class="filter" href="javascript:;"><img src="/img/add.png"></a>');
+}
+function ___showLink(name, define) {
+	var htm = "";
+	if (name == "submit") {
+		htm = "btn btn-primary";
+		var label = define["label"] || "";
+		if (define.icon) {
+			label = '<img src="/img/' + define.icon + '" alt="' + label + '" title="' + label + '">' + label;
+		}
+		if ("css" in define) {
+			htm = define["css"];
+		}
+		htm = '<button type="button" class="' + htm + '">' + label + '</button>';
+		if (define.disabled) {
+			htm = htm.replace(' class="', 'disabled=true class="disabled ');
+		}
+		return htm;
+	}
+	if (name.startsWith("diy")) {
+		return "";
+	}
+	var def = {};
+	switch (name) {
+	case "list":
+		def = {"Title": "List", "label": "List", "icon": "", "type": "link"};
+		break;
+	case "edit":
+		def = {"Title": "Edit", "label": "Edit", "icon": "copy.png", "type": "link"};
+		break;
+	case "new":
+		def = {"Title": "New", "label": "New Data", "icon": "add.png", "type": "link"};
+		break;
+	case "copy":
+		def = {"Title": "Copy", "label": "Copy", "icon": "copy.png", "type": "link"};
+		break;
+	case "show":
+		def = {"Title": "Detail", "label": "Detail", "icon": "", "type": "link"};
+		break;
+	case "remove":
+		def = {"Title": "Remove", "label": "Remove", "icon": "remove.png", "type": "link"};
+		break;
+	default:
+		break;
+	}
+	for (var i in define) {
+		def[i] = define[i];
+	}
+	
+	if (def.type != "link" && def.type != "button") {
+		return "";
+	}
+	
+	htm = ' class="btn "';
+	if (def.type != "link") {
+		htm = ' class="btn-primary"';
+	}
+	if ("css" in def) {
+		htm = ' class="btn ' + def["css"] + '"';
+	}
+	
+	if (def.disabled) {
+		htm = htm.replace(' class="', 'disabled=true class="disabled ');
+	}
+	
+	htm = '<a ' + htm + ' href="javascript:;">';
+	if (def.icon) {
+		htm += '<img src="/img/' + def.icon + '" alt="' + def.label + '" title="' + def.label + '">';
+	}
+	htm += def.label + '</a>';
+	htm = '<div class="' + (def.width ? def.width : "col-md-0") + '">' + htm + '</div>';
+	return htm;
+}
+
+</script>
+<!-- end -->
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -212,8 +1346,7 @@
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -223,8 +1356,8 @@
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -234,17 +1367,36 @@
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		<li><label>Inner Sites:</label></li>
+		<li><a href="http://ent244.sharepoint.hp.com/teams/hpsum/default.aspx"  title="Share Point">HPSUM</a></li>
+		<li><a href="http://ent232.sharepoint.hp.com/teams/hpsumbcs/offline/default.aspx"  title="HPSUM China team Share Point">SPI-China</a></li>
+		<li><a href="ftp://gstl.rose.hp.com/pub/"  title="FTP to download Firmwares">FWs FTP</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/kauai/"  title="Share Point">Kauai</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/Tiger/"  title="Share Point">Tiger</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/Sentosa/"  title="Share Point">Sentosa</a></li>
+		<li><a href="http://gstl.rose.hp.com/projects/Marina/"  title="Share Point">Coyote</a></li>
+		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/Recipe/default.aspx"  title="Share Point">SkyMaster SD2</a></li>
+		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/default.aspx"  title="Share Point">Buccaneer</a></li>
+		<li><a href="http://quix-tt.atlanta.hp.com/tmtrack/tmtrack.dll?" >Quix</a></li>
+		<li><a href="https://matrix.cce.hp.com/app/DesktopDefault.aspx?tabindex=2&tabid=8" >Morpheus</a></li>
+		<li><a href="https://csvnhou-pro.houston.hp.com:18490/svn/ess-hpsum/branches/"  title="HPSUM source codes">SVN</a></li>
 		</ul>
 	</div>
+	<div class="col-md-12">
+		Click 
+		<a href="http://fstldb.fc.hp.com/mhwr/systemInv/findSys.asp" >HERE</a> to find DH servers. If DH server is down, 
+		<a href="http://fstl2c.fc.hp.com/ttx.cgi" >file a ticket</a>.
+		
+		Find proliant servers at <a href="http://vartan.cce.hp.com/listall.php" >vartan.cce</a>.
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+		<a href="" class="badge"></a>
+	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

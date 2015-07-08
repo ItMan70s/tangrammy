@@ -60,13 +60,20 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
 	<div class="jumbotron homepage">
 		<h1>Welcome!</h1>
 		<p>This a sample of tangrammy system. </p>
 </div>
 <div class="col-md-12"><div class="row">
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF0/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/roles/list">Roles</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>This application is used to define user role in this system.</p></div>
+		<p class="text-right"><a href="/roles/list" role="button">Details »</a></p>
+	</div>
+<% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V1")) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
 		<h2><a href="/todo/list">Todo</a></h2>
@@ -84,8 +91,6 @@ To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
 <% } %>
 </div></div>
 
-
-	<div class="row"></div>
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -100,8 +105,7 @@ To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -111,8 +115,8 @@ To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -132,7 +136,7 @@ To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

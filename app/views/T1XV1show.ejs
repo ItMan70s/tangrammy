@@ -60,31 +60,33 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
 <h1>Todo Details</h1>
 
-<div class='well col-md-12'>
+<div class='fields-section well col-md-12'>
 <div class='row'>
-<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='todo'></div>		<div class='col-md-12'><label class='control-label title-label'>ID<B class='red'>*</B></label>
+<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='todo'></div><div class='col-md-12'><label class='control-label title-label'>ID<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%- ((data["F5"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Priority<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Priority<B class='red'>*</B></label>
 <div class='form-show' readonly=true><% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left wid120' alt='Low' title='Low'>Low</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left orange' alt='Medium' title='Medium'><img class='icon15' src='/img/s/f4.png'> Medium</span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left red' alt='High' title='High'><img class='icon15' src='/img/s/f5.png'> High</span> <% } %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Status<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Status<B class='red'>*</B></label>
 <div class='form-show' readonly=true><% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left blue' alt='Initial' title='Initial'><img class='icon15' src='/img/s/b1.png'> Initial</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left green' alt='In progress' title='In progress'><img class='icon15' src='/img/s/b2.png'> In progress</span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left orange' alt='Paused' title='Paused'>Paused</span> <% } %><% if (val.contains( "," + "3" + ",")) { %> <span class='pull-left black' alt='Finished' title='Finished'>Finished</span> <% } %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Name<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Name<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%= ((data["F0"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Detail<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Detail<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%- ((data["F1"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-		<div class='col-md-12'><label class='control-label title-label'>Owner<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Owner<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%- ((data["F4"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-<div class='col-md-12'>
-<hr></hr>
-<div><a  class="btn btn-primary col-md-2" href="/todo/list">OK</a><a  class="btn btn-default" href="/todo/update?Rid=<%= data["Rid"] %>"><img src="/img/edit.png" alt="Edit" title="Edit">Edit</a><a  class="btn btn-default" href="/todo/copy?Rid=<%= data["Rid"] %>"><img src="/img/copy.png" alt="Copy&Create" title="Copy&Create">Copy&Create</a><a  class="btn btn-default" href="/todo/new"><img src="/img/add.png" alt="Add new" title="Add new">Add new</a></div></div><div name='history' ></div>
+<div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
+<div class="col-md-0"><a class="btn btn-primary col-md-2"  href="/todo/list" style="min-width:80px;" title="">OK</a></div>
+<div class="col-md-0"><a class="btn btn-default"  href="/todo/update?Rid=<%= data["Rid"] %>" style="min-width:80px;" title=""><img src="/img/edit.png">Edit</a></div>
+<div class="col-md-0"><a class="btn btn-default"  href="/todo/copy?Rid=<%= data["Rid"] %>" style="min-width:80px;" title=""><img src="/img/copy.png">Copy&Create</a></div>
+<div class="col-md-0"><a class="btn btn-default"  href="/todo/new" style="min-width:80px;" title=""><img src="/img/add.png">Add new</a></div>
+</div></div>
+<span name='history' class='col-md-12'></span>
 <script type='text/javascript'>getOPLogs('T1', 'V1', '<%= data["Rid"] %>');</script>	</div></div>
 
-
-	<div class="row"></div>
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -99,8 +101,7 @@
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -110,8 +111,8 @@
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -131,7 +132,7 @@
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

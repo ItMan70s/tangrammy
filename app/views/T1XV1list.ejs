@@ -60,67 +60,80 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
-<h1>List Todo  <small><a  class="" href="/todo/new"><img src="/img/add.png" alt="New Todo" title="New Todo">New Todo</a></small></h1>
+<h1>Todo  <small><a class="btn btn-link" href="/todo/new" href="/todo/new" style="min-width:80px;"><img src="/img/add.png">New Todo</a></small></h1>
 <form class='navbar-form navbar-left' action='javascrip:doFilter();'>
 <div class='form-group small' style='width:230px'><div class='input-group'><input type='text' name='filterstring' class='form-control data-filter' value='<%= (request.u.data["condition"] || "") %>' placeholder='Search in page'>
-<div class='input-group-btn'><a class='btn btn-default' filter='' title='Clear search text'>X</a><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' style='padding-left:5px;padding-right:5px;'>More <span class='caret'></span></button><ul class='dropdown-menu dropdown-menu-right' role='menu'>
-	<li><a name='search' href='javascript:;'>Search In Site</a></li>
-	<li><a name='advance' href='javascript:hideSearchZone(false);'>Advance Search</a></li>
-</ul></div></div></div>
-<div class='form-group small'><ul class="pager nomargin">
-  <li><a href='javascript:;' filter='span class="green' ><span class='green'>In progress</span></a></li>
-  <li><a href='javascript:;' filter='span class="blue' ><span class='blue'>Inital</span></a></li>
-</ul></div>
-	</form><div class='col-md-12 search-zone hidden' >
-<div class='col-md-12 win-close'><strong>Advance Search</strong></div>
-<table class='table'>
-<tr><td><div class='col-md-1 line-header'>Update:</div><div class='col-md-11'><div><% var latest = (new Date()).recent(); for (var i = 0; i < latest.length; i++) { if (!latest[i]) continue; %>
-<label class='space20 '> <input type='radio' name='opt_Update' target='Update' value='<%= latest[i].mid(0, "@").replace(/\./g, '/') %>'><%= latest[i].mid("@") %></label><% } %>
-<label class='space20 '> <input type='radio' name='opt_Update' value='' checked=true >All Days</label></div></div></td></tr>
-<tr><td><div class='col-md-1 line-header'>Status:</div><div class='col-md-11'><div><label class='space20 blue wid120'> <input type='checkbox' target='F2' value='0'><img class='icon15' src='/img/s/b1.png' >Initial</label><label class='space20 green wid120'> <input type='checkbox' target='F2' value='1'><img class='icon15' src='/img/s/b2.png' >In progress</label><label class='space20 orange wid120'> <input type='checkbox' target='F2' value='2'>Paused</label><label class='space20 wid120'> <input type='checkbox' target='F2' value='3'>Finished</label></div></div></td></tr>
-<tr><td><div class='pull-left hidden' name='selectedconditiontitle'>Selected Condition:</div><div class='col-md-9 pull-left hidden' name='selectedcondition'></div><div class='pull-right'><a class='btn btn-success btn-sm space0' name='advancesearch'>Search</a><a class='btn btn-default btn-sm ' href='javascript: hideSearchZone(true);'>Hide</a></div></td></tr></table></div>
-<script type='text/javascript'>
-<% if ("szone" in request.u.data && request.u.data["szone"].length > 0) { %>
-initAS('<%= request.u.data["szone"].replace(/'/g, '\'') %>');<% }  %>
-if (!true) {$('.search-zone').hide();} $('.search-zone').removeClass('hidden');
- </script>
-<div class='col-md-6 hidden'>
+<div class='input-group-btn'><a class='btn btn-default' filter='' title='Clear search text'>X</a></div></div></div>
+<div class='form-group small'><a class="filter" href="javascript:;" filter="span class="green"><span style="color: rgb(0, 128, 0);">In progress</span></a>
+<a class="filter" href="javascript:;" filter="span class="blue"><font color="#0000ff">Initial</font></a>
+</div>
+	</form><div class='col-md-6 hidden'>
 <div class='input-group'><input type='text' name='condition' class='form-control'><span name='search' class='input-group-addon glyphicon glyphicon-search'></span></div>
-	</div><table class='table'>
+	</div><% function getF3(val) { 
+  var opts = ""; 
+  val = "," + (val || "") + ","; 
+  if (val.contains( "," + "0" + ",")) {    opts += " "; } 
+   if (val.contains( "," + "1" + ",")) {    opts += "<span class='orange'><img class='icon15' src='/img/s/f4.png' alt='Medium' title='Medium'> </span> "; } 
+   if (val.contains( "," + "2" + ",")) {    opts += "<span class='red'><img class='icon15' src='/img/s/f5.png' alt='High' title='High'> </span> "; } 
+   return opts; } %>
+<% function getF2(val) { 
+  var opts = ""; 
+  val = "," + (val || "") + ","; 
+  if (val.contains( "," + "0" + ",")) {    opts += "<span class='blue'><img class='icon15' src='/img/s/b1.png' alt='Initial' title='Initial'> </span> "; } 
+   if (val.contains( "," + "1" + ",")) {    opts += "<span class='green'><img class='icon15' src='/img/s/b2.png' alt='In progress' title='In progress'> </span> "; } 
+   if (val.contains( "," + "2" + ",")) {    opts += "<span class='orange'></span> "; } 
+   if (val.contains( "," + "3" + ",")) {    opts += "<span class='black'></span> "; } 
+   return opts; } %>
+<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='todo'></div><table class='table'>
   <thead>
-	<tr><div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='todo'></div><th  Fid="F5" class='wid30'>ID</th><th  Fid="F3" class='wid20'>P</th><th  Fid="F2" class='wid20'>S</th><th  class='wid90'></th><th  Fid="F0">Todo</th><th  Fid="F4" class='col-md-1'>Owner</th><th  class='wid30'>Edit</th><th  class='wid30'>Copy</th><th  class='wid30'>Remove</th>
+	<tr><th class='wid30'  Fid='F5'>ID</th>
+<th class='wid20'  Fid='F3'>P</th>
+<th class='wid20'  Fid='F2'>S</th>
+<th class='wid90'  Fid='diy'></th>
+<th  Fid='F0'>Todo</th>
+<th class='col-md-1'  Fid='F4'>Owner</th>
+<th class='wid30' Fid='edit'></th>
+<th class='wid30' Fid='copy'></th>
+<th class='wid30' Fid='remove'></th>
+
 	</tr>
   </thead>
   <tbody>
 	<% if(data.length < 1) { %>
-	<tr><td colspan="9">No recorder yet. Add one now? <a  class="" href="/todo/new"><img src="/img/add.png" alt="New Todo" title="New Todo">New Todo</a></td></tr>	<% }
+	<tr><td colspan="9">No recorder yet. Add one now? <a class="btn btn-link" href="/todo/new" href="/todo/new" style="min-width:80px;"><img src="/img/add.png">New Todo</a></td></tr>	<% }
  var group = ""; for(var item in data) { 
-if (data[item]["F3"] != group) { group = data[item]["F3"]; %> <tr class="group"><th colspan="9"><b class="glyphicon glyphicon-minus-sign"></b> Priority: <% var val = data[item]["F3"] || "";  val = "," + val.toString() + ","; %><% if (val.contains( "," + "0" + ",")) { %><% } %> <% if (val.contains( "," + "1" + ",")) { %><span class='orange'><img class='icon15' src='/img/s/f4.png' alt='Medium' title='Medium'> <% } %> </span><% if (val.contains( "," + "2" + ",")) { %><span class='red'><img class='icon15' src='/img/s/f5.png' alt='High' title='High'> <% } %> </span> </th></tr> <% } %>	<tr Rid='<%= data[item]["Rid"] %>'>
-  <td Fid="F5" ><%- (data[item]["F5"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
-  <td Fid="F3" ><% var val = data[item]["F3"] || "";  val = "," + val.toString() + ","; %><% if (val.contains( "," + "0" + ",")) { %><% } %> <% if (val.contains( "," + "1" + ",")) { %><span class='orange'><img class='icon15' src='/img/s/f4.png' alt='Medium' title='Medium'> <% } %> </span><% if (val.contains( "," + "2" + ",")) { %><span class='red'><img class='icon15' src='/img/s/f5.png' alt='High' title='High'> <% } %> </span></td>
-  <td Fid="F2" ><% var val = data[item]["F2"] || "";  val = "," + val.toString() + ","; %><% if (val.contains( "," + "0" + ",")) { %><span class='blue'><img class='icon15' src='/img/s/b1.png' alt='Initial' title='Initial'> <% } %> </span><% if (val.contains( "," + "1" + ",")) { %><span class='green'><img class='icon15' src='/img/s/b2.png' alt='In progress' title='In progress'> <% } %> </span><% if (val.contains( "," + "2" + ",")) { %><span class='orange'><% } %> </span><% if (val.contains( "," + "3" + ",")) { %><span class='black'><% } %> </span></td>
-  <td ><div class="btn-group btn-group-xs ">  <a></a>  <a class="btn btn-default" name="oneremove" url="/T4/V1/update?Rid=<%= data[item].Rid %>&format=json&F2=3" >Done</a>  <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">	<span class="caret"></span>.  </a>  <ul class="dropdown-menu" role="menu">	<li><a name="oneupdate" href="javascript:;" url="/T4/V1/update?Rid=<%= data[item].Rid %>&format=json&F2=0" class="blue"><img class="icon15" src="/img/s/b1.png">Initial</a></li>	<li><a name="oneupdate" href="javascript:;" url="/T4/V1/update?Rid=<%= data[item].Rid %>&format=json&F2=1" class="green"><img class="icon15" src="/img/s/b2.png">In progress</a></li>	<li><a name="oneupdate" href="javascript:;" url="/T4/V1/update?Rid=<%= data[item].Rid %>&format=json&F2=2" class="orange">Paused</a></li>  </ul></div></td>
-  <td Fid="F0" ><a  class="" href="/todo/show?Rid=<%= data[item]["Rid"] %>" title="Click for detail information"><%= ("F0" in data[item]) ? data[item]["F0"] : "" %></a></td>
-  <td Fid="F4" ><%- (data[item]["F4"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
-  <td ><div class="wid30"><a  class="" href="/todo/update?Rid=<%= data[item]["Rid"] %>"><img src="/img/edit.png" alt="" title=""></a></div></td>
-  <td ><div class="wid30"><a  class="" href="/todo/copy?Rid=<%= data[item]["Rid"] %>"><img src="/img/copy.png" alt="" title=""></a></div></td>
-  <td ><div class="wid30"><a name="remove" class="" href="javascript:;" url="/todo/remove?Rid=<%= data[item]["Rid"] %>"><img src="/img/remove.png" alt="" title=""></a></div></td>
+ %><tr Rid='<%= data[item]["Rid"] %>'><td class="wid30"  Fid='F5'><%- (data[item]["F5"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
+<td class="wid20"  Fid='F3'><%- getF3(data[item]["F3"]) %></td>
+<td class="wid20"  Fid='F2'><%- getF2(data[item]["F2"]) %></td>
+<td class="wid90" ><div class='btn-group btn-group-xs'><a class="btn btn-default" name="oneremove" url="/todo/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=3" >Done</a>
 
-	</tr>
-	<tr Rid='<%= data[item]["Rid"] %>' class='hidden' sub='true' >
-  <td ></td>
-  <td colspan="8" Fid="F1" ><label class='pull-left'>Details:</label><span class='pull-left spanval'><%- ("F1" in data[item]) ? data[item]["F1"] : "" %></span></td>
+<a class="btn btn-default dropdown-toggle" data-toggle="dropdown">&#20;<span class="caret"></span></a>
 
-	</tr>
+<ul class="dropdown-menu" role="menu">
+<li><a name="oneupdate" url="/todo/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=0" class="blue"><img class="icon15" src="/img/s/b1.png">Initial</a>
+</li>
+<li><a name="oneupdate" url="/todo/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=1" class="green"><img class="icon15" src="/img/s/b2.png">In progress</a>
+</li>
+<li><a name="oneupdate" url="/todo/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=2" class="orange">Paused</a>
+</li></ul>
+</div>
+</td>
+<td  Fid='F0'><a  class="" href="/todo/show?Rid=<%= data[item]["Rid"] %>" title="Click for detail information"><%= ("F0" in data[item]) ? data[item]["F0"] : "" %></a></td>
+<td class="col-md-1"  Fid='F4'><%- (data[item]["F4"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
+<td class="wid30"><a href="/todo/update?Rid=<%= data[item]["Rid"] %>" title=""><img src="/img/edit.png"></a></td>
+<td class="wid30"><a href="/todo/copy?Rid=<%= data[item]["Rid"] %>" title=""><img src="/img/copy.png"></a></td>
+<td class="wid30"><a name="remove" href="javascript:;" url="/todo/remove?Rid=<%= data[item]["Rid"] %>" name="delete" title=""><img src="/img/remove.png"></a></td>
+</tr><tr Rid='<%= data[item]["Rid"] %>' class='hidden' sub='true' ><td colspan=9  Fid='F1'><label class='pull-left'>Details:</label><span class='pull-left spanval'><%- ("F1" in data[item]) ? data[item]["F1"] : "" %></span></td>
+</tr>
+
 	<% } %>
   </tbody>
 </table>
 
-<div class='input-group hidden'><input type='hidden' class='hidden' name='ids' value='F5,F0,F4,'></div><div class='summaryarea'></div><script type='text/javascript'>
+<span class='input-group hidden'><input type='hidden' class='hidden' name='ids' value=''></span><span class='col-md-12 summaryarea'></span><script type='text/javascript'>
   var summaryid = '';
-$(document).on("click", "[name=oneremove]", function () {oneClick(this, "remove");});$(document).on("click", "[name=oneupdate]", function () {oneClick(this, "refresh");});
 
 	$("[sub='true']").each(function () {
 		var empty = true;
@@ -129,8 +142,6 @@ $(document).on("click", "[name=oneremove]", function () {oneClick(this, "remove"
 	});
  summary();</script>
 
-
-	<div class="row"></div>
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -145,8 +156,7 @@ $(document).on("click", "[name=oneremove]", function () {oneClick(this, "remove"
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -156,8 +166,8 @@ $(document).on("click", "[name=oneremove]", function () {oneClick(this, "remove"
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -177,7 +187,7 @@ $(document).on("click", "[name=oneremove]", function () {oneClick(this, "remove"
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

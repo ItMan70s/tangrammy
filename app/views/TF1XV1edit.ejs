@@ -61,38 +61,48 @@
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
     </div>
+	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
 	
-	<div id="container" class="container">
 <h1>Modify Users</h1>
 
-<form class='well col-md-7'  method="post" action="/users/update" target="submitFrame" >
-	<div class="row">
+<form class='fields-section well col-md-12' method="post" action="/users/update" target="submitFrame" >
+
+<div class='row'>
 <div class='col-md-12 <%= (code != 200) ? "alert alert-danger": "" %>'><%= (code != 200) ? message : "" %></div>
-<div class='input-group hidden'><input type='hidden' class='hidden' name='format' value='json'><input type='hidden' class='hidden' name='app' value='users'></div>
-<div class='input-group hidden'><input type='hidden' class='hidden' name='Rid' value='<%= data["Rid"] %>'></div>		<div class='col-md-12'><div><label class='control-label title-label'>Name<B class='red'>*</B></label><div class='controls'>
-<input type='text' class='form-control' name='F0' value='<%= data["F0"] || "" %>' required=true unique=true placeholder='User name'></div></div></div>
-		<div class='col-md-12'><div><label class='control-label title-label'>Email<B class='red'>*</B></label><div class='controls'>
-<input type='text' class='form-control' name='F1' value='<%= data["F1"] || "" %>' required=true unique=true placeholder='someone@hp.com'></div></div></div>
-		<div class='col-md-12'><div><label class='control-label title-label'>Password</label><div class='controls'>
-<% if (!data["Rid"]) { %> <div class='input-group'><input type='password' class='form-control' name='F2' value='<%= data["F2"] || "" %>' placeholder='at least 6 chars'></div><% } else { %> ****** <a href="javascript:changePassword('<%= data["Rid"] || "" %>', 'F2')">Change</a><% } %></div></div></div>
-		<div class='col-md-12'><div><label class='control-label title-label'>Role</label><div class='controls'>
+<div class='hidden'><input type='hidden' class='hidden' name='format' value='json'>
+<input type='hidden' class='hidden' name='app' value='users'>
+<input type='hidden' class='hidden' name='Rid' value='<%= data["Rid"] %>'></div><div class='col-md-12'>		<div><label class='control-label title-label'>Name<B class='red'>*</B></label><div class='controls'>
+<input type='text' class='form-control' name='F0' value='<%= data["F0"] || "" %>' required=true unique=true placeholder='User name'></div></div>
+</div>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Email<B class='red'>*</B></label><div class='controls'>
+<input type='text' class='form-control' name='F1' value='<%= data["F1"] || "" %>' required=true unique=true placeholder='someone@hp.com'></div></div>
+</div>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Password</label><div class='controls'>
+<% if (!data["Rid"]) { %> <div class='input-group'><input type='password' class='form-control' name='F2' value='<%= data["F2"] || "" %>' placeholder='at least 6 chars'></div><% } else { %> ****** <a href="javascript:changePassword('<%= data["Rid"] || "" %>', 'F2')">Change</a><% } %></div></div>
+</div>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Role</label><div class='controls'>
 <% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F3' value='' checked=true class='hidden' ><div class='min-h20'>
 			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Administrator'  <%= (val.contains( "," + "Administrator" + ",")) ? "checked=true" : "" %> >Administrator</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Default'  <%= (val.contains( "," + "Default" + ",")) ? "checked=true" : "" %> >Default</label></div></div></div></div></div>
-		<div class='col-md-12'><div><label class='control-label title-label'>Enable</label><div class='controls'>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Default'  <%= (val.contains( "," + "Default" + ",")) ? "checked=true" : "" %> >Default</label></div></div></div></div>
+</div>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Enable</label><div class='controls'>
 <% var val = data["F4"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F4' value='' checked=true class='hidden' ><div class='min-h20'>
 			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div></div>
-		<div class='col-md-12'><div><label class='control-label title-label'>TimeZone<B class='red'>*</B></label><div class='controls'>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
+</div>
+<div class='col-md-12'>		<div><label class='control-label title-label'>TimeZone<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F5"] || "";  val = "," + val.toString() + ",";%>
 			<select class='form-control' name='F5'  required=true >
 			<option value='-360'  <%= (val.contains( "," + "-360" + ",")) ? "selected=true" : "" %>  >(UTC-06:00) Houston</option>
 			<option value='330'  <%= (val.contains( "," + "330" + ",")) ? "selected=true" : "" %>  >(UTC+05:30) India</option>
 			<option value='480'  <%= (val.contains( "," + "480" + ",")) ? "selected=true" : "" %>  >(UTC+08:00) China</option>
-			</select></div></div></div>
-<div class='col-md-12'>
-<hr></hr>
-<div><button type="submit" class="btn btn-primary">Save Changes</button><a  class="small" href="/users/list">Cancel</a></div></div><div name='history'></div>
+			</select></div></div>
+</div>
+ <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
+<div class="col-md-0"><button type="submit" class="btn btn-primary"    style="min-width:80px;" title="">Save Changes </button></div>
+<div class="col-md-0"><a class="btn btn-link"  href="/users/list" style="min-width:80px;" title="">Cancel</a></div>
+</div></div>
+<span name='history' class='col-md-12'></span>
 <script type='text/javascript'>getOPLogs('TF1', 'V1', '<%= data["Rid"] %>');</script></div>
 </form>
 <iframe id='submitFrame' name='submitFrame' class='hidden'></iframe>
@@ -108,8 +118,6 @@ if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').
 
  return msg;}</script>
 
-
-	<div class="row"></div>
 	<div class="go-top">
 	<div class="btn-group">
 		<a href="#" class="btn btn-default hidden"></a>
@@ -124,8 +132,7 @@ if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').
 	<%- (("" || warning).length > 0) ?  'var warning = \'' + warning.replace(/'/g, "\\'") + '\'; \n  setTimeout("warn(warning)", 2);' : '' %>
 	
 </script>
-	<div id="ModalView">
-	</div>
+	<div id="ModalView"></div>
 <div class="modal" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -135,8 +142,8 @@ if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal">OK</a>
-        <a href="#" class="btn confirm-cancelbtn">Cancel</a>
+        <a href="#" class="btn  btn-success confirm-btn" data-dismiss="modal" style="min-width:80px;">OK</a>
+        <a href="#" class="btn confirm-cancelbtn" style="min-width:80px;">Cancel</a>
       </div>
     </div>
   </div>
@@ -156,7 +163,7 @@ if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.2.0</a> at 2014.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
