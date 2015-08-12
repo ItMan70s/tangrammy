@@ -234,7 +234,7 @@ function toList(json) {
 	html += "</div></div></div>\n<div class='form-group small'>" + json.raw["Filter"] + "</div>\n	</form>";
 
 	if (false && json.raw["AdvanceCondition"] && json.raw["AdvanceCondition"].contains("condition")) {
-		html += "<div class='col-md-12 search-zone hidden' >\n";
+		html += "<div class='col-md-12 search-zone' >\n";
 		html += "<div class='col-md-12 win-close'><strong>" + "Advance Search" + "</strong></div>\n<table class='table'>";
 		//<a href='javascript: hideSearchZone(true);' class='glyphicon glyphicon-remove list-item win-close' title='Close Advance Search'></a>
 		var adconds = json.raw["AdvanceCondition"].toJSON();
@@ -259,7 +259,7 @@ function toList(json) {
 				}
 				html += "</div></div></td></tr>";
 			} else if ("type" in conds[i]) {
-				if (conds[i].type == "text") {
+				if (conds[i].type == "1") { // text
 					if (fid.contains(",")) {
 						var fids = fid.split(",");
 						html += "\n<tr><td><div class='col-md-1 line-header'>" + "Text" + ":</div><div class='col-md-11'><div class='space20 wid400 pull-left'><input type='text' target='" + fid.replace(/ /g, "").replace(/,/g, "_ac_") + "' class='form-control input-sm ' placeholder='" + (conds[i].placeholder || "") + "'></div><div class='pull-left'>";
@@ -271,15 +271,15 @@ function toList(json) {
 					} else {
 						html += "\n<tr><td><div class='col-md-1 line-header'>" + data[fid].label + ":</div><div class='col-md-11'><div class='wid400 pull-left'><input type='text' target='" + fid + "' class='form-control input-sm' placeholder='" + (conds[i].placeholder || "") + "'></div> " + (conds[i].unit ? "<div class='pull-left input-group-addon input-sm'><label>" + conds[i].unit +"</label></div>": "") + "</div></div>";
 					}
-				} else if (conds[i].type == "range") {
+				} else if (conds[i].type == "2") { //range
 					html += "\n<tr><td><div class='col-md-1 line-header'>" + data[fid].label + ":</div><div class='col-md-11'><div class='wid200 pull-left'><input type='text' target='" + fid + "' class='form-control input-sm between' placeholder='" + (conds[i].placeholder || "") + "'></div><div class='wid200 pull-left'><input type='text' target='" + fid + "' class='form-control input-sm' placeholder='" + (conds[i].placeholder2 || "") + "'></div>" + (conds[i].unit ? "<div class='pull-left input-group-addon input-sm'><label>" + conds[i].unit +"</label></div>": "") + "</div></td></tr>";
 				} else if (conds[i].type == "datetime") {
 					html += "\n<tr><td><div class='col-md-1 line-header'>" + data[fid].label + ":</div><div class='col-md-11'><div class='wid90 pull-left input-group'><input type='text' target='" + fid + "' class='form-control input-sm datesection' data-format='YYYY/MM/DD' maxlength='10' placeholder='yyyy/mm/dd'></div><div class='wid100 pull-left input-group between'><input type='text' target='" + fid + "' class='form-control input-sm' maxlength='8' data-format='hh:mm:ss' placeholder='hh:mm:ss'></div>" +
 					"<div class='wid90 pull-left input-group'><input type='text' target='" + fid + "' class='form-control input-sm datesection' data-format='YYYY/MM/DD' maxlength='10' placeholder='yyyy/mm/dd'></div><div class='wid80 pull-left input-group'><input type='text' target='" + fid + "' class='form-control input-sm' maxlength='8' placeholder='hh:mm:ss'></div>" + "</div></td></tr>";
-				} else if (conds[i].type == "date") {
+				} else if (conds[i].type == "3") { // date
 					html += "\n<tr><td><div class='col-md-1 line-header'>" + data[fid].label + ":</div><div class='col-md-11'><div class='wid100 pull-left input-group'><input type='text' target='" + fid + "' class='form-control input-sm datesection between' data-format='YYYY/MM/DD' maxlength='10' placeholder='yyyy/mm/dd'></div>" +
 					"<div class='wid90 pull-left input-group'><input type='text' target='" + fid + "' class='form-control input-sm datesection' data-format='YYYY/MM/DD' maxlength='10' placeholder='yyyy/mm/dd'></div>" + "</div></td></tr>";
-				} else if (conds[i].type == "time") {
+				} else if (conds[i].type == "4") { // time
 					html += "\n<tr><td><div class='col-md-1 line-header'>" + data[fid].label + ":</div><div class='col-md-11'><div class='wid100 pull-left input-group between'><input type='text' target='" + fid + "' class='form-control input-sm' maxlength='8' data-format='hh:mm:ss' placeholder='hh:mm:ss'></div><div class='wid80 pull-left input-group'><input type='text' target='" + fid + "' class='form-control input-sm' maxlength='8' placeholder='hh:mm:ss'></div>" + "</div></td></tr>";
 				} else {
 					// TODO
@@ -338,7 +338,7 @@ function toList(json) {
 	html += "<div class='col-md-6 hidden'>\n<div class='input-group'><input type='text' name='condition' class='form-control'><span name='search' class='input-group-addon glyphicon glyphicon-search'></span></div>\n	</div>";
 	html += options;
 	html += "<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='" + json.url + "'></div>";
-	html += "<table class='table'>\n  <thead>\n	<tr>" + head;
+	html += "<table class='table table-hover'>\n  <thead>\n	<tr>" + head;
 	var tds = json.LList;
 	var ids = "";
 	var headers = head.split("</th>").length - 1;
@@ -646,7 +646,7 @@ function ___show(json, name, def) {
 				if (opt.caption == undefined) {
 					opt.caption = opt.value;
 				}
-				html += "<% if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { %> <span class='pull-left " + (opt["css"] || "wid120") + "' alt='" + opt.caption + "' title='" + opt.caption + "'>" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "'> ": "") + opt.caption + "</span> <% } %>";
+				html += "<% if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { %> <span class='pull-left " + (opt["css"] || "col-md-auto") + "'>" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "' title='" + opt.caption + "'> ": "") + opt.caption + "</span> <% } %>";
 			}
 			html += "</div>";
 		break;
@@ -877,7 +877,7 @@ if ( html.contains("datesection") || html.contains("timesection")) {
 			funcs += "}\n";
 		}
 		if (funcs.length > 0) {
-			html += "<script type='text/javascript'>  \n	function checkFields() {\n var msg = ''; \n" + funcs + "\n return msg;}</script>\n";
+			//html += "<script type='text/javascript'>  \n	function checkFields() {\n var msg = ''; \n" + funcs + "\n return msg;}</script>\n";
 		}
 	}
 
@@ -950,7 +950,7 @@ function ___edit(json, name, def) {
 				if (i % cols == 0) {
 					html += "<div class='min-h20'>";
 				}
-				html += "\n			<label class='" + json.form + "-inline " + (((i + 1) % cols == 0) ? "" : md) + (opt["css"] || "") + "'><input type='" + json.form + "' name='" + name + "' value='" + opt.value + "' " + toEF(json, foptions[json.form]) + " <%= (val.contains( \",\" + \"" + opt.value + "\" + \",\")) ? \"checked=true\" : \"\" %> >" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "'>": "") + opt.caption + "</label>";
+				html += "\n			<label class='" + json.form + "-inline " + (((i + 1) % cols == 0) ? "" : md) + (opt["css"] || "") + "'><input type='" + json.form + "' name='" + name + "' value='" + opt.value + "' " + toEF(json, foptions[json.form]).replace(" required=true", "") + " <%= (val.contains( \",\" + \"" + opt.value + "\" + \",\")) ? \"checked=true\" : \"\" %> >" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "'>": "") + opt.caption + "</label>";
 				if ((i + 1) % cols == 0) {
 					html += "</div>";
 				}
@@ -1118,6 +1118,7 @@ function hasDefine(defines, key) {
 }
 // 
 function toCheckFuncs(defines) {
+	return "";
 	if (typeof defines == "string") {
 		defines = defines.toJSON();
 	}
@@ -1135,7 +1136,7 @@ function toCheckFuncs(defines) {
 		}
 		
 		if ("max" in json && "min" in json) {
-			if ((json.max == json.min && json.min !=0) || json.max >= json.min) {
+			if ((json.max == json.min && json.min !=0) || json.max > json.min) {
 				js += "if (val > " + json.max + " || val < " + json.min + ") return 'Please input value between " + json.min + " and " + json.max + " for " + json.label +".';";
 			}
 		} else {

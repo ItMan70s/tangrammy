@@ -147,21 +147,21 @@ var TSchema = new Schema({
   Tid: {type: String, required: true, maxLength: 3},
   Vid: {type: String, required: true, maxLength: 3},
   Rid: {type: String, required: true, index: true, maxLength: 32},
-  Name: {type: String, required: true, exist:true},
-  Title: {type: String, required: true},
-  URL: {type: String, exist:true},
+  Name: {type: String, exist:true},
+  Title: {type: String, required: true, exist:true},
+  URL: {type: String, required: true, exist:true},
   Description: {type: String, required: true},
   Fields: {type: String, required: true},
   CheckFuncs: {type: String},
   Keys: {type: String},
-  Condition: {type: String, required: true},
+  Condition: {type: String},
   AdvanceCondition: {type: String},
   NoAction: {type: String},
-  New: {type: String, required: true},
-  Copy: {type: String, required: true},
-  Edit: {type: String, required: true},
-  Show: {type: String, required: true},
-  Remove: {type: String, required: true},
+  New: {type: String},
+  Copy: {type: String},
+  Edit: {type: String},
+  Show: {type: String},
+  Remove: {type: String},
   JSNew: {type: String},
   JSEdit: {type: String},
   JSShow: {type: String},
@@ -753,12 +753,12 @@ function newOne(tid, vid, condition, data, callback) {
 			__save(tid, vid, model(data), data, callback);
 		} else if (err) {
 			var msg = "Tid: " + tid + " Vid: " + vid + " condition: " + util.inspect(unique);
-			log.debug("Internal error . " + msg + "  Detail: " + util.inspect(err));
+			log.error("Internal error . " + msg + "  Detail: " + util.inspect(err));
 			callback({"code": 400, "message": err.message, "error": err, "data": {}});
 		} else {
-			var msg = "Tid: " + tid + " Vid: " + vid + " condition: " + util.inspect(unique) + " Exsit Rid: " + recorder._doc["Rid"];
-			log.debug("Duplicated. " + msg);
-			callback({"code": 409, "message": "Conflict", "data": recorder});
+			var msg = "Duplicated!\n Tid: " + tid + " Vid: " + vid + " condition: " + util.inspect(unique) + "\n Exsit Rid: " + recorder._doc["Rid"];
+			log.warn(msg);
+			callback({"code": 409, "message": "Conflict", "warning": msg, "data": recorder});
 		}
 	});
 }

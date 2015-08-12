@@ -191,6 +191,7 @@ function init(req, res) {
 			}
 			break;
 	}
+	
 	req.u.Tid = tid;
 	req.u.Vid = vid;
 	req.u.op = req.u.op.toLowerCase();
@@ -215,8 +216,9 @@ function loadUserInfo(req, res) {
 		req.u.user = {};
 	}
 	req.u.data = fetchUData(req);
-	req.u.data.Tid = req.u.Tid;
-	req.u.data.Vid = req.u.Vid;
+	req.u.data.Tid = req.u.data.Tid || req.u.Tid;
+	req.u.data.Vid = req.u.data.Vid || req.u.Vid;
+		
 	req.refreshTimeZone();
 }
 

@@ -16,8 +16,9 @@
 	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.hotkeys.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-richtext.js"></script>
     <script src="/js/bootstrap.file-input.js"></script>
+    <script src="/js/t.components.js"></script>
+    <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
 <body>
@@ -69,9 +70,9 @@
 <div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='todo'></div><div class='col-md-12'><label class='control-label title-label'>ID<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%- ((data["F5"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
 <div class='col-md-12'><label class='control-label title-label'>Priority<B class='red'>*</B></label>
-<div class='form-show' readonly=true><% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left wid120' alt='Low' title='Low'>Low</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left orange' alt='Medium' title='Medium'><img class='icon15' src='/img/s/f4.png'> Medium</span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left red' alt='High' title='High'><img class='icon15' src='/img/s/f5.png'> High</span> <% } %></div></div>
+<div class='form-show' readonly=true><% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left col-md-auto'>Low</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left orange'><img class='icon15' src='/img/s/f4.png' title='Medium'> Medium</span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left red'><img class='icon15' src='/img/s/f5.png' title='High'> High</span> <% } %></div></div>
 <div class='col-md-12'><label class='control-label title-label'>Status<B class='red'>*</B></label>
-<div class='form-show' readonly=true><% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left blue' alt='Initial' title='Initial'><img class='icon15' src='/img/s/b1.png'> Initial</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left green' alt='In progress' title='In progress'><img class='icon15' src='/img/s/b2.png'> In progress</span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left orange' alt='Paused' title='Paused'>Paused</span> <% } %><% if (val.contains( "," + "3" + ",")) { %> <span class='pull-left black' alt='Finished' title='Finished'>Finished</span> <% } %></div></div>
+<div class='form-show' readonly=true><% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left blue'><img class='icon15' src='/img/s/b1.png' title='Initial'> Initial</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left green'><img class='icon15' src='/img/s/b2.png' title='In progress'> In progress</span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left orange'>Paused</span> <% } %><% if (val.contains( "," + "3" + ",")) { %> <span class='pull-left black'>Finished</span> <% } %></div></div>
 <div class='col-md-12'><label class='control-label title-label'>Name<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%= ((data["F0"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
 <div class='col-md-12'><label class='control-label title-label'>Detail<B class='red'>*</B></label>
@@ -89,12 +90,12 @@
 
 	<div class="go-top">
 	<div class="btn-group">
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
 		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
 		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
 		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 	</div>
 	</div>
 <script>
@@ -117,7 +118,6 @@
     </div>
   </div>
 </div>
-	<a name="bottom" > </a>
 	<hr />
 	<footer>
 	<div class="col-md-12 form-group small">
@@ -128,14 +128,15 @@
 		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
 		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
 		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
+	<a name="bottom" > </a>
 </body>
 </html>
 

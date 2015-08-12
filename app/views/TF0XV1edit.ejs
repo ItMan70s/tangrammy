@@ -16,8 +16,9 @@
 	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.hotkeys.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-richtext.js"></script>
     <script src="/js/bootstrap.file-input.js"></script>
+    <script src="/js/t.components.js"></script>
+    <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
 <body>
@@ -76,31 +77,22 @@
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Application<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F1"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F1' value='' checked=true class='hidden' ><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='*'  required=true <%= (val.contains( "," + "*" + ",")) ? "checked=true" : "" %> >All</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T2/V1'  required=true <%= (val.contains( "," + "T2/V1" + ",")) ? "checked=true" : "" %> >Users</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T2/V3'  required=true <%= (val.contains( "," + "T2/V3" + ",")) ? "checked=true" : "" %> >UserLogin</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T3/V1'  required=true <%= (val.contains( "," + "T3/V1" + ",")) ? "checked=true" : "" %> >Links</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T4/V1'  required=true <%= (val.contains( "," + "T4/V1" + ",")) ? "checked=true" : "" %> >Todo</label>
-			<label class='checkbox-inline wid100'><input type='checkbox' name='F1' value='T5/V1'  required=true <%= (val.contains( "," + "T5/V1" + ",")) ? "checked=true" : "" %> >Money</label></div><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T5/V2'  required=true <%= (val.contains( "," + "T5/V2" + ",")) ? "checked=true" : "" %> >lend</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T5/V4'  required=true <%= (val.contains( "," + "T5/V4" + ",")) ? "checked=true" : "" %> >brotherlend</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T6/V1'  required=true <%= (val.contains( "," + "T6/V1" + ",")) ? "checked=true" : "" %> >books</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T7/V1'  required=true <%= (val.contains( "," + "T7/V1" + ",")) ? "checked=true" : "" %> >Words</label>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='T9/V1'  required=true <%= (val.contains( "," + "T9/V1" + ",")) ? "checked=true" : "" %> >Booking</label>
-			<label class='checkbox-inline wid100'><input type='checkbox' name='F1' value='T9/V2'  required=true <%= (val.contains( "," + "T9/V2" + ",")) ? "checked=true" : "" %> >Servers</label></div><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 wid100'><input type='checkbox' name='F1' value='TA/V1'  required=true <%= (val.contains( "," + "TA/V1" + ",")) ? "checked=true" : "" %> >VMs</label></div></div></div></div>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='*'  <%= (val.contains( "," + "*" + ",")) ? "checked=true" : "" %> >All</label>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='TF0/V1'  <%= (val.contains( "," + "TF0/V1" + ",")) ? "checked=true" : "" %> >Roles</label>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T1/V1'  <%= (val.contains( "," + "T1/V1" + ",")) ? "checked=true" : "" %> >Todo</label>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='TF1/V1'  <%= (val.contains( "," + "TF1/V1" + ",")) ? "checked=true" : "" %> >Users</label></div></div></div></div>
 </div>
-<div class='col-md-12'>		<div><label class='control-label title-label'>Enable</label><div class='controls'>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Enable<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F2' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Enable</label>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F2' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >Disable</label></div></div></div></div>
+			<label class='radio-inline col-md-1 '><input type='radio' name='F2' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Enable</label>
+			<label class='radio-inline col-md-1 '><input type='radio' name='F2' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >Disable</label></div></div></div></div>
 </div>
-<div class='col-md-12'>		<div><label class='control-label title-label'>Default Role</label><div class='controls'>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Default Role<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
+			<label class='radio-inline col-md-1 '><input type='radio' name='F3' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
+			<label class='radio-inline col-md-1 '><input type='radio' name='F3' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
 </div>
- <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
+   <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
 <div class="col-md-0"><button type="submit" class="btn btn-primary"    style="min-width:80px;" title="">Save Changes </button></div>
 <div class="col-md-0"><a class="btn btn-link"  href="/roles/list" style="min-width:80px;" title="">Cancel</a></div>
 </div></div>
@@ -108,24 +100,15 @@
 <script type='text/javascript'>getOPLogs('TF0', 'V1', '<%= data["Rid"] %>');</script></div>
 </form>
 <iframe id='submitFrame' name='submitFrame' class='hidden'></iframe>
-<script type='text/javascript'>  
-	function checkFields() {
- var msg = ''; 
-if ($('[name=F0]')[0]) { var val = $('[name=F0]').val(); switch ($('[name=F0]').attr('type')) { case 'radio': val = $('[name=F0]:checked').attr('value'); break; case 'textarea': val = $('[name=F0]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val > 0 || val < 0) return 'Please input value between 0 and 0 for Role.';if (val.length < 0) return 'Please input value for Role!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F0', val.length > 0);}
-if ($('[name=F1]')[0]) { var val = $('[name=F1]').val(); switch ($('[name=F1]').attr('type')) { case 'radio': val = $('[name=F1]:checked').attr('value'); break; case 'textarea': val = $('[name=F1]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length < 0) return 'Please input value for Application!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F1', val.length > 0);}
-if ($('[name=F2]')[0]) { var val = $('[name=F2]').val(); switch ($('[name=F2]').attr('type')) { case 'radio': val = $('[name=F2]:checked').attr('value'); break; case 'textarea': val = $('[name=F2]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val > 0 || val < 0) return 'Please input value between 0 and 0 for Enable.';if (val.length < 0) return 'Please input value for Enable!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F2', val.length > 0);}
-if ($('[name=F3]')[0]) { var val = $('[name=F3]').val(); switch ($('[name=F3]').attr('type')) { case 'radio': val = $('[name=F3]:checked').attr('value'); break; case 'textarea': val = $('[name=F3]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val > 0 || val < 0) return 'Please input value between 0 and 0 for Default Role.';if (val.length < 0) return 'Please input value for Default Role!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F3', val.length > 0);}
-
- return msg;}</script>
 
 	<div class="go-top">
 	<div class="btn-group">
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
 		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
 		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
 		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 	</div>
 	</div>
 <script>
@@ -148,7 +131,6 @@ if ($('[name=F3]')[0]) { var val = $('[name=F3]').val(); switch ($('[name=F3]').
     </div>
   </div>
 </div>
-	<a name="bottom" > </a>
 	<hr />
 	<footer>
 	<div class="col-md-12 form-group small">
@@ -159,14 +141,15 @@ if ($('[name=F3]')[0]) { var val = $('[name=F3]').val(); switch ($('[name=F3]').
 		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
 		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
 		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
+	<a name="bottom" > </a>
 </body>
 </html>
 

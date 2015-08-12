@@ -1,0 +1,16 @@
+bak/
+db/
+logs/
+*.bak
+app/node_modules/
+
+*.pydevproject
+.project
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties

@@ -77,9 +77,24 @@
 	min-height: 20px;
 	padding: 4px 10px;
 }
-div {
-	min-height: 34px;
+
+
+.btn-toolbar > .btn-group > .btn {
+  padding: 5px 10px;
+  font-size: 16px;
+  line-height: 1;
+  height: 30px;
 }
+li > .btn-group-xs > .btn {
+  line-height: 1;
+  width: 30px;
+  height: 20px;
+}
+li > .btn-group-xs > .btn > img{
+  width: 16px;
+  height: 16px;
+}
+
 td > div {
 	min-height: 15px;
 }
@@ -612,12 +627,6 @@ div.glyphicon-char-xs {
 
 a.color-box:active, a.color-box:hover {
 	text-decoration: none;
-}
-.btn-toolbar>.btn-group-xs>.btn {
-	font-size: 14px;
-}
-.btn-toolbar>.btn-group-sm>.btn {
-	font-size: 16px;
 }
 
 .color-box {

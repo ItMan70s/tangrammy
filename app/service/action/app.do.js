@@ -202,7 +202,11 @@ function __verify(data, define) {
 	return (error.length > 0) ? error.substr(1) : error;
 }
 function __winnow(data, define) {
-	var fields = (define["Fields"] || "").replace(/'/g, "\"").toJSON();
+	var fields = (define["Fields"] || "").toJSON();
+	if (fields["error"]) {
+		log.warn(util.inspect(fields));
+		return data;
+	}
 	for (var i in data) {
 		if (i.charAt(0) == "F" && !(i in fields)) {
 			debug("Drop values[" + i + "] - not in defines.");

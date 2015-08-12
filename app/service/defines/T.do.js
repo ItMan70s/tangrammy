@@ -3,9 +3,9 @@ var field = require('./fields.js');
 var cps = require('../core/components.js');
 var settings = require('../../settings.js');
 var fs = require('fs');
+var A = require('../action/app.do.js');
 var mongo = require('../core/mongo.db.js');
 var log = require('../core/log.js')('Z');
-var mongo = require('../core/mongo.db.js');
 var fnames = {"Title": "", "URL": "", "Fields": "", "New": "", "Copy": "", "Edit": "", "Remove": "", "Help": "", "Email": "", "OrderBy": "", "Order": "", "Group": "", "Filter": "", "History": "", "Status": "", "Header": "", "Footer": "", "Active": "", "update": "", "updater": ""};
 
 var vpath = "./views/";
@@ -19,51 +19,44 @@ Processes command http requests.
 	res: Object HTTP response.
 Returns: no
 */
-function getUData(req) {
-/*	var udata = cps.getReqData(req);
-	var ff = {"F1": {type: "String", form: "text", label: 'name', required: true, trim: true, exist:true, minLength: 0, length: 0, maxLength: 50, min: 0, max: 0, enum:['en','cn'], default: 'en', regExp: "", exist0: "return true", placeholder: 'hint message', msg: 'ERROR: user name is empty'},
-		"F2": {type: "String", form: "text", label: 'email', required: true, trim: true, exist:true, minLength: 0, length: 0, maxLength: 0, min: 0, max: 0, enum:['en','cn'], default: 'en', regExp: "", exist0: "return true", placeholder: 'hint message', msg: ''},
-		"F3": {type: "String", form: "text", label: 'age', required: true, trim: true, exist:true, minLength: 0, length: 0, maxLength: 0, min: 0, max: 150, enum:['en','cn'], default: 'en', regExp: "", exist0: "return true", placeholder: 'hint message', msg: ''}, };
-*/
- return cps.getReqData(req);
-}
+var TTemplate = {"Title" : "New Applicaton Title", "URL" : "url", "Help" : "<a href='#'>Help </a>", "Description" : "Input description for this application so that people could understand what's application.", "Fields" : "{\r\n\"F0\": {\"type\": \"String\", \"form\": \"text\", \"label\": \"SampleText\", \"default\": \"0\", \"placeholder\": \" despcription\", \"attribute\": \",required,unique,\"},\r\n\"F1\": {\"type\": \"String\", \"form\": \"richtext\", \"label\": \"SampleRichText\", \"default\": \"0\", \"placeholder\": \" despcription\", \"attribute\": \",htm,\"},\r\n\"F2\": {\"type\": \"String\", \"form\": \"radio\", \"label\": \"SampleRadio\", \"options\": [{\"value\": \"0\", \"caption\": \"<font color='#0000ff'><img src=' /img/s/b1.png '> Inistial</font>\"},{\"value\": \"1\", \"caption\": \"<img src=' /img/s/b2.png '><font color='#008000'> In Progress</font>\"},{\"value\": \"2\", \"caption\": \"<font color='#ff9900'><img src=' /img/s/b3.png '> Waiting</font>\"},{\"value\": \"3\", \"caption\": \"<img src=' /img/s/b7.png '> Finished\"},], \"default\": \"0\", \"attribute\": \",\"},\r\n\"F3\": {\"type\": \"String\", \"form\": \"checkbox\", \"label\": \"Samplecheckbox\", \"options\": [{\"value\": \"0\", \"caption\": \"Low\"},{\"value\": \"1\", \"caption\": \"<img src='/img/s/f4.png'><span class='orange'>Medium</span>\"},{\"value\": \"2\", \"caption\": \"<img src='/img/s/f5.png'><span class='red'>High</span>\"},], \"default\": \"0\", \"attribute\": \",htm,\"},\r\n\"F4\": {\"type\": \"String\", \"form\": \"datetime\", \"label\": \"SampleDatetime\", \"format\": \"YYYY-MM-DD hh:mm:ss\", \"attribute\": \",\"},\r\n\"F5\": {\"type\": \"String\", \"form\": \"id\", \"label\": \"SampleID\", \"default\": \"0\", \"key\": \"V.sample\", \"val\": \"1\", \"format\": \"Do000\", \"attribute\": \",\"},\r\n}", "Keys" : "undefined", "NoAction" : "", "JSNew" : "", "JSEdit" : "", "JSShow" : "", "JSSave" : "", "LList" : "\"F0\": {\"Title\": \"SampleText\"}, \"F1\": {\"Title\": \"SampleRichText\"}, \"F2\": {\"Title\": \"SampleRadio\"}, \"F3\": {\"Title\": \"Samplecheckbox\"}, \"F4\": {\"Title\": \"SampleDatetime\"}, \"F5\": {\"Title\": \"SampleID\"}, \"Show\": {\"Title\": \"Detail\", \"label\": \"Detail\", \"icon\": \"\", \"type\": \"link\"}, \"Edit\": {\"Title\": \"Edit\", \"label\": \"\", \"icon\": \"edit.png\", \"type\": \"link\"}, \"Copy\": {\"Title\": \"Copy\", \"label\": \"\", \"icon\": \"copy.png\", \"type\": \"link\"}, \"Remove\": {\"Title\": \"Remove\", \"name\": \"remove\", \"label\": \"\", \"icon\": \"remove.png\", \"type\": \"link\"}", "LShow" : "\"Title\": \"Show undefined\", \"Width\": \"col-md-12\",\"F0\": {}, \"F1\": {}, \"F2\": {}, \"F3\": {}, \"F4\": {}, \"F5\": {}, \"Section4\": {\"Width\": \"col-md-12\", \"List\": {\"label\": \"OK\", \"type\": \"button\", \"css\": \"btn btn-primary col-md-2\"}, \"Edit\": {\"label\": \"Edit\", \"icon\": \"edit.png\", \"type\": \"button\", \"css\": \"btn btn-default\"}, \"Copy\": {\"label\": \"Copy&Create\", \"icon\": \"copy.png\", \"type\": \"button\", \"css\": \"btn btn-default\"}, \"New\": {\"label\": \"Add new\", \"icon\": \"add.png\", \"type\": \"button\", \"css\": \"btn btn-default\"}}", "LEdit" : "\"Title\": \"Modify undefined\", \"Width\": \"col-md-12\",\"F0\": {}, \"F1\": {}, \"F2\": {}, \"F3\": {}, \"F4\": {}, \"F5\": {}, \"Section4\": {\"Width\": \"col-md-12\", \"Submit\": {\"label\": \"Save Changes\", \"icon\": \"\", \"type\": \"button\", \"css\": \"btn btn-primary\"}, \"List\": {\"label\": \"Cancel\", \"icon\": \"\", \"type\": \"link\", \"css\": \"small\"}}", "LNew" : "\"Title\": \"Add New undefined\", \"Width\": \"col-md-12\",\"F0\": {}, \"F1\": {}, \"F2\": {}, \"F3\": {}, \"F4\": {}, \"F5\": {}, \"Section4\": {\"Width\": \"col-md-12\", \"Submit\": {\"label\": \"Save\", \"icon\": \"\", \"type\": \"button\", \"css\": \"btn btn-primary\"}, \"List\": {\"label\": \"Cancel\", \"icon\": \"\", \"type\": \"link\", \"css\": \"small\"}}", "CheckFuncs" : "{ F0: '\"if (val == undefined) return \\'\\';if (val.length < 0) return \\'Please input value for SampleText!\\';return \\'\\';\"',\n  F1: '\"if (val == undefined) return \\'\\';if (val.length < 0) return \\'Please input value for SampleRichText!\\';return \\'\\';\"',\n  F2: '\"if (val == undefined) return \\'\\';if (val.length < 0) return \\'Please input value for SampleRadio!\\';return \\'\\';\"',\n  F3: '\"if (val == undefined) return \\'\\';if (val.length < 0) return \\'Please input value for Samplecheckbox!\\';return \\'\\';\"',\n  F4: '\"if (val == undefined) return \\'\\';if (val.length < 0) return \\'Please input value for SampleDatetime!\\';return \\'\\';\"',\n  F5: '\"if (val == undefined) return \\'\\';if (val.length < 0) return \\'Please input value for SampleID!\\';return \\'\\';\"' }", "Update" : "2015/08/03 17:41:36.802 (UTC 8:00)", "__v" : 0, "Status" : "available", "Footer" : "", "Group" : "-1", "Order" : "1,1,1", "OrderBy" : "F5,null,null", "Condition" : "{\"F2\": { $in : [0,1,2] }}", "LayoutL" : "<table class=‘table’><tr>\r\n<td  field='F0'>(F0)</td>\r\n<td  field='F1'>(F1)</td>\r\n<td  field='F2'>(F2)</td>\r\n<td  field='F3'>(F3)</td>\r\n<td  field='F4'>(F4)</td>\r\n<td  field='F5'>(F5)</td>\r\n<td field=\"show\" LSAction=\"show\"><LSAction class=\"btn-group-xs\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"show\" title=\"\">Detail</a></LSAction></td>\r\n<td field=\"edit\" LSAction=\"edit\"><LSAction class=\"btn-group-xs\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"edit\" title=\"\"><img src=\"/img/edit.png\"></a></LSAction></td>\r\n<td field=\"copy\" LSAction=\"copy\"><LSAction class=\"btn-group-xs\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"copy\" title=\"\"><img src=\"/img/copy.png\"></a></LSAction></td>\r\n<td field=\"remove\" LSAction=\"remove\"><LSAction class=\"btn-group-xs\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"delete\" title=\"\"><img src=\"/img/remove.png\"></a></LSAction></td>\r\n</tr></table>  ", "FieldsLL" : "\"F0\": {\"title\": \"SampleText\"},\"F1\": {\"title\": \"SampleRichText\"},\"F2\": {\"title\": \"SampleRadio\"},\"F3\": {\"title\": \"Samplecheckbox\"},\"F4\": {\"title\": \"SampleDatetime\"},\"F5\": {\"title\": \"SampleID\"},\"Show\": {\"title\": \"Detail\"},\"Edit\": {\"title\": \"Edit\"},\"Copy\": {\"title\": \"Copy\"},\"Remove\": {\"title\": \"Remove\"}", "AdvanceCondition" : "", "Filter" : "", "Header" : "", "New" : "<div class=\"col-md-0\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"submit\" title=\"Add new data into this application\"><img src=\"/img/add.png\">New Data</a></div>", "History" : "off", "ActionLS" : "<div class=\"col-md-0\"><a class=\"btn btn-primary col-md-2\" href=\"javascript:;\" name=\"list\" style=\"min-width:80px;\" title=\"\">OK</a></div>\r\n<div class=\"col-md-0\"><a class=\"btn btn-default\" href=\"javascript:;\" name=\"edit\" style=\"min-width:80px;\" title=\"\"><img src=\"/img/edit.png\">Edit</a></div>\r\n<div class=\"col-md-0\"><a class=\"btn btn-default\" href=\"javascript:;\" name=\"copy\" style=\"min-width:80px;\" title=\"\"><img src=\"/img/copy.png\">Copy&Create</a></div>\r\n<div class=\"col-md-0\"><a class=\"btn btn-default\" href=\"javascript:;\" name=\"new\" style=\"min-width:80px;\" title=\"\"><img src=\"/img/add.png\">Add new</a></div>\r\n", "LayoutS" : "<div class='col-md-12' field='F0'>(F0)</div>\r\n<div class='col-md-12' field='F1'>(F1)</div>\r\n<div class='col-md-12' field='F2'>(F2)</div>\r\n<div class='col-md-12' field='F3'>(F3)</div>\r\n<div class='col-md-12' field='F4'>(F4)</div>\r\n<div class='col-md-12' field='F5'>(F5)</div>\r\n", "FieldsLS" : "\"F0\": {},\"F1\": {},\"F2\": {},\"F3\": {},\"F4\": {},\"F5\": {}", "TitleLS" : "Show New Applicaton Title", "ActionLE" : "<div class=\"col-md-0\"><a class=\"btn btn-primary\" href=\"javascript:;\" name=\"submit\" style=\"min-width:80px;\" title=\"\">Save Changes</a></div>\r\n<div class=\"col-md-0\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"list\" style=\"min-width:80px;\" title=\"\">Cancel</a></div>\r\n", "LayoutE" : "<div class='col-md-12' field='F0'>(F0)</div>\r\n<div class='col-md-12' field='F1'>(F1)</div>\r\n<div class='col-md-12' field='F2'>(F2)</div>\r\n<div class='col-md-12' field='F3'>(F3)</div>\r\n<div class='col-md-12' field='F4'>(F4)</div>\r\n<div class='col-md-12' field='F5'>(F5)</div>\r\n  ", "FieldsLE" : "\"F0\": {},\"F1\": {},\"F2\": {},\"F3\": {},\"F4\": {},\"F5\": {}", "TitleLE" : "Modify New Applicaton Title", "ActionLN" : "<div class=\"col-md-0\"><a class=\"btn btn-primary\" href=\"javascript:;\" name=\"submit\" style=\"min-width:80px;\" title=\"\">Save</a></div>\r\n<div class=\"col-md-0\"><a class=\"btn btn-link\" href=\"javascript:;\" name=\"list\" style=\"min-width:80px;\" title=\"\">Cancel</a></div>\r\n", "LayoutN" : "<div class='col-md-12' field='F0'>(F0)</div>\r\n<div class='col-md-12' field='F1'>(F1)</div>\r\n<div class='col-md-12' field='F2'>(F2)</div>\r\n<div class='col-md-12' field='F3'>(F3)</div>\r\n<div class='col-md-12' field='F4'>(F4)</div>\r\n<div class='col-md-12' field='F5'>(F5)</div>\r\n", "FieldsLN" : "\"F0\": {},\"F1\": {},\"F2\": {},\"F3\": {},\"F4\": {},\"F5\": {}", "TitleLN" : "Add New New Applicaton Title" };
+var options = {"app": [], "users": []};
+
 function add(req, res) {
-	var uData = getUData(req);
+	var uData = req.u.data;
 	if (!("Title" in uData)) {
-		fs.readFile("./T.json", 'utf8', function (err, data) {
-			var uData = {};
-			try {
-				uData = JSON.parse(data);
-			} catch (msg) {
-				log.error(msg);
-			}
-			
-			var recorder = {};
-			recorder.data = field.init(uData);
-			recorder.data["Tid"] = "auto";
-			recorder.data["Vid"] = "auto";
-			recorder.data["Rid"] = "auto";
-			recorder.title = "NEW Application";
-			recorder.action = "/T/new";
-			recorder.code = 200;
-			return __new(res, recorder);
-		});
+		var recorder = {};
+		recorder.data = TTemplate;
+		recorder.data["Tid"] = "auto";
+		recorder.data["Vid"] = "auto";
+		recorder.data["Rid"] = "auto";
+		recorder.title = "NEW Application";
+		recorder.action = "/T/new";
+		recorder.code = 200;
+		return __new(res, recorder);
 	} else {
 		var json = {"Fields":"", "New":"", "Copy":"", "Edit":"", "Remove":""};
 		for (var i in json) {
 			uData[i] = (uData[i] || "").replace(/'/g, "\"");
 		}
 //		uData.New = JSON.parse(uData.New);
-		var ids = __getTVid(req.u.Tid, req.u.Vid);		
+		var ids = __getTVid(uData["Tid"], uData["Vid"]);
 		uData["Tid"] = ids["Tid"];
 		uData["Vid"] = ids["Vid"];
 		uData['URL'] = (uData['URL'] || "").toLowerCase();
 		var cond = {'$or' : [{'Title': uData['Title']}, {'URL': uData['URL']}]};
 		
 		uData = __fillDefault(uData);
+		for (var i in TTemplate) {
+			if (! i in uData) {
+				uData[i] = TTemplate[i];
+			}
+		}
+		uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
 		mongo.newOne("T", "V", cond, uData, function (recorder) {
 			if (recorder.code != 200) {
 				log.error(recorder.message);
+				uData["dl"] = uData["dl"] == "layout" ? "" : "layout" ;
 				recorder.data = uData;
 				recorder.title = "NEW Application";
 				recorder.action = "/T/new";
@@ -71,7 +64,7 @@ function add(req, res) {
 			} else {
 				svUpdateIDDefine(uData);				
 				refreshAppList(req, res);
-				__show(res, recorder);
+				res.redirect("/T/update?Rid=" + recorder.data["Rid"] + "&dl=layout");		
 			}
 		});
 	}
@@ -113,12 +106,10 @@ function __new(res, recorder) {
 	delete recorder.fields["total"];
 	recorder.request = res.req;
 	recorder.request.u.userurl = res.req.u.userurl || "/i/show?Rid=" + res.req.u.user["Rid"];
-	if (! recorder.message) {
-		recorder.message = "";
-	}
-	if (! recorder.warning) {
-		recorder.warning = "";
-	}
+	recorder.message = recorder.message || recorder.data.message || "";
+	recorder.warning = recorder.warning || recorder.data.warning || "";
+	recorder.warning = recorder.warning.replace(/\n/g, "<br />");
+	recorder.notification = (settings.SMTP && (settings.SMTP.host || settings.SMTP.service));
 	return res.render(tpath + "T_new.ejs", recorder);
 }
 function __show(res, recorder) {
@@ -136,6 +127,7 @@ function __show(res, recorder) {
 	recorder.fields = __fields(recorder.data["Tid"]);
 	recorder.total = recorder.fields["total"];
 	delete recorder.fields["total"];
+	recorder.notification = (settings.SMTP && (settings.SMTP.host || settings.SMTP.service));
 	return res.render(tpath + "T_show.ejs", recorder);
 }
 
@@ -172,14 +164,17 @@ function __fields(tid) {
 }
 
 function show(req, res, cond) {
-	var uData = getUData(req);
+	var uData = req.u.data;
+	delete uData["Tid"];
+	delete uData["Vid"];
 	var condition = {};
 	for (var i in fnames) {
 		if (i in uData) {
 			condition[i] = uData[i];
 		}
 	}
-	mongo.findOne("T", "V", null, uData, function (recorder) {
+	condition["Rid"] = uData["Rid"];
+	mongo.findOne("T", "V", null, condition, function (recorder) {
 		if (recorder.code != 200) {
 			log.error(recorder.message);
 			__show(res, recorder);
@@ -189,51 +184,57 @@ function show(req, res, cond) {
 	});
 }
 function copy(req, res) {
-	var uData = getUData(req);
+	var uData = req.u.data;
 	var condition = {};
 	condition["Rid"] = uData["Rid"];
-	if ("Title" in uData) {
-		var ids = __getTVid(req.u.Tid, "");
-		uData["Vid"] = ids["Vid"];
-		uData['URL'] = (uData['URL'] || "").toLowerCase();
-		var cond = {'$or' : [{'Title': uData['Title']}, {'URL': uData['URL']}]};
-		uData = __fillDefault(uData);
-		mongo.newOne("T", "V", cond, uData, function (recorder) {
-			if ((recorder.code) != 200 || recorder.num < 1) {
-				log.error(recorder.message);
-				recorder.data = uData;
-				recorder.title = "Copy Create Views";
-				recorder.action = "/T/copy";
-				return __new(res, recorder);
-			} else {
-				svUpdateIDDefine(uData)
-				log.error("Update" + recorder.num);
-				recorder.title = "Copy Create Views Result";
-				recorder.data = uData;				
-				refreshAppList(req, res);
-				__show(res, recorder);
+	mongo.findOne("T", "V", null, condition, function (recorder) {
+		if ("Title" in uData) {
+			var ids = __getTVid(uData["Tid"], "");
+			uData["Vid"] = ids["Vid"];
+			uData['URL'] = (uData['URL'] || "").toLowerCase();
+			var cond = {'$or' : [{'Title': uData['Title']}, {'URL': uData['URL']}]};
+			uData = __fillDefault(uData);
+			if (recorder.code == 200) {
+				for (var i in recorder.data) {
+					if (i in uData) continue;
+					uData[i] = recorder.data[i];
+				}
 			}
-		});
-	} else {
-		mongo.findOne("T", "V", null, condition, function (recorder) {
+			uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
+			mongo.newOne("T", "V", cond, uData, function (recorder) {
+				if ((recorder.code) != 200 || recorder.num < 1) {
+					log.error(recorder.message);
+					uData["dl"] = uData["dl"] == "layout" ? "" : "layout" ;
+					recorder.data = uData;
+					recorder.title = "";
+					recorder.action = "/T/copy";
+					return __new(res, recorder);
+				} else {
+					svUpdateIDDefine(uData)
+					res.redirect("/T/update?Rid=" + recorder.data["Rid"] + "&dl=layout");		
+					refreshAppList(req, res);
+				}
+			});
+		} else {
 			if (recorder.code != 200) {
 				log.error(recorder.message);
 				res.end(recorder.message + util.inspect(recorder.error));
 			} else {
-				recorder.title = "Copy Create Views";
+				recorder.title = "";
 				recorder.action = "/T/copy";
 				recorder.data["Vid"] = "auto";
 				recorder.data["Rid"] = "auto";
 				return __new(res, recorder);
 			}
-		});
-	}
+		}
+	});
 }
 function modify(req, res) {
-	var uData = getUData(req);
+	var uData = req.u.data;
 	var condition = {};
 	condition["Rid"] = uData["Rid"];
-	if ("Title" in uData || "Description" in uData) {
+	
+	if ("Title" in uData || "Description" in uData || "Fields" in uData || "FieldsLE" in uData) {
 		uData = __fillDefault(uData);
 		// TODO tmp changes for old data
 		/*
@@ -243,20 +244,46 @@ function modify(req, res) {
 			uData["LShow"] = "";
 		}
 		*/
+		uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
 		mongo.update("T", "V", condition, uData, function (recorder) {
 			if ((recorder.code) != 200 || recorder.num < 1) {
 				log.error(recorder.message);
 				recorder.data = uData;
-				recorder.title = "Edit Application";
+				
+				if (uData["dl"] == "layout") {
+					recorder.title = recorder.data["Title"] + " Defines";
+				} else {
+					recorder.title = recorder.data["Title"] + " Layouts";
+				}
+				recorder.data["dl"] = uData["dl"] == "layout" ? "" : "layout" ;
 				recorder.action = "/T/update";
 				return __new(res, recorder);
 			} else {
-				svUpdateIDDefine(uData)
-				log.error("Update" + recorder.num);
-				recorder.title = "Edit Application Result";
-				recorder.data = uData;
-				__show(res, recorder);
+				svUpdateIDDefine(uData);
+				if (uData["dl"] == "layout") {
+					res.redirect("/T/update?Rid=" + uData["Rid"] + "&dl=layout");
+				} else {
+					res.redirect("/T/show?Rid=" + uData["Rid"]);
+				}
 				refreshAppList(req, res);
+				return;
+				/*
+				mongo.findOne("T", "V", null, condition, function (recorder) {
+					if (recorder.code != 200) {
+						recorder.data = uData;
+						recorder.code = 200;
+					}
+					if (uData["dl"] == "layout") {
+						recorder.title = recorder.data["Title"] + " Layouts";
+						recorder.action = "/T/update";
+						recorder.data["dl"] = uData["dl"];
+						__new(res, recorder);
+					} else {
+						recorder.title = recorder.data["Title"] + " Details";
+						__show(res, recorder);
+					}
+				});
+				*/
 			}
 		});
 	} else {
@@ -265,8 +292,13 @@ function modify(req, res) {
 				log.error(recorder.message);
 				res.end(recorder.message + util.inspect(recorder.error));
 			} else {
-				recorder.title = "Edit Application";
 				recorder.action = "/T/update";
+				if ("dl" in uData) {
+					recorder.data["dl"] = uData["dl"];
+					recorder.title = recorder.data["Title"] + " Layouts";
+				} else {
+					recorder.title = recorder.data["Title"] + " Defines";
+				}
 				// TODO tmp changes for old data
 				if (!recorder.data["LayoutL"]) {
 					var layout = tmpconvert(recorder.data["LNew"]);
@@ -310,7 +342,7 @@ function modify(req, res) {
 						layout = recorder.data[act].toJSON();
 						recorder.data[act] = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;" name="new" style="min-width:80px;">' + (layout["icon"] ? '<img src="/img/' + layout["icon"] + '">' : '') + '' + (layout["label"] || "") + '</a></div>'
 					}
-					recorder.data["Filter"] = recorder.data["Filter"].replace(/<\/a>/gi, "</a>\n").replace(/(.+<a )([^>]+>.+<\/a>)(.+)/gi, "<a class='filter' $2").replace(/<[\/]?ul[^>]*>\r?\n?/gi, "");
+					recorder.data["Filter"] = (recorder.data["Filter"] || "").replace(/<\/a>/gi, "</a>\n").replace(/(.+<a )([^>]+>.+<\/a>)(.+)/gi, "<a class='filter' $2").replace(/<[\/]?ul[^>]*>\r?\n?/gi, "");
 				}
 				
 				return __new(res, recorder);
@@ -540,7 +572,7 @@ function tmpconvert(data) {
 	return json;
 }
 function remove(req, res) {
-	var uData = getUData(req);
+	var uData = req.u.data;
 	var condition = {};
 	for (var i in fnames) {
 		if (i in uData) {
@@ -559,8 +591,9 @@ function remove(req, res) {
 		}
 	});
 }
+/*
 function search(req, res) {
-	var uData = getUData(req);
+	var uData = req.u.data;
 	mongo.list("T", "V", null, {}, "Tid Vid Rid Title Description Visible Enable URL Help", {sort: {Tid: 1, Vid: 1}}, function (recorder) {
 		if (recorder.code != 200) {
 			log.error(recorder.message);
@@ -572,6 +605,7 @@ function search(req, res) {
 		}
 	});
 }
+*/
 
 function svUpdateIDDefine(data) {
 	var fdata = (data["Fields"] + "").toJSON();
@@ -672,7 +706,7 @@ function __refreshAppList(lst) {
 '		<div class="text-right">\r\n' + 
 '			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
 '			<a href="/T/show?Rid=' + lst[it]["Rid"] + '" title="View define detail of application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/detail.png"></a>\r\n' + 
-'			<a href="/T/update?Rid=' + lst[it]["Rid"] + '" title="Edit application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/edit.png"></a>\r\n' + 
+'			<a href="/T/update?Rid=' + lst[it]["Rid"] + '" title="Edit [' + lst[it]["Title"] + ']"><img class="icon15" src="/img/edit.png"></a>\r\n' + 
 '			<a href="/T/copy?Rid=' + lst[it]["Rid"] + '" title="Create a new one based on application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/copy.png"></a>\r\n' + 
 (lst[it]["Tid"].match(/TF\d/gi) ? '' : '			<a name="remove" href="javascript:;" url="/T/remove?Rid=' + lst[it]["Rid"] + '" title="Remove application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/remove.png"></a>\r\n') + 
 '		</div>\r\n	</div>\r\n<% } %>\r\n';
@@ -713,6 +747,9 @@ hed = '	<div class="jumbotron homepage">\r\n' +
 	var names = ["./service/defines/T_show.ejs", "./service/defines/T_new.ejs"];
 	for (var i in names) {
 		var contents = fs.readFileSync(names[i], {encoding: 'utf8'});
+		if (contents.length > 100) {
+			fs.writeFile(names[i] + ".bak", contents, function(err){ if (err) log.error(err); });
+		}
 		if (contents && contents.contains("<!-- start -->")) {
 			contents = "<!-- start -->" + contents.mid("<!-- start -->", "<!-- end -->") + "<!-- end -->";
 			fs.writeFile(names[i], template.replace('navbar-header', 'navbar-header active').replace("TOP_LINKS", links).replace("FIELDS", contents).replace("HEAD_TITLE - ", ""), function(err){ if (err) log.error(err); });
@@ -728,7 +765,7 @@ function create(req, res) {
 		res.end(err);
 	}
 	
-	var uData = getUData(req);
+	var uData = req.u.data;
 	var condition = {};
 	if ("Rid" in uData) {
 		condition["Rid"] = uData["Rid"];
@@ -766,7 +803,8 @@ function createOneByRecorder(recorder) {
 	} else {
 		//var fields = JSON.parse((recorder.data["Fields"] || "").replace(/'/g, "\""));
 		var fdata = {};
-		fdata.data = (recorder.data["Fields"] + "").replace("'APP_OPTIONS'", mongo.getAppOptions()).toJSON();
+		fdata.data = (recorder.data["Fields"] + "").toJSON();
+		//.replace('"otype": "applications"', '"options": ' + options.app)
 		recorder.data = __fillDefault(recorder.data);
 		recorder.data["CheckFuncs"] = "" + util.inspect(field.toCheckFuncs(recorder.data["Fields"]));
 
@@ -847,9 +885,19 @@ function process(req, res) {
 	var uData = req.u.data;
 	uData.user = req.u.user;
 	*/
-	var tid = req.u.Tid;
-	var vid = req.u.Vid;
-	var define = mongo.defines(tid, vid) || {};
+	if (options.app.length < 1) {
+		options.app += '{"caption": "All", "value": "*"}';
+		mongo.list("T", "V", null, {}, "Tid Vid Rid Title Status URL", {"sort": {"Title": -1}}, function (recorder) {
+			var lst = recorder.data;
+			for (var it = lst.length - 1; it > -1; it--) {
+				if (lst[it]["Status"] == "disabled" || lst[it]["Status"] == "hidden") {
+					continue; 
+				}
+				options.app += ', {"caption": "' + lst[it]["Title"] + '", "value": "' + lst[it]["Tid"] + '/' + lst[it]["Vid"] + '"}';
+			}
+			options.app = "[" + options.app + "]";
+		});
+	}
 	switch(req.u.op) {
 		case "create":
 			return create(req, res);
@@ -869,17 +917,13 @@ function process(req, res) {
 		case "remove":
 			return remove(req, res);
 		break;
-		case "list":
-		case "search":
-			return search(req, res);
-		break;
 		default:
 			log.warn("ssid[" + req.u.ssid + "] no expected URL: " + req.url + ". Client information: " + req.info());
-			return search(req, res);
+			return A.welcome(req, res, "", true);
 		break
 	}
 	var warning = "<B>404 EVENT!</B><br/>Tangram made a lot of applications except " + tid + ". <br/>Google tangram then DIY one _(._.)_";
-	welcome(req, res, warning);
+	A.welcome(req, res, warning);
 	log.warn("ssid[" + req.u.ssid + "] " + " access invalidated URL by " + req.info().replace(/[\r\n]+/g, " "));
 }
 

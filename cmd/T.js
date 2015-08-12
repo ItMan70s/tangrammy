@@ -99,34 +99,30 @@ function install() {
 	mkdir(db);
 	mkdir("../logs");
 	var path = fs.realpathSync(db);
-	if (windows) {
-		var status = exec('sc query tangrammydb');
-		var newDB = fs.existsSync(db + '/local.ns');
+	if (windows) {		
+		try {fs.writeFileSync("../logs/mongodb.log", ""); } catch(e){}
 		
-		if ((status + "").indexOf("SERVICE_NAME:") < 0) { 
-			fs.writeFileSync("../logs/mongodb.log", "");
-			exec('nssm install TangrammyDB "' + fs.realpathSync("./mongod.exe") + '" --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
-			status = exec('sc query tangrammydb');
-		}
+		exec('nssm stop TangrammyDB');
+		exec('nssm remove TangrammyDB confirm');
+		exec('nssm install TangrammyDB "' + fs.realpathSync("./mongod.exe") + '" --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
+		exec('nssm restart TangrammyDB');
 		
-		if ((status + "").indexOf( "4  RUNNING") < 0) { 
-			exec('nssm restart TangrammyDB');
-		}
+		backupDB();
+		restoreDB("dat/TangramDB.7z");
 		
-		if (newDB) {
-			restoreDB("dat/TangramDB.7z");
-		}
+		exec('nssm stop Tangrammy');
+		exec('nssm remove Tangrammy confirm');
 		
-		status = exec('sc query Tangrammy');
-		if ((status + "").indexOf("SERVICE_NAME:") < 0) {  
-			exec(cmds["unzip"].replace("name", "dat/node_modules.zip").replace("folder", modules));
-			exec("nssm install Tangrammy " + fs.realpathSync("node.exe") + " index.js");
-			exec("nssm set Tangrammy AppDirectory " + fs.realpathSync(app));
+		console.log(modules + '/express');
+		if (!fs.existsSync(modules + '/express')) {
+			exec(cmds["unzip"].replace("name", "dat/node_modules.7z").replace("folder", modules));
 		}
+		exec("nssm install Tangrammy " + fs.realpathSync("node.exe") + " index.js");
+		exec("nssm set Tangrammy AppDirectory " + fs.realpathSync(app));
 		exec('nssm restart Tangrammy');
 	} else {
 		exec(fs.realpathSync("./mongod") + ' --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
-		restoreDB("dat/TangramDB.zip");
+		restoreDB("dat/TangramDB.7z");
 		
 		exec(fs.realpathSync("./node") + ' --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
 		var script = "#!/bin/bash\n" + 

@@ -16,8 +16,9 @@
 	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.hotkeys.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-richtext.js"></script>
     <script src="/js/bootstrap.file-input.js"></script>
+    <script src="/js/t.components.js"></script>
+    <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
 <body>
@@ -73,19 +74,10 @@
 	</div><% function getF1(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "*" + ",")) {    opts += "<span class='wid100'>All</span> "; } 
-   if (val.contains( "," + "T2/V1" + ",")) {    opts += "<span class='wid100'>Users</span> "; } 
-   if (val.contains( "," + "T2/V3" + ",")) {    opts += "<span class='wid100'>UserLogin</span> "; } 
-   if (val.contains( "," + "T3/V1" + ",")) {    opts += "<span class='wid100'>Links</span> "; } 
-   if (val.contains( "," + "T4/V1" + ",")) {    opts += "<span class='wid100'>Todo</span> "; } 
-   if (val.contains( "," + "T5/V1" + ",")) {    opts += "<span class='wid100'>Money</span> "; } 
-   if (val.contains( "," + "T5/V2" + ",")) {    opts += "<span class='wid100'>lend</span> "; } 
-   if (val.contains( "," + "T5/V4" + ",")) {    opts += "<span class='wid100'>brotherlend</span> "; } 
-   if (val.contains( "," + "T6/V1" + ",")) {    opts += "<span class='wid100'>books</span> "; } 
-   if (val.contains( "," + "T7/V1" + ",")) {    opts += "<span class='wid100'>Words</span> "; } 
-   if (val.contains( "," + "T9/V1" + ",")) {    opts += "<span class='wid100'>Booking</span> "; } 
-   if (val.contains( "," + "T9/V2" + ",")) {    opts += "<span class='wid100'>Servers</span> "; } 
-   if (val.contains( "," + "TA/V1" + ",")) {    opts += "<span class='wid100'>VMs</span> "; } 
+  if (val.contains( "," + "*" + ",")) {    opts += "All "; } 
+   if (val.contains( "," + "TF0/V1" + ",")) {    opts += "Roles "; } 
+   if (val.contains( "," + "T1/V1" + ",")) {    opts += "Todo "; } 
+   if (val.contains( "," + "TF1/V1" + ",")) {    opts += "Users "; } 
    return opts; } %>
 <% function getF2(val) { 
   var opts = ""; 
@@ -99,7 +91,7 @@
   if (val.contains( "," + "1" + ",")) {    opts += "Yes "; } 
    if (val.contains( "," + "0" + ",")) {    opts += "No "; } 
    return opts; } %>
-<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='roles'></div><table class='table'>
+<div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='roles'></div><table class='table table-hover'>
   <thead>
 	<tr><th  Fid='F0'>Role</th>
 <th class='col-md-6'  Fid='F1'>Application</th>
@@ -140,12 +132,12 @@
 
 	<div class="go-top">
 	<div class="btn-group">
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
 		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
 		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
 		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 	</div>
 	</div>
 <script>
@@ -168,7 +160,6 @@
     </div>
   </div>
 </div>
-	<a name="bottom" > </a>
 	<hr />
 	<footer>
 	<div class="col-md-12 form-group small">
@@ -179,14 +170,15 @@
 		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
 		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
 		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
+	<a name="bottom" > </a>
 </body>
 </html>
 

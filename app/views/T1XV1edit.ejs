@@ -16,8 +16,9 @@
 	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.hotkeys.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-richtext.js"></script>
     <script src="/js/bootstrap.file-input.js"></script>
+    <script src="/js/t.components.js"></script>
+    <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
 <body>
@@ -75,16 +76,16 @@
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Priority<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='0'  required=true <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >Low</label>
-			<label class='radio-inline col-md-2 orange'><input type='radio' name='F3' value='1'  required=true <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/f4.png'>Medium</label>
-			<label class='radio-inline col-md-2 red'><input type='radio' name='F3' value='2'  required=true <%= (val.contains( "," + "2" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/f5.png'>High</label></div></div></div></div>
+			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >Low</label>
+			<label class='radio-inline col-md-2 orange'><input type='radio' name='F3' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/f4.png'>Medium</label>
+			<label class='radio-inline col-md-2 red'><input type='radio' name='F3' value='2'  <%= (val.contains( "," + "2" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/f5.png'>High</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Status<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
-			<label class='radio-inline col-md-2 blue'><input type='radio' name='F2' value='0'  required=true <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/b1.png'>Initial</label>
-			<label class='radio-inline col-md-2 green'><input type='radio' name='F2' value='1'  required=true <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/b2.png'>In progress</label>
-			<label class='radio-inline col-md-2 orange'><input type='radio' name='F2' value='2'  required=true <%= (val.contains( "," + "2" + ",")) ? "checked=true" : "" %> >Paused</label>
-			<label class='radio-inline col-md-2 black'><input type='radio' name='F2' value='3'  required=true <%= (val.contains( "," + "3" + ",")) ? "checked=true" : "" %> >Finished</label></div></div></div></div>
+			<label class='radio-inline col-md-2 blue'><input type='radio' name='F2' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/b1.png'>Initial</label>
+			<label class='radio-inline col-md-2 green'><input type='radio' name='F2' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> ><img class='icon15' src='/img/s/b2.png'>In progress</label>
+			<label class='radio-inline col-md-2 orange'><input type='radio' name='F2' value='2'  <%= (val.contains( "," + "2" + ",")) ? "checked=true" : "" %> >Paused</label>
+			<label class='radio-inline col-md-2 black'><input type='radio' name='F2' value='3'  <%= (val.contains( "," + "3" + ",")) ? "checked=true" : "" %> >Finished</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Name<B class='red'>*</B></label><div class='controls'>
 <input type='text' class='form-control' name='F0' value='<%= data["F0"] || "" %>' maxlength=200 minlength=3 required=true unique=true placeholder='Todo name'></div><span class='errormsg'>3~200 chars</span></div>
@@ -97,7 +98,7 @@
 </div>
 <div class='col-md-12'><label class='control-label title-label'>Update</label>
 		<div class='form-show' readonly=true ><%= (data["Update"] || '') %></div></div>
-  <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
+    <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
 <div class="col-md-0"><button type="submit" class="btn btn-primary"    style="min-width:80px;" title="">Save Changes </button></div>
 <div class="col-md-0"><a class="btn btn-link"  href="/todo/list" style="min-width:80px;" title="">Cancel</a></div>
 </div></div>
@@ -105,26 +106,15 @@
 <script type='text/javascript'>getOPLogs('T1', 'V1', '<%= data["Rid"] %>');</script></div>
 </form>
 <iframe id='submitFrame' name='submitFrame' class='hidden'></iframe>
-<script type='text/javascript'>  
-	function checkFields() {
- var msg = ''; 
-if ($('[name=F0]')[0]) { var val = $('[name=F0]').val(); switch ($('[name=F0]').attr('type')) { case 'radio': val = $('[name=F0]:checked').attr('value'); break; case 'textarea': val = $('[name=F0]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length > 200 || val.length < 3) return 'Please input 3~200 chars for Name.';if (val.length < 0) return 'Please input value for Name!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F0', val.length > 0);}
-if ($('[name=F1]')[0]) { var val = $('[name=F1]').val(); switch ($('[name=F1]').attr('type')) { case 'radio': val = $('[name=F1]:checked').attr('value'); break; case 'textarea': val = $('[name=F1]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length < 0) return 'Please input value for Detail!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F1', val.length > 0);}
-if ($('[name=F2]')[0]) { var val = $('[name=F2]').val(); switch ($('[name=F2]').attr('type')) { case 'radio': val = $('[name=F2]:checked').attr('value'); break; case 'textarea': val = $('[name=F2]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length < 0) return 'Please input value for Status!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F2', val.length > 0);}
-if ($('[name=F3]')[0]) { var val = $('[name=F3]').val(); switch ($('[name=F3]').attr('type')) { case 'radio': val = $('[name=F3]:checked').attr('value'); break; case 'textarea': val = $('[name=F3]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length < 0) return 'Please input value for Priority!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F3', val.length > 0);}
-if ($('[name=F4]')[0]) { var val = $('[name=F4]').val(); switch ($('[name=F4]').attr('type')) { case 'radio': val = $('[name=F4]:checked').attr('value'); break; case 'textarea': val = $('[name=F4]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length < 0) return 'Please input value for Owner!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F4', val.length > 0);}
-if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').attr('type')) { case 'radio': val = $('[name=F5]:checked').attr('value'); break; case 'textarea': val = $('[name=F5]')[0].value; break;} val = Function('val', "if (val == undefined) return '';if (val.length < 0) return 'Please input value for ID!';return '';")(val); if (val.length > 0) msg += val + '\n'; showError('F5', val.length > 0);}
-
- return msg;}</script>
 
 	<div class="go-top">
 	<div class="btn-group">
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
 		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
 		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
 		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 	</div>
 	</div>
 <script>
@@ -147,7 +137,6 @@ if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').
     </div>
   </div>
 </div>
-	<a name="bottom" > </a>
 	<hr />
 	<footer>
 	<div class="col-md-12 form-group small">
@@ -158,14 +147,15 @@ if ($('[name=F5]')[0]) { var val = $('[name=F5]').val(); switch ($('[name=F5]').
 		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
 		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
 		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="https://github.com/ItMan70s/bootstrap3-richtext">bootstrap3-richtext</a></li>
+		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
+	<a name="bottom" > </a>
 </body>
 </html>
 

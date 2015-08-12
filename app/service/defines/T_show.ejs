@@ -16,8 +16,9 @@
 	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.hotkeys.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-richtext.js"></script>
     <script src="/js/bootstrap.file-input.js"></script>
+    <script src="/js/t.components.js"></script>
+    <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
 <body>
@@ -30,9 +31,7 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/' title=''>Home</a></li>
-			<li><a href='/issues/list' title=''>Issues</a></li>
 			<li><a href='/todo/list' title=''>Todo</a></li>
-			<li><a href='/booking/list' title=''>Booking</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -102,8 +101,7 @@
 		<div class="col-md-12">
 			<ul class="pagination tab">
 				<li class="btn-info text-center active"><a class="wid200 font170" href="#panel-defines" data-toggle="tab">Defines</a></li>
-				<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-single" data-toggle="tab">Layout: Single</a></li>
-				<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-list" data-toggle="tab">Layout: List</a></li>
+				<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout" data-toggle="tab">Layouts</a></li>
 			</ul>
 		</div>
 		<div class="tab-content">
@@ -111,10 +109,10 @@
 			
 				<div class='col-md-12'><label>Fields*</label></div>
 				<div class='col-md-12'><%- data["Fields"] %></div>
-				<div class='col-md-12'><div><label>Keys</label><div class='controls'><%- data["Keys"] %></div></div></div>
+				<div class='col-md-12 hide'><div><label>Keys</label><div class='controls'><%- data["Keys"] %></div></div></div>
 				<div class="col-md-12"><div><label class="control-label title-label">Disable Actions</label><div class="controls">
-					<div class="form-control min-h34"><div class="min-h20"><%= data["NoAction"] || "" %>
-				</div></div></div></div></div>
+					<div class=" min-h20"><%= data["NoAction"] || "" %></div>
+				</div></div></div>
 
 				<div class='col-md-12'>
 					<div class="tabbable">
@@ -142,24 +140,24 @@
 					</div>	
 				</div>
 				<div class='col-md-12'><label>Notification</label>
-					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">From:<%= (data["EmailFrom"] || "") %></span></div></div></div>
-					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">To:<%= (data["EmailTo"] || "") %></span></div></div></div>
-					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">Cc:<%= (data["EmailCc"] || "") %></span></div></div></div>
-					<div class='col-md-12'><div class='controls'><div class="input-group"><span class="right">Subject:<%= (data["EmailTitle"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="right">From:<%= (data["EmailFrom"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="right">To:<%= (data["EmailTo"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="right">Cc:<%= (data["EmailCc"] || "") %></span></div></div></div>
+					<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="right">Subject:<%= (data["EmailTitle"] || "") %></span></div></div></div>
 				</div>
 				
 			</div>
-			<div class="tab-pane" id="panel-layout-single">
+			<div class="tab-pane" id="panel-layout">
 				
-				<h2 class='col-md-12'><small>[New Data]</small> <%- data["TitleLN"] %></h2>
+				<h2 class='col-md-12'><small>[New]</small> <%- data["TitleLN"] %></h2>
 				<div class='col-md-12'><%- data["LayoutN"] %></div>
 				<div class='col-md-12'> <%- data["ActionLN"] %></div>
 				
-				<h2 class='col-md-12'><small>[Edit Data]</small> <%- data["TitleLE"] %></h2>
+				<h2 class='col-md-12'><small>[Edit]</small> <%- data["TitleLE"] %></h2>
 				<div class='col-md-12'><%- data["LayoutE"] %></div>
 				<div class='col-md-12'> <%- data["ActionLE"] %></div>
 				
-				<h2 class='col-md-12'><small>[Show Data]</small> <%- data["TitleLS"] %></h2>
+				<h2 class='col-md-12'><small>[Show]</small> <%- data["TitleLS"] %></h2>
 				<div class='col-md-12'><%- data["LayoutS"] %></div>
 				<div class='col-md-12'> <%- data["ActionLS"] %></div>
 				
@@ -167,10 +165,7 @@
 					<label class="radio col-md-11"> <%= data["History"] == "on" ? "Show operation history in Edit/Show page" : "Hide operation history in Edit/Show page" %></label>
 				</div></div>
 
-			</div>
-			<div class="tab-pane" id="panel-layout-list">
-
-				<h2 class='col-md-12'><span class='col-md-0'><%- data["Title"] %></span> <small> <%- (data["New"] || "") %></small></h2>
+				<h2 class='col-md-12'><span class='col-md-0'><small>[List]</small><%- data["Title"] %></span> <small> <%- (data["New"] || "") %></small></h2>
 				<div class='col-md-12'><%- data["Header"] || ""  %></div>
 				<div class='col-md-12 min-h34'><div><label>Filter</label><div class='controls'><%- (data["Filter"] || "") %></div></div></div>
 				<div class='col-md-12' style='margin-top: 25px'><div><label>Layout</label><div class='controls'><%- data["LayoutL"] %></div></div></div>
@@ -208,6 +203,7 @@
 	<div class='col-md-12'><div class='panel-footer' style='padding-top:20px;'>
 		<a class='btn btn-primary col-md-2' href='/tangrammy'>OK</a>
 		<a class='btn btn-default col-md-1' href="/T/update?Rid=<%= data["Rid"] %>"><img class="icon15" src="/img/edit.png" title="Edit">Edit</a>
+		<a class='btn btn-link' href="/T/update?Rid=<%= data["Rid"] %>&dl=layout"><img class="icon15" src="/img/edit.png" title="Edit">Layouts</a>
 		<a class='btn btn-link' name="onemsg" href="javascript:;" url="/T/create?Rid=<%= data["Rid"] %>">Build Application</a>
 	</div></div>
 	
@@ -216,12 +212,12 @@
 <!-- end -->
 	<div class="go-top">
 	<div class="btn-group">
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
 		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
 		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
 		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 	</div>
 	</div>
 <script>
@@ -244,44 +240,25 @@
     </div>
   </div>
 </div>
-	<a name="bottom" > </a>
 	<hr />
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Inner Sites:</label></li>
-		<li><a href="http://ent244.sharepoint.hp.com/teams/hpsum/default.aspx"  title="Share Point">HPSUM</a></li>
-		<li><a href="http://ent232.sharepoint.hp.com/teams/hpsumbcs/offline/default.aspx"  title="HPSUM China team Share Point">SPI-China</a></li>
-		<li><a href="ftp://gstl.rose.hp.com/pub/"  title="FTP to download Firmwares">FWs FTP</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/kauai/"  title="Share Point">Kauai</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/Tiger/"  title="Share Point">Tiger</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/Sentosa/"  title="Share Point">Sentosa</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/Marina/"  title="Share Point">Coyote</a></li>
-		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/Recipe/default.aspx"  title="Share Point">SkyMaster SD2</a></li>
-		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/default.aspx"  title="Share Point">Buccaneer</a></li>
-		<li><a href="http://quix-tt.atlanta.hp.com/tmtrack/tmtrack.dll?" >Quix</a></li>
-		<li><a href="https://matrix.cce.hp.com/app/DesktopDefault.aspx?tabindex=2&tabid=8" >Morpheus</a></li>
-		<li><a href="https://csvnhou-pro.houston.hp.com:18490/svn/ess-hpsum/branches/"  title="HPSUM source codes">SVN</a></li>
+		<li><label>Dependencies：</label></li>
+		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
+		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
+		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
+		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
+		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
+		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
 		</ul>
 	</div>
-	<div class="col-md-12">
-		Click 
-		<a href="http://fstldb.fc.hp.com/mhwr/systemInv/findSys.asp" >HERE</a> to find DH servers. If DH server is down, 
-		<a href="http://fstl2c.fc.hp.com/ttx.cgi" >file a ticket</a>.
-		
-		Find proliant servers at <a href="http://vartan.cce.hp.com/listall.php" >vartan.cce</a>.
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
+	<a name="bottom" > </a>
 </body>
 </html>
 

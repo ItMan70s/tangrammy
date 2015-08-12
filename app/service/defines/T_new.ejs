@@ -16,8 +16,9 @@
 	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.hotkeys.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-richtext.js"></script>
     <script src="/js/bootstrap.file-input.js"></script>
+    <script src="/js/t.components.js"></script>
+    <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
 <body>
@@ -30,9 +31,7 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/' title=''>Home</a></li>
-			<li><a href='/issues/list' title=''>Issues</a></li>
 			<li><a href='/todo/list' title=''>Todo</a></li>
-			<li><a href='/booking/list' title=''>Booking</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -80,47 +79,60 @@
  }
 </style>
 <form class="well col-md-12" method="post" action="<%= action %>" >
+<%
+	var editLink = "";
+	if (action.match(/\/T\/(copy|new)/gi)) {
+		editLink = "";
+	} else {
+		if (data["dl"] == "layout") {
+			editLink = "<a class='btn btn-success' href='/T/update?Rid=" + data["Rid"] + "' title='Move to edit defines page' >Edit Defines</a>";
+		} else {
+			editLink = "<a class='btn btn-success' href='/T/update?Rid=" + data["Rid"] + "&dl=layout' title='Move to edit layouts page' >Edit Layouts</a>";
+		}
+	}
+%>
 	<div class="row">
-	<div class='col-md-12'> 
-		<div class='col-md-12'> <h2>
-			<input type='hidden' class="divinput col-md-auto text-nowrap" name='Title' value='<%= data["Title"] %>' placeholder="title for application">
-			<small class="col-md-auto"> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>
-				<input type='hidden' name='Tid' value='<%= data["Tid"] %>'>
-				<input type='hidden' name='Vid' value='<%= data["Vid"] %>' >
-				<input type='hidden' name='Rid' value='<%= data["Rid"] %>' >
-			<select name='Status' class='input-sm col-md-auto'>
-				<option value='available'  <%= (data["Status"] != "disabled" && data["Status"] != "hidden") ? "selected=true" : "" %>  >Available</option>
-				<option value='disabled'  <%= (data["Status"] == "disabled") ? "selected=true" : "" %>  >Disabled</option>
-				<option value='hidden'  <%= (data["Status"] == "hidden") ? "selected=true" : "" %>  >Hidden</option>
-			</select>
-		</h2></div>
-		<div class='col-md-4'><div class='controls'><div class="input-group"><span class="input-group-addon"><a href="javascript:;">http://localhost:3000/</a></span><input type='text' class='form-control' name='URL' value='<%= data["URL"] %>' title='URL'><span class="input-group-addon"><a href="javascript:;">/list</a></span></div></div></div>
-		<div class='col-md-2'> </div>
-		<div class='col-md-6 tab-content hide'>
-			<input type='text' class='form-control richtextcodeline' name='Help' value='<%= data["Help"] %>' placeholder='Help file link'>
-		</div>
+		<input type='hidden' name='Tid' value='<%= data["Tid"] %>'>
+		<input type='hidden' name='Vid' value='<%= data["Vid"] %>' >
+		<input type='hidden' name='Rid' value='<%= data["Rid"] %>' >
+	<div class='col-md-12'> <h1><%= title %> <%- editLink %></h1>
+	<div class='col-md-12 alert alert-danger <%= (code == 200) ? "hide" : "" %>'>
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	 <% if ((code || 0) != 200) { %>
+	 <label><%- warning || message %></label>
+	 <% } %>
+	 
 	</div>
+<% if (data["dl"] != "layout") { %>
+	<div class='col-md-12'> <h2>
+		<input type='hidden' class="divinput col-md-auto text-nowrap" name='Title' value='<%= data["Title"] %>' placeholder="title for application">
+		<% if (!action.match(/\/T\/(copy|new)/gi)) { %>
+		<small class="col-md-auto" style="padding-top: 12px;"> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>
+		<select name='Status' class='input-sm col-md-auto' style="margin-top: 8px;">
+			<option value='available'  <%= (data["Status"] != "disabled" && data["Status"] != "hidden") ? "selected=true" : "" %>  >Available</option>
+			<option value='disabled'  <%= (data["Status"] == "disabled") ? "selected=true" : "" %>  >Disabled</option>
+			<option value='hidden'  <%= (data["Status"] == "hidden") ? "selected=true" : "" %>  >Hidden</option>
+		</select>
+		<% } %>
+	</h2></div>
+	<div class='col-md-4'><div class='controls col-md-12'><div class="input-group"><span class="input-group-addon"><a href="javascript:;">http://localhost:3000/</a></span><input type='text' class='form-control' name='URL' value='<%= data["URL"] %>' title='URL'><span class="input-group-addon"><a href="javascript:;">/list</a></span></div></div></div>
+	<div class='col-md-8'> </div>
+	<div class='col-md-6 tab-content hide'>
+		<input type='text' class='form-control richtextcode' name='Help' value='<%= data["Help"] %>' placeholder='Help file link'>
+	</div>
+
 	<div class='col-md-12'> 
 		<div class='col-md-12'> 
 			<textarea class='form-control richtextcode' name='Description' cols=100 rows=2 validate="required"  placeholder="description for application"><%= data["Description"] %></textarea>
 		</div>
 	</div>
 <div class='col-md-12'>
-	<div class="col-md-12">
-		<ul class="pagination tab">
-			<li class="btn-info text-center active"><a class="wid200 font170" href="#panel-defines" data-toggle="tab">Defines</a></li>
-			<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-single" data-toggle="tab">Layout: Single</a></li>
-			<li class="btn-info text-center"><a class="wid200 font170" href="#panel-layout-list" data-toggle="tab">Layout: List</a></li>
-		</ul>
-	</div>
-	<div class="tab-content">
-		<div class="tab-pane active" id="panel-defines">
 		
 			<div class='col-md-12'><label>Fields*</label></div>
 			<div class='col-md-12'> 
 				<div class='controls'><textarea class='form-control preview' preview='yes' onview='showFields' name='Fields' cols=100 rows='<%= total + 4 %>' validate="required" ><%= data["Fields"] %></textarea></div>
 			</div>
-			<div class='col-md-12'><div><label>Keys</label><div class='controls'><input type='text' class='form-control' name='Keys' value='<%= data["Keys"] %>' placeholder='Key field names joined by ","'></div></div></div>
+			<div class='col-md-12 hide'><div><label>Keys</label><div class='controls'><input type='text' class='form-control' name='Keys' value='<%= data["Keys"] %>' placeholder='Key field names joined by ","'></div></div></div>
 			<div class="col-md-12"><div><label class="control-label title-label">Disable Actions</label><div class="controls">
 				<div class="form-control min-h34"><div class="min-h20">
 				<input type="checkbox" name="NoAction" value="" checked=true class="hidden" >
@@ -159,22 +171,37 @@
 					</div>	
 				</div>	
 			</div>
+<% 		if (notification) { %>
 			<div class='col-md-12'><label>Notification</label>
-				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>From:</b></span><input type='text' class='form-control' name='EmailFrom' value='<%= (data["EmailFrom"] || "") %>' placeholder='email address to send'></div></div></div>
-				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>To:</b></span><% var val = data["EmailTo"] || "";  val = "," + val.toString() + ",";%>
-					<select class='form-control' name='EmailTo'  size=1 multiple=true >
-					<option value='me'  <%= (val.contains( "," + "me" + ",")) ? "selected=true" : "" %>  >Owner</option>
-					<option value='F0'  <%= (val.contains( "," + "F0" + ",")) ? "selected=true" : "" %>  >F0</option>
-					<option value='F1'  <%= (val.contains( "," + "F1" + ",")) ? "selected=true" : "" %>  >F1</option>
+				<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="input-group-addon wid100 right"><b>From:</b></span><input type='text' class='form-control' name='EmailFrom' value='<%= (data["EmailFrom"] || "") %>' placeholder='email address to send'></div></div></div>
+				<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="input-group-addon wid100 right"><b>To:</b></span><% var val = data["EmailTo"] || "";  val = "," + val.toString() + ",";%>
+					<select class='form-control' name='EmailTo'  size=3 multiple=true >
+					<option value='me'  <%= (val.contains( "," + "me" + ",")) ? "selected=true" : "" %>  >Owner</option>					
+				<% for (var fid in fields) { %>
+					<option value='<%= fid %>'  <%= (val.contains( "," + fid + ",")) ? "selected=true" : "" %>  ><%= "[" + fid + "] " + fields[fid] %></option>
+				<% } %>
 					</select></div></div></div>
-				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>Cc:</b></span><input type='text' class='form-control' name='EmailCc' value='<%= (data["EmailCc"] || "") %>' placeholder='email addresses in cc list'></div></div></div>
-				<div class='col-md-12'><div class='controls'><div class="input-group"><span class="input-group-addon wid100 right"><b>Subject:</b></span><input type='text' class='form-control' name='EmailTitle' value='<%= (data["EmailTitle"] || "") %>' placeholder='subject of email'></div></div></div>
+				<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="input-group-addon wid100 right"><b>Cc:</b></span><input type='text' class='form-control' name='EmailCc' value='<%= (data["EmailCc"] || "") %>' placeholder='email addresses in cc list'></div></div></div>
+				<div class='col-md-12'><div class='controls'><div class="input-group col-md-12"><span class="input-group-addon wid100 right"><b>Subject:</b></span><input type='text' class='form-control' name='EmailTitle' value='<%= (data["EmailTitle"] || "") %>' placeholder='subject of email'></div></div></div>
 			</div>
-			
+<% 		} %>
+	
+<% } else { %>			
+		<div class='col-md-12'> 
+		<h1><small><%= (data["Status"] == "hidden") ? "[Hidden]" : "" %><%= (data["Status"] == "disabled") ? "[Disabled]" : "" %></small>
+			<span><%- data["Title"] %></span>
+			<small> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>
+		</h1></div>
+		
+		<div class='col-md-4'><small><a href="/<%= data["URL"] %>/list">http://~/<%= data["URL"] %>/list </a> </small></div>
+		<div class='col-md-8'> </div>
+		<div class='col-md-12'> 
+			<div class='col-md-12'> 
+				<%- data["Description"] %>
+				<textarea class='hide' name='Fields' cols=100 rows='3' ><%= data["Fields"] %></textarea>
+			</div>
 		</div>
-		<div class="tab-pane" id="panel-layout-single">
-			
-			<h2 class='col-md-12'>
+			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[New]</small>
 				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLN' value='<%= data["TitleLN"] %>' placeholder="title for new data">
 			</h2>
 			<div class='col-md-12'> 
@@ -185,7 +212,7 @@
 				<textarea class='form-control preview' preview='yes' onview='viewAction' name='ActionLN' cols=100 rows='2' validate="required"  placeholder="Click preview to add new action"><%= data["ActionLN"] %></textarea>
 			</div>
 			
-			<h2 class='col-md-12'>
+			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[Edit]</small>
 				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLE' value='<%= data["TitleLE"] %>' placeholder="title for new data">
 			</h2>
 			<div class='col-md-12'>
@@ -196,7 +223,7 @@
 				<textarea class='form-control preview' preview='yes' onview='viewAction' name='ActionLE' cols=100 rows='2' validate="required"  placeholder="Click preview to add new action"><%= data["ActionLE"] %></textarea>
 			</div>
 			
-			<h2 class='col-md-12'>
+			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[Show]</small>
 				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLS' value='<%= data["TitleLS"] %>' placeholder="title for new data">
 			</h2>
 			<div class='col-md-12'> 
@@ -211,10 +238,8 @@
 				<label class="radio col-md-11"><input type="radio" name="History" value="off" <%= data["History"] != "on" ? "checked=true" : "" %> >Hide operation history in Edit/Show page</label>
 			</div></div>
 
-		</div>
-		<div class="tab-pane" id="panel-layout-list">
 
-			<h2 class='col-md-12'>
+			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[List]</small>
 				<div class="col-md-auto text-nowrap" name='TitleLL'><%= data["Title"] %> </div>
 				<input type='hidden' class="divinput col-md-auto text-nowrap" name='New' value='<%= (data["New"] || "").contains("<a ") ? data["New"] : " " %>' placeholder="Click to modify action button">
 			</h2>
@@ -232,7 +257,95 @@
 				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutL' cols=100 rows='<%= total %>'  validate="required" ><%= data["LayoutL"] %> </textarea>
 			</div>
 			
-			<div class='col-md-12'><div><label>Condition</label><div class='controls'><textarea class='form-control' name='Condition'  cols=100 rows=3 required=true placeholder='Condition to list data'><%= data["Condition"] %></textarea></div></div></div>
+			<div class='col-md-12'><div><label>Condition</label><div class='controls'>
+			<textarea class='form-control hide' name='Condition'  cols=100 rows=2 required=true placeholder='Condition to list data'><%= data["Condition"] %></textarea>
+			<div class='col-md-12 search-zone' >
+				<div class='col-md-12 win-close'><strong>What data to list?</strong></div>
+				<table class='table'>
+			<% 
+			var dFields = data["Fields"].toJSON();
+			var txtFields = {};
+			var txtFids = "";
+			var condJ = (data["Condition"] || "{}").toJSON();
+			dFields["Update"] = {"type": "String", "form": "datetime", "label": "Update Date", "format": "yyyy-mm-dd hh:mm:ss", "attribute": ","};
+			dFields["Create"] = {"type": "String", "form": "datetime", "label": "Create Date", "format": "yyyy-mm-dd hh:mm:ss", "attribute": ","};
+			for (var i in dFields) {
+				if (!dFields[i]["form"]) continue;
+				if ("options" in dFields[i] && dFields[i]["options"].length > 1) {
+			%>
+					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'><div>
+				<% 
+				var chks = "";
+				if (i in condJ && condJ[i]["$in"]) {
+					chks += "," + condJ[i]["$in"].join(",") + ",";
+				}
+				for (var j in dFields[i]["options"]) {
+					var opt = dFields[i]["options"][j];
+					var chk = chks.indexOf("," + opt.value + ",") < 0 ? "": " checked=true";
+				%>
+						<label class='space20'> <input type='checkbox' target='<%= i %>' value='<%= opt.value %>'<%= chk %>><%- opt.caption || opt.value %></label>
+				<% } %>
+						<label class='checked'> <input type='checkbox' selectall=true>All</label>
+					</div></div></td></tr>
+			<% 
+				} else if (dFields[i]["form"] == "number") {
+					var gte = "";
+					var lte = "";
+					if (i in condJ) {
+						gte = condJ[i]["$gte"];
+						lte = condJ[i]["$lte"];
+					}
+			%>		
+					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'><div class='wid200 pull-left'><input type='text' target='<%= i %>' value='<%= gte %>' class='form-control input-sm between'></div><div class='wid200 pull-left'><input type='text' target='<%= i %>' value='<%= lte %>' class='form-control input-sm'></div></div></td></tr>
+			<% 
+				} else if (dFields[i]["form"] == "reservation") {
+					// ignore
+				} else if (dFields[i]["form"] == "time" || dFields[i]["form"].match(/date/gi)) {
+					// ignore
+				} else if (dFields[i]["form"].match(/date/gi)) {
+			%>		
+					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-365d~0" <%= i %> >Last 365 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 30 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 7 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-1d~">Yesterday</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0d~">Today</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="1d~">Tomorrow</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0w~">This Week</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0m~">This Month</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0y~">This Year</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 7 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 30 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~365d">Next 365 Days</label>
+					</div></td></tr>
+			<% 
+				} else  {
+					txtFields[i] = dFields[i]["label"];
+					txtFids += i + "_ac_";
+				}
+			}
+			var cond_txt = condJ["$or"] ? "" : "";
+			var cond_txt_ids = {};
+			if (condJ["$or"]) {
+				for (var i in condJ["$or"]) {
+					cond_txt_ids[i] = "";
+					cond_txt = condJ["$or"][i] + "";
+				}
+			}
+			%>
+					<tr><td><div class='col-md-1 line-header'>Text:</div><div class='col-md-11'><div class='space20 wid400 pull-left'><input type='text' target='<%= txtFids %>' class='form-control input-sm ' value='<%= cond_txt %>' ></div><div class='pull-left'>
+				<%
+				for (var j in txtFields) { 
+					var chk = (j in cond_txt_ids)? " checked=true" : "";
+				%>
+						<div class='col-md-0'><label class='margin1'><input type='checkbox' target='Fids' value='<%= j %>' <%= chk %> ><%= txtFields[j] %></label></div>
+				<% } %>
+					</div></div></td></tr>
+					<tr><td><div class='pull-left hidden' name='selectedconditiontitle'>List Condition:</div><div class='col-md-9 pull-left hidden' name='selectedcondition'></div></td></tr>
+				</table>
+			</div>
+			</div>
+			</div></div></div>
 			
 			<div class='col-md-12'><div><label>Order By</label>
 			<div class='input-group'>
@@ -263,19 +376,26 @@
 			<div class='col-md-12'>
 				<textarea class='form-control richtextcode' name='Footer' cols=100 rows=2 validate="required" title="Message in list page"><%= data["Footer"] || "" %></textarea>
 			</div>
-				
-		</div>
-	</div>
+	
+<% } %>					
 </div>
 
-	<div class='col-md-12 error'>
+	<div class='col-md-12 alert alert-danger <%= code == 200 ? "hide" : "" %>'>
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	 <% if ((code || 0) != 200) { %>
-	 <label><%= message %></label>
+	 <label><%- warning || message %></label>
 	 <% } %>
 	</div>
 	<div class='col-md-12'><div class='panel-footer' style='padding-top:20px;'>
-		<button type='submit' class='btn btn-success col-md-2'>Save Changes</button>
-		<a class='btn btn-link col-md-1' href='/tangrammy'>Cancel</a>
+<% if (data["dl"] != "layout") { %>
+		<input type='hidden' name='dl' value='layout' >
+		<button type='submit' class='btn btn-success col-md-2'>Next</button>
+		<%- editLink.replace("btn-success", "btn-link") %>
+<% } else { %>
+		<button type='submit' class='btn btn-success col-md-2'>Save</button>
+		<%- editLink.replace("btn-success", "btn-link") %>
+<% } %>
+		<a class='btn btn-link' href='/tangrammy'>Cancel</a>
 	</div></div>
 	
 	</div>
@@ -342,8 +462,8 @@
 			<input type="text" class="form-control" name="key" value=""></div></div></div>
 		<div class="col-md-2 f-val"><div><label class="control-label title-label">val</label><div class="controls">
 			<input type="text" class="form-control" name="val" value=""></div></div></div>
-		<div class="col-md-2 f-format"><div><label class="control-label title-label">format</label><div class="controls">
-			<input type="text" class="form-control" name="format" value=""></div></div></div>
+		<div class="col-md-4 f-format"><div><label class="control-label title-label">format</label><div class="controls">
+			<input type="text" class="form-control" name="format" value="YYYY-MM-DD hh:mm:ss"></div></div></div>
 		<div class="col-md-2 f-size"><div><label class="control-label title-label">size</label><div class="controls">
 			<input type="text" class="form-control" name="size" value=""></div></div></div>
 		<div class="col-md-4 f-regexp"><div><label class="control-label title-label">RegExp</label><div class="controls">
@@ -355,7 +475,16 @@
 			<input type="text" class="form-control" name="css" value=""></div></div></div>
 	</div><div>
 	
-		<div class="col-md-12 controls f-options"><label class="control-label title-label">Options </label>
+		<div class="col-md-12 controls f-options"><label class="control-label title-label"> 
+		
+		<select name='otype' class='input-sm col-md-auto' style="margin-top: 8px;">
+			<option value='diy'  <%= (data["otype"] != "applications" && data["otype"] != "users" ) ? "selected=true" : "" %>  >Options: User Define</option>
+			<option value='applications'  <%= (data["otype"] == "applications") ? "selected=true" : "" %>  >Options: Application List</option>
+<%
+			// <option value='users'  <%= (data["otype"] == "users") ? "selected=true" : "" %>  >Options:  System Users List</option>
+%>
+		</select>
+		</label>
 		<div class='col-md-12 tab-content'>
 			<div class="switch-icon">
 				<a class="btn active" href="#Options-v" data-toggle="tab">view</a>
@@ -402,13 +531,13 @@ function showFields() {
 	if (fds == null) {
 		fds = $("#Fields-m").find(".mvc-group-m-preview").val().toJSON();
 	}
-	var htm = "<table class='table'>\n";
+	var htm = "<table class='table table-hover'>\n";
 	htm += "<thead><tr><th>ID</th><th>Field</th><th>Type</th><th>Form</th><th>Default</th><th>Attribute</th><th>PlaceHolder</th></tr></thead>\n<tbody>\n";
 	var no = 0;
 	for (var i in fds) {
 		no++;
 		htm += "	<tr class='clickable' onclick='editField(\"" + i + "\")' title='Click to edit field[" + (fds[i]["label"] + "").encodeAttr() + "]'><td>" + i + 
-		"</td><td>" + fds[i]["label"] + "</td><td>" + fds[i]["type"] + "</td><td>" + fds[i]["form"] + "</td><td>" + fds[i]["default"] + "</td><td>" + fds[i]["attribute"] + 
+		"</td><td>" + fds[i]["label"] + "</td><td>" + fds[i]["type"] + "</td><td>" + fds[i]["form"] + "</td><td>" + (fds[i]["default"] || "") + "</td><td>" + (fds[i]["attribute"] || "") + 
 		"</td><td class='auto-fit text-nowrap'>" + (fds[i]["placeholder"] || "NA") + "</td></tr>\n";
 	}
 	while (fds["F" + no]) {
@@ -476,17 +605,17 @@ function init(json) {
 			});
 			
 		} else {
-			if (i == "options") {
-				showOptions(fields[i], fields["form"], fields["cols"]);
+			if (i == "options" || i == "otype") {
+				showOptions(fields["options"] || [], fields["form"], fields["size"] || fields["cols"], fields["otype"]);
 			} else {
-				$("[name=" + i + "]").val(fields[i]);
+				$("[name=" + i + "]").val(fields[i] || "");
 			}
 		}
 	}
 	onChangeForm();
 }
 
-function showOptions(opts, form, cols) {
+function showOptions(opts, form, cols, type) {
 
 	var htm = "";
 	for (var i in opts) {
@@ -494,6 +623,7 @@ function showOptions(opts, form, cols) {
 			(opts[i]["css"] ? "<span class='" + opts[i]["css"] + "'>" : "") + (opts[i]["caption"] || "") + (opts[i]["css"] ? "</span>" : "")  + '"},\n';
 	}
 	$('[name="options"]').val("[" + htm + "]");
+	$('[name="otype"]').val(type || "diy");
 	htm = "";
 	
 	var vals = ",";
@@ -519,13 +649,12 @@ function showOptions(opts, form, cols) {
 	}
 	
 	cols = (cols > 0 && cols < 999) ? cols : 10;
+	$('[name="cols"]').val(cols);
 	var cnt = 1;
 	vals = ",";
-	htm += "<div class='col-md-12'><span id='common-toolbar'></div>";
+	//htm += "<div class='col-md-12 divinputs' id='def-options-zone' options='autohide:\"no\", sfont:\"yes\", img:\"no\", link:\"no\", undo:\"no\", '></div>";
+	htm += "<div class='col-md-12 divinputs' rt-selector='.def-options-rich' id='def-options-zone' options='autohide:\"no\", sfont:\"yes\", img:\"no\", link:\"no\", undo:\"no\", '>";
 	for (var i in opts) {
-		if (cnt == 1) {
-			htm += "<div class='col-md-12'>";
-		}
 		vals += opts[i]["value"] + ",";
 		htm += "<div class='col-md-0'>[" + opts[i]["value"] + "]</div><div class='editable col-md-auto def-options def-options-rich' contenteditable='true' val=" + opts[i]["value"] + ">" + 
 			(opts[i]["icon"] ? "<img src='" + opts[i]["icon"] + "'>" : "") +
@@ -549,16 +678,6 @@ function showOptions(opts, form, cols) {
 	htm += "</div>\n";
 	$("#Options-v").html(htm);
 
-	var userOptions = {"icons": ["/img/s/b1.png", "/img/s/b2.png", "/img/s/b3.png", "/img/s/b4.png", "/img/s/b5.png", "/img/s/b6.png", "/img/s/b7.png", "/img/s/b8.png", "/img/s/f1.png", "/img/s/f2.png", "/img/s/f3.png", "/img/s/f4.png", "/img/s/f5.png", "/img/s/f6.png", "/img/s/f7.png", "/img/s/f8.png", "/img/s/os.hp.png", "/img/s/os.linux.png", "/img/s/os.redhat.png", "/img/s/os.win.png", "/img/s/s4.png", "/img/s/s5.png", "/img/s/s7.gif", "/img/s/t1.png", "/img/s/t2.png", "/img/s/t3.png", "/img/s/t4.png", "/img/s/t5.png", "/img/s/t6.png", "/img/s/t7.png", "/img/s/t8.png", "/img/add.png", "/img/copy.png", "/img/detail.png", "/img/edit.png", "/img/remove.png", "/img/search.png"]};
-	userOptions["p"] = "no";
-	userOptions["link"] = "no";
-	userOptions["img"] = "no";
-	userOptions["undo"] = "no";
-	userOptions["autohide"] = "no";
-	initRichTextToolbarBindings("#common-toolbar", userOptions);
-	var tt = $($("#common-toolbar")[0].parentNode);
-	tt.html(tt.html().replace(/data\-edit/gi, "command"));
-	$("#common-toolbar").hide();
 	$(document).on("click", "[command]", function() {
 		var commandArr = $(this).attr("command").split(' ');
 		var command = commandArr.shift();
@@ -572,7 +691,7 @@ function showOptions(opts, form, cols) {
 		var htm = "";
 		$(".def-options").each(function() {
 			if ($(this).html().length > 0) {
-				htm += '{"value": "' + $(this).attr("val") + '", "caption": "' + $(this).html().replace(/"/gi, '\\"') + '"},\n';
+				htm += '{"value": "' + $(this).attr("val") + '", "caption": "' + $(this).html().replace(/"/gi, "'") + '"},\n';
 			}
 		});
 		$('[name="options"]').val("[" + htm + "]");
@@ -586,6 +705,15 @@ function showOptions(opts, form, cols) {
 			showOptions(json["options"], form, cols);
 		}
 	});
+	$(document).on("change", '[name="otype"]', function() {
+		if ($(this).val() == "applications" || $(this).val() == "users") {
+			$(".f-options > .tab-content").hide();
+		} else {
+			$(".f-options > .tab-content").show();
+		}
+	});
+	$('[name="otype"]').change();
+	bindRichText();
 }
 
 function syncOptions() {
@@ -632,10 +760,18 @@ function onCreate() {
 			continue;
 		}
 		var val = $("[name=" + key + "]").val();
-		if (chks.indexOf(key) > 0  || !val || val.length < 1) {
+		if (chks.indexOf(key) > 0 || !val || val.length < 1) {
 			// $("." + key + " input:checked").val() 
 			//val = ($("." + key + " input:checked")) ? "true" : "false";
 			continue;
+		}
+		if (key == "options") {
+			json += '"otype": "' + $("[name='otype']").val() + '", ';
+			if ($("[name=otype]").val() == "diy") {
+				val = (val)? val.replace(/[\r\n]/g, ""): "[]";
+			} else {
+				continue;
+			}
 		}
 		if (strings.indexOf(key) > 0) {
 			val = (val)? '"' + val.replace(/"/g, '\\"') + '"' : '""';
@@ -656,7 +792,9 @@ function onCreate() {
 	var id = $("[name=kid]").val();
 	var oid = $("[name=kid]").attr("org");
 	var htm = $("[name='Fields']").val();
-	var reg  = new RegExp('"' + oid + '": *\\{([^{}])*(\\{.*\\})*([^{}])*\\},?', "g");
+	htm = htm.replace("}}", "}\n}").replace(/(.+)("F[\dA-F]+":.+)/g, "$1\n$2\n").replace(/\n+/g, "\n");
+	var reg  = new RegExp('"' + oid + '":.+', "g");
+
 	if (oid != id) {
 		htm = htm.replace(reg, "");
 		if (htm.indexOf('"' + id + '":') > 0) {
@@ -671,6 +809,7 @@ function onCreate() {
 			htm = htm.substring(0, htm.lastIndexOf("}", htm.lastIndexOf("}") - 1)) + "},\n" + json + "}";
 		}
 	}
+	htm = htm.replace(/},[\n ]+}/g, "}\n}").replace(/\],[\n ]*}/g, "]}").replace(/},[\n ]*\]/g, "}]");
 	fds= htm.toJSON();
 	showFields();
 	$("[name='Fields']").val(htm);
@@ -1169,7 +1308,7 @@ function editAction(e, act, callback) {
 '		<div class="col-md-4"><div class="well col-md-12" style="height:170px;"><label>Preivew:</label><div class="controls" name="Action_html">' + htm + '</div></div></div>\n' +
 '		<div class="col-md-8 padding0"><div class="col-md-12">' + style + '</div><div class="col-md-12 action_type" style="padding: 5px 0px;"><div class="col-md-4">' + sel + '</div>' +
 "<div class='col-md-8'><div class='controls'><input type='text' class='form-control' name='Action_href' value='" + href + "' placeholder='URL like: /APP/show?Rid=RID'></div></div></div>" + 
-'		<div class="col-md-12">' + "<div class='controls'><input type='text' class='form-control richtextcodeline' name='Action_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='action label'></div>" + '</div>' + 
+'		<div class="col-md-12">' + "<div class='controls'><input type='text' class='form-control richtextcode' name='Action_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='action label'></div>" + '</div>' + 
 "<div class='col-md-12' style='padding-top: 34px;'><div class='controls'><input type='text' class='form-control' name='Action_hint' value='" + hint + "' placeholder='hint message'></div></div>" + '</div>\n' +
 '</div>\n</div>\n';
 
@@ -1233,7 +1372,7 @@ function editFilter() {
 
 	var msg = '<div class="modal-body" style="min-height:120px;">\n' +
 "		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Text:</label></div><div class='col-md-10 controls'><input type='text' class='form-control' name='filter_text' value='" + text + "' placeholder='string to find in page'></div></div>" + 
-"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Label:</label></div><div class='col-md-10 controls'><input type='text' class='form-control richtextcodeline' name='filter_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='label'></div></div>" + 
+"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Label:</label></div><div class='col-md-10 controls'><input type='text' class='form-control richtextcode' name='filter_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='label'></div></div>" + 
 '</div>\n';
 
 	showModalView((text == "" ? "New Filter" : "Modify Filter"), msg, "Save", "Cancel", 
@@ -1330,16 +1469,26 @@ function ___showLink(name, define) {
 	return htm;
 }
 
+$(document).on("blur", "[target-input=\"[name='Title']\"]", function() { $("[name='TitleLL']").html($(this).html()); });
+$(document).on('blur', '.search-zone input', function(){
+	var cond = '{';
+	for (var i in asCond) {
+		cond += ((i == '$or') ? ', ' + i + ': ' : ', "' + i + '": ') + asCond[i] + '';
+	}
+	cond = cond.replace("{, ", "{") + '}';
+	$("[name='Condition']").val(cond);
+});
+refreshAS();
 </script>
 <!-- end -->
 	<div class="go-top">
 	<div class="btn-group">
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 		<a href="javascript:;" id="scrollTop" class="btn btn-default glyphicon glyphicon-open"></a>
 		<a href="javascript:;" id="scrollBack" class="btn btn-default glyphicon glyphicon-chevron-up"></a>
 		<a href="javascript:;" id="scrollNext" class="btn btn-default glyphicon glyphicon-chevron-down"></a>
 		<a href="#bottom" class="btn btn-default glyphicon glyphicon-save"></a>
-		<a href="#" class="btn btn-default hidden"></a>
+		<a href="#" class="btn btn-default hide"></a>
 	</div>
 	</div>
 <script>
@@ -1362,44 +1511,25 @@ function ___showLink(name, define) {
     </div>
   </div>
 </div>
-	<a name="bottom" > </a>
 	<hr />
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Inner Sites:</label></li>
-		<li><a href="http://ent244.sharepoint.hp.com/teams/hpsum/default.aspx"  title="Share Point">HPSUM</a></li>
-		<li><a href="http://ent232.sharepoint.hp.com/teams/hpsumbcs/offline/default.aspx"  title="HPSUM China team Share Point">SPI-China</a></li>
-		<li><a href="ftp://gstl.rose.hp.com/pub/"  title="FTP to download Firmwares">FWs FTP</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/kauai/"  title="Share Point">Kauai</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/Tiger/"  title="Share Point">Tiger</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/Sentosa/"  title="Share Point">Sentosa</a></li>
-		<li><a href="http://gstl.rose.hp.com/projects/Marina/"  title="Share Point">Coyote</a></li>
-		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/Recipe/default.aspx"  title="Share Point">SkyMaster SD2</a></li>
-		<li><a href="http://cp-ps-1.rsn.hp.com/sites/WJ/default.aspx"  title="Share Point">Buccaneer</a></li>
-		<li><a href="http://quix-tt.atlanta.hp.com/tmtrack/tmtrack.dll?" >Quix</a></li>
-		<li><a href="https://matrix.cce.hp.com/app/DesktopDefault.aspx?tabindex=2&tabid=8" >Morpheus</a></li>
-		<li><a href="https://csvnhou-pro.houston.hp.com:18490/svn/ess-hpsum/branches/"  title="HPSUM source codes">SVN</a></li>
+		<li><label>Dependencies：</label></li>
+		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
+		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
+		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
+		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
+		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
+		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
 		</ul>
 	</div>
-	<div class="col-md-12">
-		Click 
-		<a href="http://fstldb.fc.hp.com/mhwr/systemInv/findSys.asp" >HERE</a> to find DH servers. If DH server is down, 
-		<a href="http://fstl2c.fc.hp.com/ttx.cgi" >file a ticket</a>.
-		
-		Find proliant servers at <a href="http://vartan.cce.hp.com/listall.php" >vartan.cce</a>.
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-		<a href="" class="badge"></a>
-	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
 	</div>
 	</footer>
 	</div>
+	<a name="bottom" > </a>
 </body>
 </html>
 
