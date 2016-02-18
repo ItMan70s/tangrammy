@@ -31,7 +31,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li ><a href='/' title=''>Home</a></li>
+			<li ><a href='/issues/list' title=''>Issues</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
+			<li ><a href='/zcar/list' title=''>ZCar</a></li>
 			<li class='active backup'></li>
 
           </ul>
@@ -78,22 +80,22 @@
 <div class='col-md-12'>		<div><label class='control-label title-label'>Email<B class='red'>*</B></label><div class='controls'>
 <input type='text' class='form-control' name='F1' value='<%= data["F1"] || "" %>' required=true unique=true placeholder='someone@hp.com'></div></div>
 </div>
-<div class='col-md-12'>		<div><label class='control-label title-label'>Password<B class='red'>*</B></label><div class='controls'>
-<% if (!data["Rid"]) { %> <div class='input-group'><input type='password' class='form-control' name='F2' value='<%= data["F2"] || "" %>' required=true></div><% } else { %> ****** <a href="javascript:changePassword('<%= data["Rid"] || "" %>', 'F2')">Change</a><% } %></div></div>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Password</label><div class='controls'>
+<% if (!data["Rid"]) { %> <div class='input-group'><input type='password' class='form-control' name='F2' value='<%= data["F2"] || "" %>' placeholder='at least 6 chars'></div><% } else { %> ****** <a href="javascript:changePassword('<%= data["Rid"] || "" %>', 'F2')">Change</a><% } %></div></div>
 </div>
-<div class='col-md-12'>		<div><label class='control-label title-label'>Role<B class='red'>*</B></label><div class='controls'>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Role</label><div class='controls'>
 <% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F3' value='' checked=true class='hidden' ><div class='min-h20'>
-			<label class='checkbox-inline col-md-4 '><input type='checkbox' name='F3' value='Administrator'  <%= (val.contains( "," + "Administrator" + ",")) ? "checked=true" : "" %> >Administrator</label>
-			<label class='checkbox-inline col-md-4 '><input type='checkbox' name='F3' value='Default'  <%= (val.contains( "," + "Default" + ",")) ? "checked=true" : "" %> >Default</label></div></div></div></div>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Administrator'  <%= (val.contains( "," + "Administrator" + ",")) ? "checked=true" : "" %> >Administrator</label>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Default'  <%= (val.contains( "," + "Default" + ",")) ? "checked=true" : "" %> >Default</label></div></div></div></div>
 </div>
-<div class='col-md-12'>		<div><label class='control-label title-label'>Enable<B class='red'>*</B></label><div class='controls'>
+<div class='col-md-12'>		<div><label class='control-label title-label'>Enable</label><div class='controls'>
 <% var val = data["F4"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F4' value='' checked=true class='hidden' ><div class='min-h20'>
-			<label class='checkbox-inline col-md-4 '><input type='checkbox' name='F4' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='checkbox-inline col-md-4 '><input type='checkbox' name='F4' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
+			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>TimeZone<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F5"] || "";  val = "," + val.toString() + ",";%>
-			<select class='form-control' name='F5'  size=3 required=true >
+			<select class='form-control' name='F5'  required=true >
 			<option value='-360'  <%= (val.contains( "," + "-360" + ",")) ? "selected=true" : "" %>  >(UTC-06:00) Houston</option>
 			<option value='330'  <%= (val.contains( "," + "330" + ",")) ? "selected=true" : "" %>  >(UTC+05:30) India</option>
 			<option value='480'  <%= (val.contains( "," + "480" + ",")) ? "selected=true" : "" %>  >(UTC+08:00) China</option>
@@ -142,17 +144,13 @@
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
+		<li><label>推荐网站:</label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
+		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

@@ -186,7 +186,7 @@ function register(req, res) {
 		var mail = {
 			from: uData["email"],
 			to: uData["email"],
-			subject: "[Booking] reset password",
+			subject: "[Tangrammy] reset password",
 			text: "" + con,
 		}
 		if (item) {
@@ -219,7 +219,7 @@ function register(req, res) {
 			htm += "User Password: <b>" + pass + "</b><br/>";
 			
 			var define = mongo.defines(utid, uvid);
-			var fields = (define["Fields"] || "").replace(/'/g, "\"").toJSON();
+			var fields = (define["Fields"] || "").toJSON();
 			for (var i in fields) {
 				if (i != umail && i != upasswd) {
 					con[i] = fields[i]["default"] || "";
@@ -262,7 +262,7 @@ function register(req, res) {
 			htm += "<a href='" + url + "'>" + url + "</a><br/>";
 			
 			
-			mail.subject = "[Booking] register";
+			mail.subject = "[Tangrammy] register";
 			mail.html = htm;
 
 			// register

@@ -134,7 +134,7 @@ function addCsv(req, res) {
 	var vid = req.u.data["Vid"];
 	var rows = cps.text2array(req.u.data["csv"], ",", "\"", "\n", true);
 	var define = mongo.defines(tid, vid);
-	var fields = (define["Fields"] || "").replace(/'/g, "\"").toJSON();
+	var fields = (define["Fields"] || "").toJSON();
 	var key = "";
 	for (var j=1; j < rows.length; j++) {
 		var data = {};

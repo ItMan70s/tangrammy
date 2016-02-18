@@ -187,6 +187,10 @@ var TSchema = new Schema({
   LList: {type: String},
   Help: {type: String},
   Email: {From: String, To: String, Cc: String, Title: String},
+  EmailTitle: {type: String},
+  EmailFrom: {type: String},
+  EmailTo: {type: String},
+  EmailCc: {type: String},
   OrderBy: {type: String},
   Order: {type: String},
   Group: {type: String},
@@ -720,7 +724,7 @@ function findOne(tid, vid, user, condition, callback) {
 
 function __getUnique(fields, data) {
 	if (typeof fields == "string") {
-		fields = fields.replace(/'/g, "\"").toJSON();
+		fields = fields.toJSON();
 	}
 	var cond = {'$or' : []};
 	for (var i in fields) {

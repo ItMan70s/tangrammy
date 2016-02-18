@@ -31,7 +31,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li ><a href='/' title=''>Home</a></li>
+			<li ><a href='/issues/list' title=''>Issues</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
+			<li ><a href='/zcar/list' title=''>ZCar</a></li>
 			<li class='active backup'></li>
 
           </ul>
@@ -68,16 +70,25 @@
 <form class='navbar-form navbar-left' action='javascrip:doFilter();'>
 <div class='form-group small' style='width:230px'><div class='input-group'><input type='text' name='filterstring' class='form-control data-filter' value='<%= (request.u.data["condition"] || "") %>' placeholder='Search in page'>
 <div class='input-group-btn'><a class='btn btn-default' filter='' title='Clear search text'>X</a></div></div></div>
-<div class='form-group small'></div>
+<div class='form-group small'>undefined</div>
 	</form><div class='col-md-6 hidden'>
 <div class='input-group'><input type='text' name='condition' class='form-control'><span name='search' class='input-group-addon glyphicon glyphicon-search'></span></div>
 	</div><% function getF1(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "*" + ",")) {    opts += "All "; } 
-   if (val.contains( "," + "TF0/V1" + ",")) {    opts += "Roles "; } 
-   if (val.contains( "," + "T1/V1" + ",")) {    opts += "Todo "; } 
-   if (val.contains( "," + "TF1/V1" + ",")) {    opts += "Users "; } 
+  if (val.contains( "," + "*" + ",")) {    opts += "<span class='wid100'>All</span> "; } 
+   if (val.contains( "," + "T2/V1" + ",")) {    opts += "<span class='wid100'>Users</span> "; } 
+   if (val.contains( "," + "T2/V3" + ",")) {    opts += "<span class='wid100'>UserLogin</span> "; } 
+   if (val.contains( "," + "T3/V1" + ",")) {    opts += "<span class='wid100'>Links</span> "; } 
+   if (val.contains( "," + "T4/V1" + ",")) {    opts += "<span class='wid100'>Todo</span> "; } 
+   if (val.contains( "," + "T5/V1" + ",")) {    opts += "<span class='wid100'>Money</span> "; } 
+   if (val.contains( "," + "T5/V2" + ",")) {    opts += "<span class='wid100'>lend</span> "; } 
+   if (val.contains( "," + "T5/V4" + ",")) {    opts += "<span class='wid100'>brotherlend</span> "; } 
+   if (val.contains( "," + "T6/V1" + ",")) {    opts += "<span class='wid100'>books</span> "; } 
+   if (val.contains( "," + "T7/V1" + ",")) {    opts += "<span class='wid100'>Words</span> "; } 
+   if (val.contains( "," + "T9/V1" + ",")) {    opts += "<span class='wid100'>Booking</span> "; } 
+   if (val.contains( "," + "T9/V2" + ",")) {    opts += "<span class='wid100'>Servers</span> "; } 
+   if (val.contains( "," + "TA/V1" + ",")) {    opts += "<span class='wid100'>VMs</span> "; } 
    return opts; } %>
 <% function getF2(val) { 
   var opts = ""; 
@@ -164,17 +175,13 @@
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
+		<li><label>推荐网站:</label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
+		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

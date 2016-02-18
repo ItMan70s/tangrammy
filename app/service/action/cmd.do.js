@@ -76,6 +76,10 @@ function sendMail(mail, req, res) {
 	if (settings.SMTP.cc) {
 		mail["cc"] = settings.SMTP.cc;
 	}
+	if (settings.SMTP.auth && settings.SMTP.auth.user) {
+		mail["from"] = settings.SMTP.auth.user;
+	}
+
 	smtp.sendMail(mail, function(error, response){
 		if(error){
 			res.end(error);

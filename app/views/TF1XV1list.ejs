@@ -31,7 +31,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li ><a href='/' title=''>Home</a></li>
+			<li ><a href='/issues/list' title=''>Issues</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
+			<li ><a href='/zcar/list' title=''>ZCar</a></li>
 			<li class='active backup'></li>
 
           </ul>
@@ -68,7 +70,7 @@
 <form class='navbar-form navbar-left' action='javascrip:doFilter();'>
 <div class='form-group small' style='width:230px'><div class='input-group'><input type='text' name='filterstring' class='form-control data-filter' value='<%= (request.u.data["condition"] || "") %>' placeholder='Search in page'>
 <div class='input-group-btn'><a class='btn btn-default' filter='' title='Clear search text'>X</a></div></div></div>
-<div class='form-group small'></div>
+<div class='form-group small'>undefined</div>
 	</form><div class='col-md-6 hidden'>
 <div class='input-group'><input type='text' name='condition' class='form-control'><span name='search' class='input-group-addon glyphicon glyphicon-search'></span></div>
 	</div><% function getF3(val) { 
@@ -86,35 +88,39 @@
 <% function getF5(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "-360" + ",")) {    opts += "(UTC-06:00) Houston "; } 
-   if (val.contains( "," + "330" + ",")) {    opts += "(UTC+05:30) India "; } 
-   if (val.contains( "," + "480" + ",")) {    opts += "(UTC+08:00) China "; } 
+  if (val.contains( "," + "-360" + ",")) {    opts += "<span class='wid150'>(UTC-06:00) Houston</span> "; } 
+   if (val.contains( "," + "330" + ",")) {    opts += "<span class='wid150'>(UTC+05:30) India</span> "; } 
+   if (val.contains( "," + "480" + ",")) {    opts += "<span class='wid150'>(UTC+08:00) China</span> "; } 
    return opts; } %>
 <div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='users'></div><table class='table table-hover'>
   <thead>
-	<tr><th  Fid='F0'>Name</th>
-<th  Fid='F1'>Email</th>
-<th  Fid='F2'>Password</th>
-<th  Fid='F3'>Role</th>
-<th  Fid='F4'>Enable</th>
-<th  Fid='F5'>TimeZone</th>
+	<tr><th Fid='F0'>Name</th>
+<th Fid='F1'>Email</th>
+<th Fid='F2'>Password</th>
+<th Fid='F3'>Role</th>
+<th Fid='F4'>Enable</th>
+<th Fid='F5'>TimeZone</th>
+<th Fid='show'></th>
 <th Fid='edit'></th>
 <th Fid='copy'></th>
+<th Fid='remove'></th>
 
 	</tr>
   </thead>
   <tbody>
 	<% if(data.length < 1) { %>
-	<tr><td colspan="8">No recorder yet. Add one now? <a class="btn btn-link" href="/users/new" href="/users/new" style="min-width:80px;"><img src="/img/add.png">Add User</a></td></tr>	<% }
+	<tr><td colspan="10">No recorder yet. Add one now? <a class="btn btn-link" href="/users/new" href="/users/new" style="min-width:80px;"><img src="/img/add.png">Add User</a></td></tr>	<% }
  var group = ""; for(var item in data) { 
- %><tr Rid='<%= data[item]["Rid"] %>'><td  Fid='F0'><%= ("F0" in data[item]) ? data[item]["F0"] : "" %></td>
-<td  Fid='F1'><%= ("F1" in data[item]) ? data[item]["F1"] : "" %></td>
-<td  Fid='F2'>******</td>
-<td  Fid='F3'><%- getF3(data[item]["F3"]) %></td>
-<td  Fid='F4'><%- getF4(data[item]["F4"]) %></td>
-<td  Fid='F5'><%- getF5(data[item]["F5"]) %></td>
+ %><tr Rid='<%= data[item]["Rid"] %>'><td Fid='F0'><%= ("F0" in data[item]) ? data[item]["F0"] : "" %></td>
+<td Fid='F1'><%= ("F1" in data[item]) ? data[item]["F1"] : "" %></td>
+<td Fid='F2'>******</td>
+<td Fid='F3'><%- getF3(data[item]["F3"]) %></td>
+<td Fid='F4'><%- getF4(data[item]["F4"]) %></td>
+<td Fid='F5'><%- getF5(data[item]["F5"]) %></td>
+<td Fid="show"><a href="/users/show?Rid=<%= data[item]["Rid"] %>" title="">Detail</a></td>
 <td Fid="edit"><a href="/users/update?Rid=<%= data[item]["Rid"] %>" title=""><img src="/img/edit.png"></a></td>
 <td Fid="copy"><a href="/users/copy?Rid=<%= data[item]["Rid"] %>" title=""><img src="/img/copy.png"></a></td>
+<td Fid="remove"><a name="remove" href="javascript:;" url="/users/remove?Rid=<%= data[item]["Rid"] %>" name="delete" title=""><img src="/img/remove.png"></a></td>
 </tr>
 
 	<% } %>
@@ -165,17 +171,13 @@
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
+		<li><label>推荐网站:</label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
+		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

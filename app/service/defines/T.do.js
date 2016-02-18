@@ -190,6 +190,7 @@ function copy(req, res) {
 	mongo.findOne("T", "V", null, condition, function (recorder) {
 		if ("Title" in uData) {
 			var ids = __getTVid(uData["Tid"], "");
+			uData["Tid"] = ids["Tid"];
 			uData["Vid"] = ids["Vid"];
 			uData['URL'] = (uData['URL'] || "").toLowerCase();
 			var cond = {'$or' : [{'Title': uData['Title']}, {'URL': uData['URL']}]};
@@ -234,17 +235,25 @@ function modify(req, res) {
 	var condition = {};
 	condition["Rid"] = uData["Rid"];
 	
+	// remove wrong data brought by oneclick update at Tangrammy page.
+	if (uData["Tid"] == "t") {
+		delete uData["Tid"];
+		delete uData["Vid"];
+	}
+	
 	if ("Title" in uData || "Description" in uData || "Fields" in uData || "FieldsLE" in uData) {
-		uData = __fillDefault(uData);
-		// TODO tmp changes for old data
-		/*
-		if ("LayoutE" in uData && uData["LayoutE"] != "") {
-			uData["LNew"] = "";
-			uData["LEdit"] = "";
-			uData["LShow"] = "";
+		if ("Fields" in uData) {
+			uData = __fillDefault(uData);
+			// TODO tmp changes for old data
+			/*
+			if ("LayoutE" in uData && uData["LayoutE"] != "") {
+				uData["LNew"] = "";
+				uData["LEdit"] = "";
+				uData["LShow"] = "";
+			}
+			*/
+			uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
 		}
-		*/
-		uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
 		mongo.update("T", "V", condition, uData, function (recorder) {
 			if ((recorder.code) != 200 || recorder.num < 1) {
 				log.error(recorder.message);
@@ -259,7 +268,9 @@ function modify(req, res) {
 				recorder.action = "/T/update";
 				return __new(res, recorder);
 			} else {
-				svUpdateIDDefine(uData);
+				if ("Fields" in uData) {
+					svUpdateIDDefine(uData);
+				}
 				if (uData["dl"] == "layout") {
 					res.redirect("/T/update?Rid=" + uData["Rid"] + "&dl=layout");
 				} else {
@@ -706,7 +717,8 @@ function __refreshAppList(lst) {
 '		<div class="text-right">\r\n' + 
 '			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
 '			<a href="/T/show?Rid=' + lst[it]["Rid"] + '" title="View define detail of application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/detail.png"></a>\r\n' + 
-'			<a href="/T/update?Rid=' + lst[it]["Rid"] + '" title="Edit [' + lst[it]["Title"] + ']"><img class="icon15" src="/img/edit.png"></a>\r\n' + 
+'			<a href="/T/update?Rid=' + lst[it]["Rid"] + '" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>\r\n' + 
+'			<a href="/T/update?Rid=' + lst[it]["Rid"] + '&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>\r\n' + 
 '			<a href="/T/copy?Rid=' + lst[it]["Rid"] + '" title="Create a new one based on application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/copy.png"></a>\r\n' + 
 (lst[it]["Tid"].match(/TF\d/gi) ? '' : '			<a name="remove" href="javascript:;" url="/T/remove?Rid=' + lst[it]["Rid"] + '" title="Remove application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/remove.png"></a>\r\n') + 
 '		</div>\r\n	</div>\r\n<% } %>\r\n';

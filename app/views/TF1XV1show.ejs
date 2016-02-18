@@ -31,7 +31,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li ><a href='/' title=''>Home</a></li>
+			<li ><a href='/issues/list' title=''>Issues</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
+			<li ><a href='/zcar/list' title=''>ZCar</a></li>
 			<li class='active backup'></li>
 
           </ul>
@@ -72,14 +74,14 @@
 		<div class='form-show' readonly=true><%= ((data["F0"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
 <div class='col-md-12'><label class='control-label title-label'>Email<B class='red'>*</B></label>
 		<div class='form-show' readonly=true><%= ((data["F1"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-<div class='col-md-12'><label class='control-label title-label'>Password<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Password</label>
 		<div class='form-show' readonly=true>******</div></div>
-<div class='col-md-12'><label class='control-label title-label'>Role<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Role</label>
 <div class='form-show' readonly=true><% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "Administrator" + ",")) { %> <span class='pull-left col-md-auto'>Administrator</span> <% } %><% if (val.contains( "," + "Default" + ",")) { %> <span class='pull-left col-md-auto'>Default</span> <% } %></div></div>
-<div class='col-md-12'><label class='control-label title-label'>Enable<B class='red'>*</B></label>
+<div class='col-md-12'><label class='control-label title-label'>Enable</label>
 <div class='form-show' readonly=true><% var val = data["F4"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left col-md-auto'>Yes</span> <% } %><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left col-md-auto'>No</span> <% } %></div></div>
 <div class='col-md-12'><label class='control-label title-label'>TimeZone<B class='red'>*</B></label>
-<div class='form-show' readonly=true><% var val = data["F5"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "-360" + ",")) { %> <span class='pull-left col-md-auto'>(UTC-06:00) Houston</span> <% } %><% if (val.contains( "," + "330" + ",")) { %> <span class='pull-left col-md-auto'>(UTC+05:30) India</span> <% } %><% if (val.contains( "," + "480" + ",")) { %> <span class='pull-left col-md-auto'>(UTC+08:00) China</span> <% } %></div></div>
+<div class='form-show' readonly=true><% var val = data["F5"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "-360" + ",")) { %> <span class='pull-left wid150'>(UTC-06:00) Houston</span> <% } %><% if (val.contains( "," + "330" + ",")) { %> <span class='pull-left wid150'>(UTC+05:30) India</span> <% } %><% if (val.contains( "," + "480" + ",")) { %> <span class='pull-left wid150'>(UTC+08:00) China</span> <% } %></div></div>
 <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
 <div class="col-md-0"><a class="btn btn-primary col-md-2"  href="/users/list" style="min-width:80px;" title="">OK</a></div>
 <div class="col-md-0"><a class="btn btn-default"  href="/users/update?Rid=<%= data["Rid"] %>" style="min-width:80px;" title=""><img src="/img/edit.png">Edit</a></div>
@@ -123,17 +125,13 @@
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
+		<li><label>推荐网站:</label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
+		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

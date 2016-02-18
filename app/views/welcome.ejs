@@ -31,7 +31,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li class='active'><a href='/' title=''>Home</a></li>
+			<li><a href='/issues/list' title=''>Issues</a></li>
 			<li><a href='/todo/list' title=''>Todo</a></li>
+			<li><a href='/zcar/list' title=''>ZCar</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -68,18 +70,66 @@
 		<p>This a sample of tangrammy system. </p>
 </div>
 <div class="col-md-12"><div class="row">
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/booking/list">Booking</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p></div>
+		<p class="text-right"><a href="/booking/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V3")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/booking3/list">Booking3</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p></div>
+		<p class="text-right"><a href="/booking3/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T6/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/books/list">Books</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>读书</p></div>
+		<p class="text-right"><a href="/books/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TB/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/issues/list">Issues</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>跟踪照护系统的问题</p></div>
+		<p class="text-right"><a href="/issues/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T3/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/links/list">Links</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>links</p></div>
+		<p class="text-right"><a href="/links/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("t/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/Money/list">Money</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>记账</p></div>
+		<p class="text-right"><a href="/Money/list" role="button">Details »</a></p>
+	</div>
+<% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF0/V1")) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
 		<h2><a href="/roles/list">Roles</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>This application is used to define user role in this system.</p></div>
+		<div style="height: 60px; overflow: hidden;"><p>用于定义系统内的用户角色已经相应的应用访问权限。</p></div>
 		<p class="text-right"><a href="/roles/list" role="button">Details »</a></p>
 	</div>
 <% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V1")) { %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V2")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/servers/list">Servers</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>Define servers (SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote) in Houston and China to enable make reservation.</p></div>
+		<p class="text-right"><a href="/servers/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
 		<h2><a href="/todo/list">Todo</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>Todo list for Tangrammy tasks. <br />
-To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
+		<div style="height: 60px; overflow: hidden;"><p>用于管理项目的各种属于我的事项。 </p></div>
 		<p class="text-right"><a href="/todo/list" role="button">Details »</a></p>
 	</div>
 <% } %>
@@ -88,6 +138,41 @@ To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
 		<h2><a href="/users/list">Users</a></h2>
 		<div style="height: 60px; overflow: hidden;"><p>Users in current system</p></div>
 		<p class="text-right"><a href="/users/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TA/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/vms/list">VMs</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>VM using by BCS team</p></div>
+		<p class="text-right"><a href="/vms/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T7/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/words/list">Words</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>名词解释2</p></div>
+		<p class="text-right"><a href="/words/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V1")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/zcar/list">ZCar</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>用于管理项目的各种属于我的事项。 </p></div>
+		<p class="text-right"><a href="/zcar/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V2")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/release/list">ZCarRelease</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>用于管理项目的各种属于我的事项。 </p></div>
+		<p class="text-right"><a href="/release/list" role="button">Details »</a></p>
+	</div>
+<% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T5/V2")) { %>
+	<div class="col-md-3" style="border: 1px solid #ccc;">
+		<h2><a href="/lend/list">lend</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>房贷</p></div>
+		<p class="text-right"><a href="/lend/list" role="button">Details »</a></p>
 	</div>
 <% } %>
 </div></div>
@@ -126,17 +211,13 @@ To manage todo in "Initial", "In progress" and "Paused" status.</p></div>
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
+		<li><label>推荐网站:</label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
+		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

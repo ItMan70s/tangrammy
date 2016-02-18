@@ -31,7 +31,9 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/' title=''>Home</a></li>
+			<li><a href='/issues/list' title=''>Issues</a></li>
 			<li><a href='/todo/list' title=''>Todo</a></li>
+			<li><a href='/zcar/list' title=''>ZCar</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -92,7 +94,10 @@
 	}
 %>
 	<div class="row">
+	<% if (data["dl"] != "layout" && action.match(/\/T\/copy/gi)) { %>
+	<% } else { %>
 		<input type='hidden' name='Tid' value='<%= data["Tid"] %>'>
+	<% } %>
 		<input type='hidden' name='Vid' value='<%= data["Vid"] %>' >
 		<input type='hidden' name='Rid' value='<%= data["Rid"] %>' >
 	<div class='col-md-12'> <h1><%= title %> <%- editLink %></h1>
@@ -106,13 +111,20 @@
 <% if (data["dl"] != "layout") { %>
 	<div class='col-md-12'> <h2>
 		<input type='hidden' class="divinput col-md-auto text-nowrap" name='Title' value='<%= data["Title"] %>' placeholder="title for application">
-		<% if (!action.match(/\/T\/(copy|new)/gi)) { %>
-		<small class="col-md-auto" style="padding-top: 12px;"> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>
 		<select name='Status' class='input-sm col-md-auto' style="margin-top: 8px;">
 			<option value='available'  <%= (data["Status"] != "disabled" && data["Status"] != "hidden") ? "selected=true" : "" %>  >Available</option>
 			<option value='disabled'  <%= (data["Status"] == "disabled") ? "selected=true" : "" %>  >Disabled</option>
 			<option value='hidden'  <%= (data["Status"] == "hidden") ? "selected=true" : "" %>  >Hidden</option>
 		</select>
+		<% if (action.match(/\/T\/copy/gi)) { %>
+			<small class="col-md-auto" style="padding-top: 12px;"> Create New Application Based On</small>
+			<select name='Tid' class='input-sm col-md-auto' style="margin-top: 8px;">
+				<option value='<%= data["Tid"] %>' >Original DB</option>
+				<option value='auto' >New DB</option>
+			</select>
+		<% } else if (action.match(/\/T\/new/gi)) { %>
+		<% } else { %>
+			<small class="col-md-auto" style="padding-top: 12px;"> (<%= data["Tid"] %>.<%= data["Vid"] %>)</small>
 		<% } %>
 	</h2></div>
 	<div class='col-md-4'><div class='controls col-md-12'><div class="input-group"><span class="input-group-addon"><a href="javascript:;">http://localhost:3000/</a></span><input type='text' class='form-control' name='URL' value='<%= data["URL"] %>' title='URL'><span class="input-group-addon"><a href="javascript:;">/list</a></span></div></div></div>
@@ -365,8 +377,8 @@
 				</select>
 				<% if(i == 0) { %>
 					<select name='Group' class='input-sm'>
-						<option value='1'  <%= ("on" == data["Group"]) ? "selected=true" : "" %>  >grouping</option>
-						<option value='-1'  <%= ("on" != data["Group"]) ? "selected=true" : "" %>  >no group</option>
+						<option value='1'  <%= ("on" == data["Group"] || "1" == data["Group"]) ? "selected=true" : "" %>  >grouping</option>
+						<option value='-1'  <%= ("on" != data["Group"] && "1" != data["Group"]) ? "selected=true" : "" %>  >no group</option>
 					</select>
 				<% } %>
 			  </div>
@@ -892,7 +904,7 @@ htm += '</label>\n' +
 		case "S":
 		break;
 		case "L":
-			htm += '<label class="col-md-12 Field_Iconly"  title="Only show icon in list page"><input type="checkbox" name="Field_Iconly" value=true >Icon Only</label>\n' + 
+			htm += '<label class="col-md-12 Field_Iconly"  title="Only show icon in list page"><input type="checkbox" name="Field_Iconly" value=true >Icon Only</label>\n<label class="col-md-12 Field_Iconly"  title="Only show icon in list page"><input type="checkbox" name="Field_Textonly" value=true >Text Only</label>\n' + 
 					'<label class="col-md-12 Field_Clickable"  title="Show in link and move to detail page if clicked"><input type="checkbox" name="Field_Clickable" value=true >Click for detail?</label>\n';
 			htm += '<div class="col-md-12 padding0 aclick hide">\n' + 
 					'<div class="col-md-12 padding0 aclick-fids"><label>Click to update: </label><select name="aclick_fids" class="col-md-12 input-sm">';
@@ -937,8 +949,8 @@ function fillLayoutField(root, fid) {
 }
 
 $(document).on("change", '[name="aclick_fids"]', function() {
-	var self = this;
-	fillOneClickOptions($(self).parents(".aclick"));
+	var $self = $(this);
+	fillOneClickOptions($self.parents(".aclick"));
 });
 function fillOneClickOptions(root) {
 	var fid = root.find('[name="aclick_fids"]').val();
@@ -946,7 +958,7 @@ function fillOneClickOptions(root) {
 	
 	var htm = '<div class="col-md-12 padding0" style="padding-top: 15px;"><label>One click actions:</label></div>\n<div class="col-md-12 padding0 aclicked-opts"></div>\n' + 
 			'<div class="col-md-12 padding0" style="padding-top: 15px;"><label>Selectable actions:</label></div>\n<div class="col-md-12 padding0 aclick-opts">' + 
-			'<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'caret" ><span class="caret"></span></a></initLSAction>\n' + 
+			'<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'caret" ><span class="caret" val="caret"></span></a></initLSAction>\n' + 
 			'<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'edit" >More</a></initLSAction></div>';
 	var optzone = root.find(".aclick-vals");
 	optzone.html(htm);
@@ -961,11 +973,11 @@ function fillOneClickOptions(root) {
 	if (htm.indexOf("val='" + fid) < 0 && htm.indexOf("val=\"" + fid) < 0) {
 		return;
 	}
-	root.find(".aclicked-opts").html(htm.replace(/LSAction/gi, "initLSAction").replace('<span class="caret" val="caret"></span>', '<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'caret" ><span class="caret"></span></a></initLSAction>'));
+	root.find(".aclicked-opts").html(htm.replace(/LSAction/gi, "initLSAction").replace('<span class="caret" val="caret"></span>', '<initLSAction class="btn-group-xs"><a class="btn btn-link" val="' + fid + '=' + 'caret" ><span class="caret" val="caret"></span></a></initLSAction>'));
 	
 	opts.find("[val]").each(function(){
-		var self = this;
-		var val = $(self).attr("val");
+		var $self = $(this);
+		var val = $self.attr("val");
 		if (val == "") {
 			val = "edit";
 		} else if (val == "caret") {
@@ -980,12 +992,12 @@ function fillOneClickOptions(root) {
 }
 
 $(document).on("click", 'initLSAction', function() {
-	var self = this;
-	var root = $(self).parents(".aclick");
-	if ($(self.parentNode).attr("class").indexOf("aclick-opts") > -1) {
-		root.find(".aclicked-opts").append(self);
+	var $self = $(this);
+	var root = $self.parents(".aclick");
+	if (($($self[0].parentNode).attr("class") || "").indexOf("aclick-opts") > -1) {
+		root.find(".aclicked-opts").append(self[0]);
 	} else {
-		root.find(".aclick-opts").append(self);
+		root.find(".aclick-opts").append(self[0]);
 	}
 	root = root.parents(".layout-parent");
 	var htm = root.find(".aclicked-opts").html().replace(/initlsaction/gi, "LSAction");
@@ -995,44 +1007,44 @@ $(document).on("click", 'initLSAction', function() {
 
 $(document).on("click", "[field]", editLayoutField);
 $(document).on("change", '[name="Field_Ids"]', function() {
-	var self = this;
-	var root = $(self).parents(".layout-parent");
+	var $self = $(this);
+	var root = $self.parents(".layout-parent");
 	root.find("[field]").each(function() { $(this).removeClass("field-active"); })
-	var field = root.find('[field="' + $(self).val() + '"]');
+	var field = root.find('[field="' + $self.val() + '"]');
 	fillDivWidth(field, root.find('[name="div_width"]'));
 	autofillAttr(root);
 	field.addClass("field-active");
 });
 
 $(document).on("change", '[name="div_width"]', function() {
-	var self = this;
-	var root = $(self).parents(".layout-parent");
+	var $self = $(this);
+	var root = $self.parents(".layout-parent");
 	var fid = root.find('[name="Field_Ids"]').val();
 	var field = root.find('[field="' + fid + '"]');
 	var css = (field.attr("class") || "").replace(/(col.md.|wid|p)\d+/gi, "");
 
 	field.attr("class", css);
 	
-	if ($(self).val().match(/^\d+.+/g)) {
-		field.attr("width", $(self).val());
+	if ($self.val().match(/^\d+.+/g)) {
+		field.attr("width", $self.val());
 	} else {
 		field.removeProp("width");
-		field.addClass($(self).val());
+		field.addClass($self.val());
 	}
 	saveLayout(root);
 });
 function editLayoutField() {
-	var self = this;
-	var root = $(self).parents(".layout-parent");
-	fillDivWidth($(self), root.find('[name="div_width"]'));
+	var $self = $(this);
+	var root = $self.parents(".layout-parent");
+	fillDivWidth($self, root.find('[name="div_width"]'));
 	var ids = root.find('[name="Field_Ids"]');
-	if (!$(self).attr("field") || ids.html().contains('value="' + $(self).attr("field") + '"')) {
-		ids.val($(self).attr("field"));
+	if (!$self.attr("field") || ids.html().contains('value="' + $self.attr("field") + '"')) {
+		ids.val($self.attr("field"));
 	} else {
-		ids.append('<option value="' + $(self).attr("field") + '" selected="selected">' + $(self).attr("field").toUpperCase() + '</option>');
+		ids.append('<option value="' + $self.attr("field") + '" selected="selected">' + $self.attr("field").toUpperCase() + '</option>');
 	}
 	root.find("[field]").each(function() { $(this).removeClass("field-active"); })
-	$(self).addClass("field-active");
+	$self.addClass("field-active");
 	autofillAttr(root);
 }
 function fillDivWidth(field, div) {
@@ -1110,6 +1122,7 @@ function autofillAttr(root) {
 			if (fields[fid]["options"] && fields[fid]["options"].length > 0) {
 				root.find('.Field_Iconly').removeClass('hide');
 				root.find('[name="Field_Iconly"]').attr("checked", (fattr["iconly"]) ? true : false);
+				root.find('[name="Field_Textonly"]').attr("checked", (fattr["textonly"]) ? true : false);
 			}
 			root.find('[name="Field_Clickable"]').attr("checked", (fattr["clickable"]) ? true : false);
 			root.find('.Field_Clickable').removeClass('hide');
@@ -1149,8 +1162,8 @@ function autofillAttr(root) {
 	}
 }
 $(document).on("click", '.fremove', function() {
-	var self = this;
-	var root = $(self).parents(".layout-parent");
+	var $self = $(this);
+	var root = $self.parents(".layout-parent");
 	var fid = root.find('[name="Field_Ids"]').val();
 	var field = root.find('[field="' + fid + '"]');
 	if (field[0]) {
@@ -1163,8 +1176,8 @@ $(document).on("click", '.fremove', function() {
 	saveLayout(root);
 });
 $(document).on("click", '.fappend', function() {
-	var self = this;
-	var root = $(self).parents(".layout-parent");
+	var $self = $(this);
+	var root = $self.parents(".layout-parent");
 	var fid = root.find('[name="Field_Ids"]').val();
 	var wid = root.find('[name="div_width"]').val() || "";
 	var label = root.find('[name="Field_Dispaly"]');
@@ -1177,11 +1190,11 @@ $(document).on("click", '.fappend', function() {
 		htm = "class='" + wid + "' ";
 	}
 	htm += "field='" + fid + "'>";
-	var target = $(self).attr("pos");
+	var target = $self.attr("pos");
 	if (target.length > 0) {
 		target = target.mid(0, ":");
 	}
-	$(self).attr("pos", fid + ":" + label);
+	$self.attr("pos", fid + ":" + label);
 	if (root.find("td")[0]) {
 		if (fid.match(/copy|show|edit|remove|diy/gi)) {
 			var alink = '<lsaction class="btn-group-xs"><a class="btn btn-default" href="javascript:;" name="delete" title="">delete</a></lsaction>';
@@ -1216,18 +1229,16 @@ function saveLayout(root) {
 }
 
 $(document).on("change", '[name="Field_Readonly"]', saveFieldAttr);
+$(document).on("change", '[name="Field_Iconly"]', saveFieldAttr);
+$(document).on("change", '[name="Field_Textonly"]', saveFieldAttr);
+$(document).on("change", '[name="Field_Clickable"]', saveFieldAttr);
 $(document).on("change", '[name="Field_Dispaly"]', saveFieldAttr);
+$(document).on("change", '[name="Field_Title"]', saveFieldAttr);
 function saveFieldAttr() {
-	var self = this;
-	var root = $(self).parents(".layout-parent");
+	var $self = $(this);
+	var root = $self.parents(".layout-parent");
 	var fid = root.find('[name="Field_Ids"]').val();
-	var json = {};
-	json["displayas"] = root.find('[name="Field_Dispaly"]').val();
-	if (root.find('[name="Field_Readonly"]')[0]) {
-		json["readonly"] = root.find('[name="Field_Readonly"]')[0].checked;
-	}
-	var label = root.find('[name="Field_Dispaly"]').val();
-	var readonly = root.find('[name="Field_Dispaly"]').val();
+	
 	var attr = {};
 	switch(root.attr("stype")) {
 		case "N":
@@ -1243,7 +1254,28 @@ function saveFieldAttr() {
 			attr = attrL;
 		break;
 	}
-	attr[fid] = json;
+	
+	if (!attr[fid]) {
+		attr[fid] = {};
+	}
+	var $obj = root.find('[name="Field_Readonly"]');
+	attr[fid]["readonly"] = $obj[0] ? $obj[0].checked : false;
+	
+	$obj = root.find('[name="Field_Iconly"]');
+	attr[fid]["iconly"] = $obj[0] ? $obj[0].checked : false;
+	
+	$obj = root.find('[name="Field_Textonly"]');
+	attr[fid]["textonly"] = $obj[0] ? $obj[0].checked : false;
+	
+	$obj = root.find('[name="Field_Clickable"]');
+	attr[fid]["clickable"] = $obj[0] ? $obj[0].checked : false;
+	
+	$obj = root.find('[name="Field_Title"]');
+	attr[fid]["title"] = $obj[0] ? $obj.val() : "";
+	
+	$obj = root.find('[name="Field_Dispaly"]');
+	attr[fid]["displayas"] = $obj[0] ? $obj.val() : "";
+	
 	$("[name='FieldsLN']".replace("N", root.attr("stype"))).val(obj2str(attr));
 	fillLayoutField(root, fid);
 }
@@ -1253,12 +1285,12 @@ function viewAction(source, target) {
 }
 $(document).on("focus", "[target-input=\"[name='New']\"]", function(e) {
 	var newAction = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;"><img src="/img/add.png">New Action</a></div>';
-	var self = this;
-	var t =  $(self).attr("target-input");
-	if (!$(self).html().contains("< a")) {
-		$(self).html(newAction);
+	var $self = $(this);
+	var t =  $self.attr("target-input");
+	if (!$self.html().contains("< a")) {
+		$self.html(newAction);
 	}
-	editAction(e, $(self).find("div")[0], function () { if ($(self).html() == newAction) $(self).html(""); $(t).val($(self).html());  });
+	editAction(e, $self.find("div")[0], function () { if ($self.html() == newAction) $self.html(""); $(t).val($self.html());  });
 });
 
 $(document).on("change", "[name='Title']", function() {$("[name='TitleLL']").html($(this).val());});
@@ -1266,19 +1298,23 @@ $(document).on("click", "#ActionLN-v-e >div", editAction);
 $(document).on("click", "#ActionLE-v-e >div", editAction);
 $(document).on("click", "#ActionLS-v-e >div", editAction);
 $(document).on("click", "LSAction", function(e) {
-	var self = this;
-	if ($(self).prop("tagName") == "TD") {
+	var $self = $(this);
+	if ($self.prop("tagName") == "TD") {
 		editLayoutField();
 	} else {
-		editAction(e, $(self)[0], function () {  });
+		editAction(e, $self[0], function () {
+			var root = $self.parents(".layout-parent");
+			saveLayout(root); 
+			autofillAttr(root);
+		});
 	}
 });
 
 function editAction(e, act, callback) {
 	var newAction = '<div class="col-md-0"><a class="btn btn-link" href="javascript:;"><img src="/img/add.png">New Action</a></div>';
-	var self = act ? act : this;
-	var htm = $(self).html();
-	var action = ($(self).find("a") || $(self));
+	var $self = act ? $(act) : $(this);
+	var htm = $self.html();
+	var action = ($self.find("a") || $self);
 	var href = action.attr("url") || "";
 	var hint = action.attr("title") || "";
 	var label = action.html() || "";
@@ -1314,11 +1350,11 @@ function editAction(e, act, callback) {
 
 	showModalView((name == "" ? "New Action" : "Modify Action"), msg, "Save", "Cancel", 
 	function() {
-		var parent = self.parentNode;
+		var parent = $self[0].parentNode;
 		if($("[name='Action_label']").val() == "") {
-			parent.removeChild(self);
+			parent.removeChild($self[0]);
 		} else {
-			$(self).html($("[name='Action_html']").html());
+			$self.html($("[name='Action_html']").html());
 		}
 		var id = $(parent).attr("id");
 		if (id && id.contains("-v-e")) {
@@ -1340,7 +1376,7 @@ function editAction(e, act, callback) {
 	bindRichText();
 	var obj = $("[name='Action_html']").find("a");
 	
-	var actionInList = $(self).prop("tagName").match(/(TD|LSAction)/gi);
+	var actionInList = $self.prop("tagName").match(/(TD|LSAction)/gi);
 	if (actionInList) {
 		$(".action_type").addClass("hide");
 	} else {
@@ -1366,9 +1402,9 @@ function editAction(e, act, callback) {
 $(document).on("click", "#Filter-v-e >a", editFilter);
 function editFilter() {
 	var newFilter = '<a class="filter" href="javascript:;"><img src="/img/add.png"></a>';
-	var self = this;
-	var text = $(self).attr("filter") || "";
-	var label = $(self).html() || "";
+	var $self = $(this);
+	var text = $self.attr("filter") || "";
+	var label = $self.html() || "";
 
 	var msg = '<div class="modal-body" style="min-height:120px;">\n' +
 "		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Text:</label></div><div class='col-md-10 controls'><input type='text' class='form-control' name='filter_text' value='" + text + "' placeholder='string to find in page'></div></div>" + 
@@ -1377,12 +1413,12 @@ function editFilter() {
 
 	showModalView((text == "" ? "New Filter" : "Modify Filter"), msg, "Save", "Cancel", 
 	function() {
-		var parent = self.parentNode;
-		if($("[name='filter_label']").val() == "" || $("[name='filter_text']").val() == "") {
-			self.parentNode.removeChild(self);
+		var parent = $self[0].parentNode;
+		if ($("[name='filter_label']").val() == "" || $("[name='filter_text']").val() == "") {
+			parent.removeChild(self[0]);
 		} else {
-			$(self).html($("[name='filter_label']").val());
-			$(self).attr("filter", $("[name='filter_text']").val());
+			$self.html($("[name='filter_label']").val());
+			$self.attr("filter", $("[name='filter_text']").val());
 		}
 		
 		$("[name='Filter']").val($(parent).html().replace(newFilter, ""));
@@ -1515,17 +1551,13 @@ refreshAS();
 	<footer>
 	<div class="col-md-12 form-group small">
 		<ul class="pager nomargin pull-left">
-		<li><label>Dependencies：</label></li>
-		<li><a target="_blank" href="https://nodejs.org/">NodeJS</a></li>
-		<li><a target="_blank" href="http://www.mongodb.org/">mongoDB</a></li>
-		<li><a target="_blank" href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
-		<li><a target="_blank" href="http://jquery.com/">jQuery</a></li>
-		<li><a target="_blank" href="https://github.com/">GitHub</a></li>
-		<li><a target="_blank" href="http://itman70s.github.io/richtext">Rich Text</a></li>
+		<li><label>推荐网站:</label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
+		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.4.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
 	</div>
 	</footer>
 	</div>

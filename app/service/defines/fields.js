@@ -50,6 +50,7 @@ function toList(json) {
 	var head = "";
 	var options = "";
 	if (trs.length != "") {
+		trs = trs.replace("<tbody>", "").replace("</tbody>", "");
 		trs = trs.replace(/[\r\n]+/gi, "").replace(/(.*<table [^>]*>)(.+)(<\/table>.*)/gi, "$2").replace(/ field=/gi, " Fid=");
 		head = trs.mid("<tr>", "</tr>").replace(/<td /gi, "<th ").replace(/<\/td>/gi, "</th>\n");
 		var sub = trs.contains("</tr>") ? trs.mid("</tr>").replace(/'/gi, '"') : "";
@@ -62,7 +63,7 @@ function toList(json) {
 		if (!("UpdateR" in data)) data["UpdateR"] = {"type": "String", "form": "text", "label": "Updater", "default": "", "placeholder": "", "msg": "", "format": "json", "attribute": ",readonly,"};
 		if (!("CreateR" in data)) data["CreateR"] = {"type": "String", "form": "text", "label": "Creater", "default": "", "placeholder": "", "msg": "", "format": "json", "attribute": ",readonly,"};
 
-		head = head.replace(/"/gi, "'").replace(/ LSAction='.+'/g, "");
+		head = head.replace(/"/gi, "'").replace(/ LSAction='.+'/gi, "");
 		head = head.replace(/(.*<th [^>]*>)(.*)(<\/th>.*)/gi, "$1$3");
 			
 		for (var j = 1; j < trs.length; j++) {
@@ -162,6 +163,7 @@ function toList(json) {
 			case "select":
 			case "mulselect":
 				var iconly = (i in def && "iconly" in def[i]) ? def[i]["iconly"] : false;
+				var textonly = (!iconly && i in def && "textonly" in def[i]) ? def[i]["textonly"] : false;
 				
 				options += "<% function get" + i + "(val) { \n";
 				options += "  var opts = \"\"; \n  val = \",\" + (val || \"\") + \",\"; \n";
@@ -171,7 +173,21 @@ function toList(json) {
 						opt.caption = opt.value;
 					}
 					options += "  if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { ";
-					options += "   opts += \"" + (opt["css"] ? "<span class='" + opt["css"] + "'>":"") + ((opt.icon && iconly) ? "<img class='icon15' src='" + opt.icon + "' alt='" + opt.caption + "' title='" + opt.caption + "'> ": "") + (!iconly ? opt.caption : "") + (opt["css"] ? "</span>":"") + " \"; } \n ";
+					options += "   opts += \"" + (opt["css"] ? "<span class='" + opt["css"] + "'>":"");
+					var tmp = (opt.icon ? "<img class='icon15' src='" + opt.icon + "' alt='" + opt.caption + "' title='" + opt.caption + "'> " : "") + opt.caption;
+					if (iconly) {
+						if (tmp.contains("<img ")) {
+							tmp = "<img " + tmp.mid("<img ", ">") + ">";
+						} else {
+							tmp = "";
+						}
+					}
+					if (textonly) {
+						tmp = tmp.replace(/<img [^>]+>/gi, "");
+					}
+					options += tmp + (opt["css"] ? "</span>":"") + " \"; } \n ";
+					// options += iconly ?  + (!iconly ? opt.caption : "") + (opt["css"] ? "</span>":"") + " \"; } \n ";
+					//options += (!iconly ? opt.caption : "") + (opt["css"] ? "</span>":"") + " \"; } \n ";
 				}
 				options += "  return opts; } %>\n";
 				val += "<%- get" + i + "(data[item][\"" + i + "\"]) %>";

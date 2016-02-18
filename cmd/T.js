@@ -156,7 +156,7 @@ function backupAll() {
 	var folder = tmpfolder();
 	exportDB(folder);
 	mkdir(bak);
-	_zip([app, folder + "/DB"], bak + "/Tangram_" + format(new Date(), "yyyyMMddhhmm") + ".zip");
+	_zip([app, folder + "/DB"], bak + "/Tangram_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
 	remove(folder);
 }
 
@@ -164,7 +164,7 @@ function backupDB() {
 	var folder = tmpfolder();
 	exportDB(folder);
 	mkdir(bak);
-	_zip([folder + "/DB"], bak + "/Tangram_DB_" + format(new Date(), "yyyyMMddhhmm") + ".zip");
+	_zip([folder + "/DB"], bak + "/Tangram_DB_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
 	remove(folder);
 }
 
