@@ -9,6 +9,10 @@ var cmds_win = {exportDB: "mongoexport --db z -c name -o folder/name.json",
 				importDB: "mongoimport --db z --drop -c name -file folder/name.json",
 				zip: "7z u name folder",
 				unzip: "7z x name -ofolder -r -y"};
+var cmds_lin = {exportDB: "./mongoexport --db z -c name -o folder/name.json", 
+				importDB: "./mongoimport --db z --drop -c name -file folder/name.json",
+				zip: "./7za a -t7z -r name folder",
+				unzip: "./7za x name -r -y -ofolder"};
 				
 var pwd = fs.realpathSync("./");
 console.log('pwd: ' + pwd);
@@ -40,7 +44,7 @@ if (process.platform == "win32") {
 	cmds = cmds_win;
 	windows = true;
 } else {
-	cmds = cmds_win;
+	cmds = cmds_lin;
 }
 
 if(process.argv.length < 3) {
