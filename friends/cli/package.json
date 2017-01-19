@@ -1,0 +1,13 @@
+{
+  "name": "ZC",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node start.js"
+  },
+  "dependencies": {
+    "express": "~3.4.8",
+    "static-favicon": "~1.0.0",
+    "nodemailer": "^0.7.0"
+  }
+}
