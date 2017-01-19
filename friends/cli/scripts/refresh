@@ -1,0 +1,26 @@
+#!/bin/sh
+pid=`ps -ef | grep mongod | grep zcar`
+echo $pid
+if [ "$pid" == "" ]
+then
+	/opt/zcar/cmd/mongod --smallfiles --dbpath /opt/zcar/db --logpath /opt/zcar/logs/mongodb.log
+	echo restart DB
+fi
+
+
+
+pid=`ps -ef | grep zcar | grep index.js | gawk '{print $2}'`
+echo $pid
+if [ "$pid" != "" ]
+then
+	kill -9 $pid
+fi
+
+pid=`ps -ef | grep zcar | grep index.js`
+echo $pid
+if [ "$pid" == "" ]
+then
+	cd /opt/zcar/app
+	/opt/zcar/cmd/node /opt/zcar/app/index.js &
+	echo restart Tangrammy
+fi
