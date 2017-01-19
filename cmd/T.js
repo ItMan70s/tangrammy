@@ -4,9 +4,11 @@ var fs = require('fs');
 
 var cli = require('child_process');
 var util = require('util');
+var settings = require('../app/settings');
+var dbName = settings.db.name;
 var cmds = null;
-var cmds_win = {exportDB: "mongoexport --db z -c name -o folder/name.json", 
-				importDB: "mongoimport --db z --drop -c name -file folder/name.json",
+var cmds_win = {exportDB: "mongoexport --db " + dbName + " -c name -o folder/name.json", 
+				importDB: "mongoimport --db " + dbName + " --drop -c name -file folder/name.json",
 				zip: "7z u name folder",
 				unzip: "7z x name -ofolder -r -y"};
 				
@@ -16,6 +18,7 @@ console.log('pwd: ' + pwd);
 var bak = "../bak";
 var app = "../app";
 var db = "../db";
+var clearDB = false;
 var modules = "../app/node_modules";
 /*
 var os = require('os');
@@ -51,8 +54,10 @@ if(process.argv.length < 3) {
 	console.log('    restore filenmame - restore DB data.');
 	console.log('    install - inital DB and application, and start services.');
 	console.log('    uninstall - stop and remove DB service and tangrammy service.');
+	console.log('    clean - required if restore DB or install with clean DB.');
 }
 
+clearDB = process.argv.join(" ").indexOf("clean") > -1;
 for(var idx = 2; idx < process.argv.length; idx++) {
 	var val = ("" + process.argv[idx]).toLowerCase();
 	switch(val) {
@@ -107,7 +112,7 @@ function install() {
 		exec('nssm install TangrammyDB "' + fs.realpathSync("./mongod.exe") + '" --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
 		exec('nssm restart TangrammyDB');
 		
-		backupDB();
+//		backupDB();
 		restoreDB("dat/TangramDB.7z");
 		
 		exec('nssm stop Tangrammy');
@@ -156,7 +161,7 @@ function backupAll() {
 	var folder = tmpfolder();
 	exportDB(folder);
 	mkdir(bak);
-	_zip([app, folder + "/DB"], bak + "/Tangram_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
+	_zip([app, folder + "/DB"], bak + "/Tangram_" + dbName + "_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
 	remove(folder);
 }
 
@@ -164,7 +169,7 @@ function backupDB() {
 	var folder = tmpfolder();
 	exportDB(folder);
 	mkdir(bak);
-	_zip([folder + "/DB"], bak + "/Tangram_DB_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
+	_zip([folder + "/DB"], bak + "/Tangram_DB_" + dbName + "_" + format(new Date(), "yyyyMMddhhmm") + ".7z");
 	remove(folder);
 }
 
@@ -206,6 +211,10 @@ function exportDB(folder) {
 }
 
 function restoreDB(zfile) {
+	if (!clearDB) {
+		console.warn('Warning: ignore DB restore, need add "clean" option if need restore DB.');
+		return;
+	}
 	var folder = tmpfolder();
 	exec(cmds["unzip"].replace("name", zfile).replace("folder", folder));
 	var cmd = cmds["importDB"].replace("folder", folder + "/DB");
@@ -213,7 +222,7 @@ function restoreDB(zfile) {
     dirList.forEach(function(item){
 		if (item.match(/.+\.json/gi)) {
 			exec(cmd.replace(/name/gi, item.replace(".json", "")));
-			//console.error('exec : ' + cmd.replace(/name/gi, item.replace(".json", "")));
+			console.error('exec : ' + cmd.replace(/name/gi, item.replace(".json", "")));
 		}
     });
 	remove(folder);

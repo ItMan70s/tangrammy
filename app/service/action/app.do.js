@@ -69,8 +69,12 @@ function add(req, res, uData, define, tid, vid) {
 				recorder.data[i] = uData[i];
 			}
 		}
+		if ("user" in uData) {
+			recorder.data["user"] = uData["user"];
+		}
 		__new(res, recorder, tid, vid, define);
 	} else {
+		uData = __winnow(uData, define);
 		var fun = __safe(define["JSSave"] || "");
 		if (fun.contains("return")) {
 			uData = Function("data", fun)(uData);
@@ -80,7 +84,6 @@ function add(req, res, uData, define, tid, vid) {
 				uData[i] = mongo.getIDNext(((fields[i]["key"]) ? fields[i]["key"] : tid));
 			}
 		}
-		uData = __winnow(uData, define);
 		uData["Update"] = (new Date()).format("YYYY/MM/DD hh:mm:ss.S Z");
 		uData["UpdateR"] = uData["user"]["Rid"] + ":" + uData["user"]["email"];
 		
@@ -152,14 +155,19 @@ function __render(res, ejs, recorder) {
 
 function __show(res, recorder, tid, vid, define) {
 	recorder.title = "Application Details";
+	recorder.data = __winnow(recorder.data, define);
 	var fun = __safe(define["JSShow"] || "");
 	if (fun.contains("return")) {
-		recorder.data = Function("data", fun)(recorder.data);
+		try {
+			recorder.data = Function("data", fun)(recorder.data);
+		} catch (msg) {
+			log.warn(msg);
+		}
 	}
-	recorder.data = __winnow(recorder.data, define);
 	return __render(res, tid + "X" + vid + "show.ejs", recorder);
 }
 function __new(res, recorder, tid, vid, define) {
+	recorder.data = __winnow(recorder.data, define);
 	var fun = __safe(define["JSNew"] || "");
 	if (fun.contains("return")) {
 		recorder.data = Function("data", fun)(recorder.data);
@@ -171,16 +179,15 @@ function __new(res, recorder, tid, vid, define) {
 			recorder.data[i] = mongo.getIDPreview(((fields[i]["key"]) ? fields[i]["key"] : tid)) + " ?";
 		}
 	}
-	recorder.data = __winnow(recorder.data, define);
 	return __render(res, tid + "X" + vid + "new.ejs", recorder);
 }
 function __edit(res, recorder, tid, vid, define) {
 	recorder.title = "Edit Application";
+	recorder.data = __winnow(recorder.data, define);
 	var fun = __safe(define["JSEdit"] || "");
 	if (fun.contains("return")) {
 		recorder.data = Function("data", fun)(recorder.data);
 	}
-	recorder.data = __winnow(recorder.data, define);
 	return __render(res, tid + "X" + vid + "edit.ejs", recorder);
 }
 	
@@ -212,13 +219,18 @@ function __winnow(data, define) {
 			debug("Drop values[" + i + "] - not in defines.");
 			delete data[i];
 		}
-		if (i in fields && "datetime" == fields[i]["form"] && uData["user"]["ctz"] != ltz) {
-			if (uData[i].match(/[\d\/]+ [\d:]+\.\d+ [\-]?\d+/g)) {
-				var dval = Date.parse(uData[i]).now() + uData["user"]["ctz"] * 60000;
-				uData[i] = (new Date(dval)).format("YYYY/MM/DD hh:mm:ss.S Z");
+		
+		if (i in fields && "datetime" == fields[i]["form"] && data["user"] && data["user"]["ctz"] != ltz) {
+			if (data[i] == "0") {
+				var dval = Date.now() + data["user"]["ctz"] * 60000;
+				data[i] = (new Date(dval)).format("YYYY/MM/DD hh:mm:ss.S Z");
+			} else if (data[i].match(/^[\d]+$/g)) {
+				var dval = eval(data[i] + (data["user"]["ctz"] > 0 ? " +" : " ") + data["user"]["ctz"]);
+				dval = Date.parse(dval) - ltz * 60000;
+				data[i] = (new Date(dval)).format("YYYY/MM/DD hh:mm:ss.S Z");
 			} else {
-				var dval = Date.parse(uData[i] + (uData["user"]["ctz"] > 0 ? " +" : " ") + uData["user"]["ctz"]).now() - ltz * 60000;
-				uData[i] = (new Date(dval)).format("YYYY/MM/DD hh:mm:ss.S Z");
+				var dval = Date.parse(data[i]);
+				data[i] = (new Date(dval)).format("YYYY/MM/DD hh:mm:ss.S Z");
 			}
 		}
 		if (i in fields && fields[i]["form"] in {"radio":"", "checkbox":"", "select":""}) {
@@ -235,6 +247,9 @@ function __winnow(data, define) {
 			}
 			data[i] = opts.join(",");
 		}
+	}
+	if ("__proto__" in data) {
+		delete data["__proto__"];
 	}
 	
 	return data;
@@ -282,11 +297,11 @@ function modify(req, res, uData, define, tid, vid) {
 			}
 		});
 	} else {
+		uData = __winnow(uData, define);
 		var fun = __safe(define["JSSave"] || "");
 		if (fun.contains("return")) {
 			uData = Function("data", fun)(uData);
 		}
-		uData = __winnow(uData, define);
 		var msg = __verify(uData, define);
 		if (msg.length > 0) {
 			var recorder = {"code": 406, "message": msg, "error": msg, "data": {}};
@@ -357,12 +372,19 @@ function __list(res, define, tid, vid, user, cond, json) {
 			recorder.warning = "Internal error!<br/>" + util.inspect(recorder.error);
 		} else {
 			var fun = __safe(define["JSShow"] || "");
+			var data = [];
 			for (var i in recorder.data) {
-				if (fun.contains("return")) {
-					recorder.data[i]._doc = Function("data", fun)(recorder.data[i]._doc);
+				recorder.data[i]._doc = __winnow(recorder.data[i]._doc, define);
+				if (fun.contains("return")) { 
+					try {
+						recorder.data[i]._doc = Function("data", fun)(recorder.data[i]._doc);
+					} catch (msg) {
+						log.warn(msg);
+					}
 				}
-				recorder.data[i] = __winnow(recorder.data[i]._doc, define);
+				data.push(recorder.data[i]._doc);
 			}
+			recorder.data = data;
 		}
 		if (json) {
 			res.json(recorder);
@@ -373,12 +395,28 @@ function __list(res, define, tid, vid, user, cond, json) {
 	});
 }
 function list(req, res, uData, define, tid, vid) {
-	var con = __safe((define["Condition"] || "").toJSON());
+	var con = __safe((define["Condition"] || "").replace(".*ME.*", ".*" + uData["user"]["Rid"] + ":.*").toJSON());
 	__list(res, define, tid, vid, uData["user"], con, (uData.json));
 }
 
 function search(req, res, uData, define, tid, vid, cond) {
-	var con = (uData["cond"]) ? (uData["cond"] + "").toJSON() : {};
+	uData["cond"] = (uData["cond"] || "");
+	uData["cond"] = uData["cond"].replace(".*ME.*", ".*" + uData["user"]["Rid"] + ":.*");
+	var con = {};
+	if (uData["cond"].length < 3) {
+		for (var i in uData) {
+			if (i.match(/(UpdateR|CreateR)/gi)) {
+				con[i] = new RegExp('.*' + uData[i] + '.*', 'gi')
+			} else if (i.match(/(Rid|^F[\da-zA-Z][\da-zA-Z]?$)/gi)) {
+				con[i] = uData[i];
+			} else {
+				
+			}
+		}
+	} else {
+		con = uData["cond"].toJSON()
+	}
+	
 	if ("adcond" in uData) {
 		con = (uData["adcond"] + "").toJSON();
 		res.req.szone = uData["szone"];

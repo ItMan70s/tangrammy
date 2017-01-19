@@ -48,26 +48,26 @@ function __login(item, req, res) {
 	req.u.utz = item[utz];
 	req.refreshTimeZone();
 	
-	res.cookie('userurl', req.u.userurl, {path: '/', expires: new Date(Date.now() + 60 * 1000)});
-	res.cookie('__sessionid', text, {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
-	res.cookie('email', item[umail], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
-	res.cookie('name', item[uname], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+	res.setCookie('userurl', req.u.userurl, {path: '/', expires: new Date(Date.now() + 60 * 1000)});
+	res.setCookie('__sessionid', text, {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+	res.setCookie('email', item[umail], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+	res.setCookie('name', item[uname], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
 	
 	
 	var usr = {name: item[uname], email: item[umail], Rid: item["Rid"], role: item[urole], tz: "" + item[utz], userurl: req.u.userurl};
 	
 	var encode = code.en(util.inspect(usr), text);
-	res.cookie('encode', encode, {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+	res.setCookie('encode', encode, {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
 	var decode = code.de(encode);
-	res.cookie('decode_key', decode.key, {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+	res.setCookie('decode_key', decode.key, {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
 	decode = eval("(" + decode.val.substring(1, decode.val.length - 1).replace(/'/g, '"') + ")");
 	if (decode.val) {
-		res.cookie('decode_val_name', decode.val[uname], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
-		res.cookie('decode_val_mail', decode.val[umail], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
-		res.cookie('decode_val_Rid', decode.val["Rid"], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
-		res.cookie('decode_val', util.inspect(decode.val), {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+		res.setCookie('decode_val_name', decode.val[uname], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+		res.setCookie('decode_val_mail', decode.val[umail], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+		res.setCookie('decode_val_Rid', decode.val["Rid"], {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+		res.setCookie('decode_val', util.inspect(decode.val), {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
 	} else {
-		res.cookie('decode_val', "empty", {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
+		res.setCookie('decode_val', "empty", {path: '/', expires: new Date(Date.now() + 7 * 24 * 6000 * 1000)});
 	}
 }
 
@@ -102,13 +102,13 @@ function login(req, res) {
 				if (pass == undefined || recorder.data[0][upasswd] == pass) {
 					recorder.code = 200;
 					recorder.message = "OK.";
+					__login(recorder.data[0], req, res);
 				} else {
 					recorder.code = 401;
 					recorder.message = "Wrong password";
 				}
 			}
 		}
-		__login(recorder.data[0], req, res);
 		recorder.data = "";
 		res.end(util.inspect(recorder) + "" );
 		return;
@@ -141,15 +141,9 @@ function register(req, res) {
 		delete uData["pass"];
 		delete uData["expired"];
 		
+		
 		if (utz in uData) {
-			mongo.list(utid, uvid, null, {umail: uData[umail]}, "", {}, function (recorder) {
-				if (recorder.data.length < 1) {
-					mongo.newOne(utid, uvid, null, uData, function (recorder) {
-						log.debug("ssid[" + req.u.ssid + "] " + util.inspect(recorder));
-						//res.redirect("" + uurl + "/update?Rid=" + recorder._doc["Rid"]);
-					});
-				}
-			});
+			addUser(uData);
 		} 
 		setTimeout(function() {
 			mongo.list(utid, uvid, null, con, "", {}, function (recorder) {
@@ -230,7 +224,7 @@ function register(req, res) {
 			}
 			
 			var ehtm = "";
-			var tz = (req.cookies['ctz']) ? (new Number(req.cookies['ctz']) - 0) : con[utz];
+			var tz = (req.getCookie('ctz')) ? (new Number(req.getCookie('ctz')) - 0) : con[utz];
 			
 			if (("" + tz).length > 0) {
 				var opts = fields[utz].options;
@@ -266,10 +260,9 @@ function register(req, res) {
 			mail.html = htm;
 
 			// register
-			mongo.newOne(utid, uvid, null, con, function (recorder) {
+			addUser(uData, function (recorder) {
 				recorder.data = con;
 				res.end(util.inspect(recorder) + "" );
-				
 				// Use Smtp Protocol to send Email
 				cmd.sendMail(mail, req, res);
 			});
@@ -278,10 +271,31 @@ function register(req, res) {
 	});
 }
 
+function addUser(uData, callback) {
+	if (!uData || !(umail in uData)) {
+		if (callback) {
+			callback({}, uData);
+		}
+		return;
+	}
+	mongo.list(utid, uvid, null, {umail: uData[umail]}, "", {}, function (recorder) {
+		if (recorder.data.length < 1) {
+			mongo.newOne(utid, uvid, null, uData, function (recorder) {
+				if (callback) {
+					callback(recorder, uData);
+				}
+			});
+		} else {
+			if (callback) {
+				callback(recorder, uData);
+			}
+		}
+	});
+}
 function logout(req, res) {
 	log.info("ssid[" + req.u.ssid + "] " + "logout: " + req.u.user.name + " / " + req.u.user.email);
-	mongo.activeUser("remove", req.cookies['__sessionid']);
-	res.clearCookie('__sessionid', { path: '/'});
+	mongo.activeUser("remove", req.getCookie('__sessionid'));
+	res.setCookie('__sessionid');
     res.redirect("/");
 }
 
@@ -356,6 +370,10 @@ function permit(req, res) {
 		default:
 			break;
 	}	
+	if (req.originalUrl.match(/^\/(CMD|SCRIPT)\/.*/g)) {
+		matched = true;
+		return "";
+	}
 	
 
 	if (req.u.Tid && req.u.Vid && (!req.u.user || !matched)) {

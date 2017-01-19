@@ -67,7 +67,6 @@ mongoose.connection.once('open', function callback () {
 	log.info("Connected DB " + DB.host + ':' + DB.port + '/' + DB.name + " successfully.");
 });
 
-mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + DB.name + '');
 
 var oid = "";
 var seed = 0;
@@ -223,21 +222,31 @@ var OpSchema = new Schema({
   o: {type: String, required: true},
   l: {type: String, required: true},
   f: {type: String},
-  ts: { type: String, required: true}
+  ts: {type: String, required: true}
 });
 
 var Ids = {};
 var Tls = {};
 var Urls = {};
-var Schemas = {"T": mongoose.model('T', TSchema), "Reservation": mongoose.model('Reservation', ReservationSchema), "Settings": mongoose.model('Settings', SettingSchema), "Op": mongoose.model("Op", OpSchema)};
+var Schemas = {};
 var TDefines = {};
 var Roles = {};
 var liApps = "";
 var optApps = "";
 var Reservations = {};
-var Settings = {"User": {}, "Role": {}, "IDDefines": {}, "ActiveUsers": {}};
-loadSettings();
-refreshstaticFilestat();
+var Settings = {};
+
+function refresh() {
+	//mongoose.connection.close();
+	mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + DB.name + '');
+	Schemas = {"T": mongoose.model('T', TSchema), "Reservation": mongoose.model('Reservation', ReservationSchema), "Settings": mongoose.model('Settings', SettingSchema), "Op": mongoose.model("Op", OpSchema)};
+	Settings = {"User": {}, "Role": {}, "IDDefines": {}, "ActiveUsers": {}};
+	loadSettings();
+	refreshstaticFilestat();
+};
+
+refresh();
+
 function loadSettings() {
 	for (var i in Settings) {
 		findOne("Settings", "V", null, {"key": i}, function (recorder) {
@@ -864,7 +873,9 @@ function __update(tid, vid, condition, udata, callback) {
 			}
 			
 			model.update(condition, udata, function (err, num) {
-			callback({"code": ((err || "").length > 0 ? 400: 200), "message": err, "num": num}); if (tid == "T") {initDB();}  });
+				if (tid == "T") {initDB();}  
+				callback({"code": ((err || "").length > 0 ? 400: 200), "message": err, "num": num}); 
+			});
 		} else {
 			callback({"code": 400, "message": err.message, "error": err, "data": {}});
 		}
@@ -1009,6 +1020,7 @@ module.exports = {
 	newOne: newOne,
 	remove: remove,
 	update: update,
+	refresh: refresh,
 	getIds: function() {return Ids;},
 	url2id: function(url) {return Urls[url];},
 	defines: defines,	

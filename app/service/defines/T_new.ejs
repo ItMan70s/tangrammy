@@ -11,6 +11,11 @@
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="/css/font-awesome-ie7.min.css">
 	<![endif]-->
+	<!--[if lte IE 9]>
+	<script src="/js/html5shiv.min.js"></script>
+	<script src="/js/respond.min.js"></script>
+	<script src="/js/json2.min.js"></script>
+	<![endif]-->
 	<link rel='stylesheet' href='/css/style.css' />
 	<script src="/js/jquery.js"></script>
 	<script src="/js/jquery.cookie.js"></script>
@@ -21,19 +26,18 @@
     <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
-<body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body style="background-color: #f7f7f9">
+<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header active">
 			<a name="top" />
-          <a class="navbar-brand" href="/tangrammy">Tangrammy</a>
+          <a class="navbar-brand" href="/">精益管理</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
-            			<li><a href='/' title=''>Home</a></li>
-			<li><a href='/issues/list' title=''>Issues</a></li>
-			<li><a href='/todo/list' title=''>Todo</a></li>
-			<li><a href='/zcar/list' title=''>ZCar</a></li>
+            			<li><a href='/zcar/list' title=''>ZCar</a></li>
+			<li><a href='/todo/list' title=''>任务<br></a></li>
+			<li><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -62,8 +66,8 @@
         </div><!--/.nav-collapse -->
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
-    </div>
-	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
+</header>
+<div style="background-color: #FFF; padding-top:60px;"><div id="container" class="container">
 	
 <!-- start -->
 <style>
@@ -213,6 +217,181 @@
 				<textarea class='hide' name='Fields' cols=100 rows='3' ><%= data["Fields"] %></textarea>
 			</div>
 		</div>
+
+			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[List]</small>
+				<div class="col-md-auto text-nowrap" name='TitleLL'><%= data["Title"] %> </div>
+				<input type='hidden' class="divinput col-md-auto text-nowrap" name='New' value='<%= (data["New"] || "").contains("<a ") ? data["New"] : " " %>' placeholder="Click to modify action button">
+			</h2>
+			<div class='col-md-12'>
+				<textarea class='form-control richtextcode' name='Header' cols=100 rows=2 validate="required" placeholder="Message in list page" ><%= data["Header"] || ""  %></textarea>
+			</div>
+			<div class='col-md-12 min-h34'><label>Filter</label></div>
+			<div class='col-md-12'>
+				<textarea class='form-control preview' preview='yes' onview='viewFilter' name='Filter' cols=100 rows='4' validate="required" placeholder="<a href='javascript:;' filter='filter key words' class='width100' >In progress</a>"><%= (data["Filter"] || "") %></textarea>
+			</div>
+			<div class='col-md-12 hide'><div><label>Advance Condition</label><div class='controls'><textarea class='form-control' name='AdvanceCondition'  cols=100 rows=10 placeholder='Advance options to show'><%= (data["AdvanceCondition"] || "") %></textarea></div></div></div>
+			<div class='col-md-12' style='margin-top: 15px'><span>Click table to edit Field detail, click action button/link to edit its detail. </span></div>
+			<div class='col-md-12'>
+				<input type='hidden' name='FieldsLL' value='<%= data["FieldsLL"] %>' >
+				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutL' cols=100 rows='<%= total %>'  validate="required" ><%= data["LayoutL"] %> </textarea>
+			</div>
+			
+			<div class='col-md-12'><div><label>Condition</label><div class='controls'>
+			<textarea class='form-control hide' name='Condition'  cols=100 rows=2 required=true placeholder='Condition to list data'><%= data["Condition"] %></textarea>
+			<div class='col-md-12 search-zone' >
+				<div class='col-md-12'>
+					<div class='pull-left' name='selectedconditiontitle'><a data-toggle="collapse" data-parent="#accordion" href="#condition_zone" aria-expanded="false" >What data to list?</a></div>
+					<div class='col-md-9 pull-left' name='selectedcondition'></div>
+				</div>
+				<div  id="condition_zone" class="col-md-12 collapse">
+				<table class='table'>
+			<% 
+			var dFields = data["Fields"].toJSON();
+			var txtFields = {};
+			var txtFids = "";
+			var condJ = (data["Condition"] || "{}").toJSON();
+			dFields["Update"] = {"type": "String", "form": "datetime", "label": "Update Date", "format": "yyyy-mm-dd hh:mm:ss", "attribute": ","};
+			dFields["Create"] = {"type": "String", "form": "datetime", "label": "Create Date", "format": "yyyy-mm-dd hh:mm:ss", "attribute": ","};
+			dFields["UpdateR"] = {"type": "String", "form": "text", "label": "Updater", "attribute": ","};
+			dFields["CreateR"] = {"type": "String", "form": "text", "label": "Creater", "attribute": ","};
+			var dfConditions = [];
+			var dfTexts = [];
+			var dfNums = [];
+			var dfDates = [];
+			for (var i in dFields) {
+				if (!dFields[i]["form"]) continue;
+				if ("options" in dFields[i] && dFields[i]["options"].length > 1) {
+					dfConditions.push(i);
+				} else if (dFields[i]["form"] == "number") {
+					dfNums.push(i);
+				} else if (dFields[i]["form"] == "reservation") {
+					// ignore
+				} else if (dFields[i]["form"] == "time") {
+					// ignore
+				} else if (dFields[i]["form"].match(/date/gi)) {
+					dfDates.push(i);
+				} else  {
+					dfTexts.push(i);
+				}
+			}
+			dfConditions = dfConditions.concat(dfNums, dfTexts);
+			for (var j in dfConditions) {
+				var i = dfConditions[j];
+				if (!i || !dFields[i]["form"]) continue;
+				if ("options" in dFields[i] && dFields[i]["options"].length > 1) {
+			%>
+					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'><div>
+				<% 
+				var chks = "";
+				if (i in condJ && condJ[i]["$in"]) {
+					chks += "," + condJ[i]["$in"].join(",") + ",";
+				}
+				for (var j in dFields[i]["options"]) {
+					var opt = dFields[i]["options"][j];
+					var chk = chks.indexOf("," + opt.value + ",") < 0 ? "": " checked=true";
+				%>
+						<label class='space20'> <input type='checkbox' target='<%= i %>' value='<%= opt.value %>'<%= chk %>><%- opt.caption || opt.value %></label>
+				<% } %>
+						<label class='checked'> <input type='checkbox' selectall=true>All</label>
+					</div></div></td></tr>
+			<% 
+				} else if (dFields[i]["form"] == "number") {
+					var gte = "";
+					var lte = "";
+					if (i in condJ) {
+						gte = condJ[i]["$gte"];
+						lte = condJ[i]["$lte"];
+					}
+			%>		
+					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'><div class='wid200 pull-left'><input type='text' target='<%= i %>' value='<%= gte %>' class='form-control input-sm between'></div><div class='wid200 pull-left'><input type='text' target='<%= i %>' value='<%= lte %>' class='form-control input-sm'></div></div></td></tr>
+			<% 
+				} else if (dFields[i]["form"] == "reservation") {
+					// ignore
+				} else if (dFields[i]["form"] == "time") {
+					// ignore
+				} else  {
+					txtFields[i] = dFields[i]["label"];
+					txtFids += i + "_ac_";
+				}
+			}
+			var cond_txt = condJ["$or"] ? "" : "";
+			var cond_txt_ids = {};
+			if (condJ["$or"]) {
+				for (var i in condJ["$or"]) {
+					cond_txt_ids[i] = "";
+					cond_txt = condJ["$or"][i] + "";
+				}
+			}
+			%>
+					<tr><td><div class='col-md-1 line-header'>Text:</div><div class='col-md-11'><div class='space20 wid400 pull-left'><input type='text' target='<%= txtFids %>' placeholder='ME - for seaching current user' class='form-control input-sm ' value='<%= cond_txt %>' ></div><div class='pull-left'>
+				<%
+				for (var j in txtFields) { 
+					var chk = (j in cond_txt_ids)? " checked=true" : "";
+				%>
+						<div class='col-md-0'><label class='margin1'><input type='checkbox' target='Fids' value='<%= j %>' <%= chk %> ><%= txtFields[j] %></label></div>
+				<% } %>
+					</div></div></td></tr>
+			<%
+					
+			for (var j in dfDates) {
+				var i = dfDates[j];
+				if (!i || !dFields[i]["form"]) continue;
+				if (dFields[i]["form"].match(/date/gi)) {
+			%>		
+					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-365d~0" <%= i %> >Last 365 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 30 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 7 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-1d~">Yesterday</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0d~">Today</label>
+					<br />
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="1d~">Tomorrow</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0w~">This Week</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0m~">This Month</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0y~">This Year</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 7 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 30 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~365d">Next 365 Days</label>
+					</div></td></tr>
+			<% 
+				}
+			}
+			%>
+				</table>
+				</div>
+			</div>
+			</div></div></div>
+			
+			<div class='col-md-12'><div><label>Order By</label>
+			<div class='input-group'>
+			<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
+			for (var i = 0; i < oby.length && i < 3; i++) {
+			%>
+			<div class='col-md-auto'>
+				<select name='OrderBy' class='input-sm'>
+				<option value='null'>Select on Fields</option>
+				<% for (var fid in fields) { %>
+					<option value='<%= fid %>'  <%= (oby[i] == fid) ? "selected=true" : "" %>  ><%= fields[fid] %></option>
+				<% } %>
+				</select>			
+				<select name='Order' class='input-sm'>
+					<option value='1'  <%= ("-1" != order[i]) ? "selected=true" : "" %>  >ascending</option>
+					<option value='-1'  <%= ("-1" == order[i]) ? "selected=true" : "" %>  >descending</option>
+				</select>
+				<% if(i == 0) { %>
+					<select name='Group' class='input-sm'>
+						<option value='1'  <%= ("on" == data["Group"] || "1" == data["Group"]) ? "selected=true" : "" %>  >grouping</option>
+						<option value='-1'  <%= ("on" != data["Group"] && "1" != data["Group"]) ? "selected=true" : "" %>  >no group</option>
+					</select>
+				<% } %>
+			  </div>
+			<% } %>
+			</div>
+			</div></div>
+			<div class='col-md-12'>
+				<textarea class='form-control richtextcode' name='Footer' cols=100 rows=2 validate="required" title="Message in list page"><%= data["Footer"] || "" %></textarea>
+			</div>
+			
 			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[New]</small>
 				<input type='hidden' class="divinput col-md-4 text-nowrap" name='TitleLN' value='<%= data["TitleLN"] %>' placeholder="title for new data">
 			</h2>
@@ -251,144 +430,6 @@
 			</div></div>
 
 
-			<h2 class='col-md-12'><small class="col-md-0" style="padding-top: 15px;">[List]</small>
-				<div class="col-md-auto text-nowrap" name='TitleLL'><%= data["Title"] %> </div>
-				<input type='hidden' class="divinput col-md-auto text-nowrap" name='New' value='<%= (data["New"] || "").contains("<a ") ? data["New"] : " " %>' placeholder="Click to modify action button">
-			</h2>
-			<div class='col-md-12'>
-				<textarea class='form-control richtextcode' name='Header' cols=100 rows=2 validate="required" placeholder="Message in list page" ><%= data["Header"] || ""  %></textarea>
-			</div>
-			<div class='col-md-12 min-h34'><label>Filter</label></div>
-			<div class='col-md-12'>
-				<textarea class='form-control preview' preview='yes' onview='viewFilter' name='Filter' cols=100 rows='3' validate="required" placeholder="<a href='javascript:;' filter='filter key words' class='width100' >In progress</a>"><%= (data["Filter"] || "") %></textarea>
-			</div>
-			<div class='col-md-12 hide'><div><label>Advance Condition</label><div class='controls'><textarea class='form-control' name='AdvanceCondition'  cols=100 rows=10 placeholder='Advance options to show'><%= (data["AdvanceCondition"] || "") %></textarea></div></div></div>
-			<div class='col-md-12' style='margin-top: 15px'><span>Click table to edit Field detail, click action button/link to edit its detail. </span></div>
-			<div class='col-md-12'>
-				<input type='hidden' name='FieldsLL' value='<%= data["FieldsLL"] %>' >
-				<textarea class='form-control preview' preview='yes' onview='viewLayout' name='LayoutL' cols=100 rows='<%= total %>'  validate="required" ><%= data["LayoutL"] %> </textarea>
-			</div>
-			
-			<div class='col-md-12'><div><label>Condition</label><div class='controls'>
-			<textarea class='form-control hide' name='Condition'  cols=100 rows=2 required=true placeholder='Condition to list data'><%= data["Condition"] %></textarea>
-			<div class='col-md-12 search-zone' >
-				<div class='col-md-12 win-close'><strong>What data to list?</strong></div>
-				<table class='table'>
-			<% 
-			var dFields = data["Fields"].toJSON();
-			var txtFields = {};
-			var txtFids = "";
-			var condJ = (data["Condition"] || "{}").toJSON();
-			dFields["Update"] = {"type": "String", "form": "datetime", "label": "Update Date", "format": "yyyy-mm-dd hh:mm:ss", "attribute": ","};
-			dFields["Create"] = {"type": "String", "form": "datetime", "label": "Create Date", "format": "yyyy-mm-dd hh:mm:ss", "attribute": ","};
-			for (var i in dFields) {
-				if (!dFields[i]["form"]) continue;
-				if ("options" in dFields[i] && dFields[i]["options"].length > 1) {
-			%>
-					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'><div>
-				<% 
-				var chks = "";
-				if (i in condJ && condJ[i]["$in"]) {
-					chks += "," + condJ[i]["$in"].join(",") + ",";
-				}
-				for (var j in dFields[i]["options"]) {
-					var opt = dFields[i]["options"][j];
-					var chk = chks.indexOf("," + opt.value + ",") < 0 ? "": " checked=true";
-				%>
-						<label class='space20'> <input type='checkbox' target='<%= i %>' value='<%= opt.value %>'<%= chk %>><%- opt.caption || opt.value %></label>
-				<% } %>
-						<label class='checked'> <input type='checkbox' selectall=true>All</label>
-					</div></div></td></tr>
-			<% 
-				} else if (dFields[i]["form"] == "number") {
-					var gte = "";
-					var lte = "";
-					if (i in condJ) {
-						gte = condJ[i]["$gte"];
-						lte = condJ[i]["$lte"];
-					}
-			%>		
-					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'><div class='wid200 pull-left'><input type='text' target='<%= i %>' value='<%= gte %>' class='form-control input-sm between'></div><div class='wid200 pull-left'><input type='text' target='<%= i %>' value='<%= lte %>' class='form-control input-sm'></div></div></td></tr>
-			<% 
-				} else if (dFields[i]["form"] == "reservation") {
-					// ignore
-				} else if (dFields[i]["form"] == "time" || dFields[i]["form"].match(/date/gi)) {
-					// ignore
-				} else if (dFields[i]["form"].match(/date/gi)) {
-			%>		
-					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-365d~0" <%= i %> >Last 365 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 30 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 7 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-1d~">Yesterday</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0d~">Today</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="1d~">Tomorrow</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0w~">This Week</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0m~">This Month</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0y~">This Year</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 7 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 30 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~365d">Next 365 Days</label>
-					</div></td></tr>
-			<% 
-				} else  {
-					txtFields[i] = dFields[i]["label"];
-					txtFids += i + "_ac_";
-				}
-			}
-			var cond_txt = condJ["$or"] ? "" : "";
-			var cond_txt_ids = {};
-			if (condJ["$or"]) {
-				for (var i in condJ["$or"]) {
-					cond_txt_ids[i] = "";
-					cond_txt = condJ["$or"][i] + "";
-				}
-			}
-			%>
-					<tr><td><div class='col-md-1 line-header'>Text:</div><div class='col-md-11'><div class='space20 wid400 pull-left'><input type='text' target='<%= txtFids %>' class='form-control input-sm ' value='<%= cond_txt %>' ></div><div class='pull-left'>
-				<%
-				for (var j in txtFields) { 
-					var chk = (j in cond_txt_ids)? " checked=true" : "";
-				%>
-						<div class='col-md-0'><label class='margin1'><input type='checkbox' target='Fids' value='<%= j %>' <%= chk %> ><%= txtFields[j] %></label></div>
-				<% } %>
-					</div></div></td></tr>
-					<tr><td><div class='pull-left hidden' name='selectedconditiontitle'>List Condition:</div><div class='col-md-9 pull-left hidden' name='selectedcondition'></div></td></tr>
-				</table>
-			</div>
-			</div>
-			</div></div></div>
-			
-			<div class='col-md-12'><div><label>Order By</label>
-			<div class='input-group'>
-			<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
-			for (var i = 0; i < oby.length && i < 3; i++) {
-			%>
-			<div class='col-md-auto'>
-				<select name='OrderBy' class='input-sm'>
-				<option value='null'>Select on Fields</option>
-				<% for (var fid in fields) { %>
-					<option value='<%= fid %>'  <%= (oby[i] == fid) ? "selected=true" : "" %>  ><%= fields[fid] %></option>
-				<% } %>
-				</select>			
-				<select name='Order' class='input-sm'>
-					<option value='1'  <%= ("-1" != order[i]) ? "selected=true" : "" %>  >ascending</option>
-					<option value='-1'  <%= ("-1" == order[i]) ? "selected=true" : "" %>  >descending</option>
-				</select>
-				<% if(i == 0) { %>
-					<select name='Group' class='input-sm'>
-						<option value='1'  <%= ("on" == data["Group"] || "1" == data["Group"]) ? "selected=true" : "" %>  >grouping</option>
-						<option value='-1'  <%= ("on" != data["Group"] && "1" != data["Group"]) ? "selected=true" : "" %>  >no group</option>
-					</select>
-				<% } %>
-			  </div>
-			<% } %>
-			</div>
-			</div></div>
-			<div class='col-md-12'>
-				<textarea class='form-control richtextcode' name='Footer' cols=100 rows=2 validate="required" title="Message in list page"><%= data["Footer"] || "" %></textarea>
-			</div>
-	
 <% } %>					
 </div>
 
@@ -581,7 +622,7 @@ var types = {"hidden": ["minLength", "length", "maxLength", "min", "max", "optio
 "number": ["minLength", "length", "size", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "format", "multiple"],
 "password": ["min", "max", "options", "trim", "exist", "exist0", "placeholder", "css", "rows", "cols", "key", "val", "format", "multiple"],
 "text": ["min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "format", "multiple"],
-"richtext": ["min", "max", "options", "trim", "exist", "exist0", "rows", "cols", "key", "val", "format", "multiple"],
+"richtext": ["min", "max", "options", "trim", "exist", "exist0", "key", "val", "format", "multiple"],
 "textarea": ["min", "max", "options", "trim", "exist", "exist0", "key", "val", "format", "multiple"],
 "radio": ["minLength", "length", "maxLength", "min", "max", "trim", "exist", "exist0", "placeholder", "css","regexp", "rows", "size", "key", "val", "format", "multiple"],
 "checkbox": ["minLength", "length", "maxLength", "min", "max", "trim", "exist", "exist0", "placeholder", "css","regexp", "rows", "size", "key", "val", "format", "multiple"],
@@ -725,7 +766,7 @@ function showOptions(opts, form, cols, type) {
 		}
 	});
 	$('[name="otype"]').change();
-	bindRichText();
+	//bindRichText();
 }
 
 function syncOptions() {
@@ -923,7 +964,7 @@ htm += '</label>\n' +
 			
 	htm += '</div></div>\n';
 	$(target).html(htm);
-	var sty = ($(target).attr("style") + "").replace("overflow-y: scroll;", "");
+	var sty = ($(target).attr("style") + "").replace("overflow-y: scroll;", "min-height: 240px;");
 	$(target).attr("style", sty);
 	$(target).find(".fremove").hide();
 	$(target).find(".fappend").hide();
@@ -1091,7 +1132,7 @@ function autofillAttr(root) {
 	var fid = root.find('[name="Field_Ids"]').val();
 	if (!fid) return;
 	
-	var act = fid.match(/(submit|list|new|copy|edit|show|remove|diy)/gi);
+	var act = fid.match(/(Update|UpdateR|Create|CreateR|submit|list|new|copy|edit|show|remove|diy)/gi);
 	if (!(fid in fields || act)) {
 		root.find('.fremove').hide();
 		root.find('.fappend').hide();
@@ -1139,6 +1180,9 @@ function autofillAttr(root) {
 		btn.hide();
 	} else {
 		root.find('.fremove').hide();
+		if (root.attr("stype") != "L") {
+			root.find('[name="div_width"]').val("col-md-12");
+		}
 		var btn = root.find('.fappend');
 		btn.attr("title", "Append current field[" + fid + ":" + label + "] " + (btn.attr("pos").length > 0 ? "after " + btn.attr("pos") : ""));
 		btn.show();
@@ -1331,7 +1375,9 @@ function editAction(e, act, callback) {
 			"	<option value='diy'>DIY</option>" + 
 			"</select>\n";
 	sel = sel.replace("value='" + name + "'", "value='" + name + "' selected=true");
-
+	if (sel.indexOf("value='" + name + "'") < 0) {
+		sel = sel.replace("</select>\n", "	<option value='" + name + "' selected=true>" + name + "</option></select>\n");
+	}
 	var style = "<div class='btn-group'><a name='Action_css' href='javascript:;' class='btn btn-danger'>R</a>" +
 	"<a name='Action_css' href='javascript:;' class='btn btn-warning'>O</a>" +
 	"<a name='Action_css' href='javascript:;' class='btn btn-success'>G</a>" +
@@ -1373,7 +1419,7 @@ function editAction(e, act, callback) {
 	},
 	function() {
 	});
-	bindRichText();
+	//bindRichText();
 	var obj = $("[name='Action_html']").find("a");
 	
 	var actionInList = $self.prop("tagName").match(/(TD|LSAction)/gi);
@@ -1407,8 +1453,8 @@ function editFilter() {
 	var label = $self.html() || "";
 
 	var msg = '<div class="modal-body" style="min-height:120px;">\n' +
-"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Text:</label></div><div class='col-md-10 controls'><input type='text' class='form-control' name='filter_text' value='" + text + "' placeholder='string to find in page'></div></div>" + 
-"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Label:</label></div><div class='col-md-10 controls'><input type='text' class='form-control richtextcode' name='filter_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label + "' placeholder='label'></div></div>" + 
+"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Text:</label></div><div class='col-md-10 controls'><input type='text' class='form-control' name='filter_text' value='" + text.encodeAttr() + "' placeholder='string to find in page'></div></div>" + 
+"		<div class='col-md-12'><div class='col-md-2 padding0 right'><label>Filter Label:</label></div><div class='col-md-10 controls'><input type='text' class='form-control richtextcode' name='filter_label' options='autohide:\"no\", link:\"no\", sfont:\"yes\", ' value='" + label.encodeAttr() + "' placeholder='label'></div></div>" + 
 '</div>\n';
 
 	showModalView((text == "" ? "New Filter" : "Modify Filter"), msg, "Save", "Cancel", 
@@ -1428,7 +1474,7 @@ function editFilter() {
 	},
 	function() {
 	});
-	bindRichText();
+	//bindRichText();
 }
 function viewFilter(source, target) {
 	$(target).html($(source).val() + '\n<a class="filter" href="javascript:;"><img src="/img/add.png"></a>');
@@ -1547,21 +1593,40 @@ refreshAS();
     </div>
   </div>
 </div>
-	<hr />
-	<footer>
+	<a name="bottom" > </a>
+</div></div>
+	
+<footer style="border-top: 1px solid #e1e1e8; padding: 15px 0;">
+<div class="container padding0">
 	<div class="col-md-12 form-group small">
-		<ul class="pager nomargin pull-left">
-		<li><label>推荐网站:</label></li>
-		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
-		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>推荐网站: </label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#" target="_blank" title="">Angular Strap</a></li>
+		<li><a href="http://www.apjs.net/" target="_blank" >Angular中文网</a></li>
+		<li><a href="http://docs.ngnice.com/api/ng/service/$q" target="_blank" >Angular API</a></li>
+		<li><a href="http://www.whycss.com/" target="_blank" >前端网址导航</a></li>
+		<li><a href="http://ionichina.cn/docs/components/" target="_blank" >Ionic</a></li>
+		<li><a href="http://codepen.io/ionic/public-list/" target="_blank" >Ionic Codes</a></li>
+		<li><a href="http://www.bootcss.com/p/layoutit/#" target="_blank" >Bootstrap布局</a></li>
+		</ul>
+	</div>
+	<div class="col-md-12 form-group small">
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>友情链接: </label></li>
+		<li><a href="http://kunkkawu.com" target="_blank" title="吴坤的博客">吴坤的博客</a></li>
+		<li><a href="http://www.yaozihao.cn" target="_blank" title="子豪的博客">子豪的博客</a></li>
+		<li><a href="http://www.cnblogs.com/itman70s" target="_blank">Job的博客</a></li>
+		<li><a href="http://itman70s.github.io/richtext/" target="_blank">富文本控件</a></li>
+		<li><label>小工具: </label></li>
+		<li><a href="/base64.html" target="_blank">Base64转换</a></li>
+		<li><a href="/super.html" title="代码同步等小工具">小工具</a></li>		
+		<li><a href="#" download=".xls" title="尝试下载当前页面数据">下载</a></li>		
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2016
 	</div>
-	</footer>
-	</div>
-	<a name="bottom" > </a>
+</div>
+</footer>
 </body>
 </html>
-

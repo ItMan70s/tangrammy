@@ -1,7 +1,7 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 // process.env.debug = "Z X Action DB";
 
-var version = "0.2.0";
+var version = "0.1.0";
 var log = require('./service/core/log.js')('Z');
 
 var express = require('express');
@@ -19,13 +19,11 @@ var views = new Array();
 server.set('views', __dirname);
 server.set('view engine', 'ejs');
 
-server.use(favicon(path.join(__dirname, 'web/img/favicon.ico')));
-server.use(bodyParser.json({limit: '50mb'}));
-server.use(bodyParser.urlencoded({limit: '1000mb', uploadDir: settings.files.uploadDir}));
+server.use(favicon());
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded());
 server.use(cookieParser());
 server.use(express.bodyParser({limit: '100gb', uploadDir: settings.files.uploadDir}));  
-//server.use(express.bodyParser({limit: '1000mb', uploadDir: settings.files.uploadDir}));
-//server.use(bodyParser({limit: '1000mb', uploadDir: settings.files.uploadDir})); 
 //server.use(express.static(path.join(__dirname, 'web')));
 server.use(server.router);
 //server.enable('view cache');
@@ -35,7 +33,7 @@ server.use(routes.notfound);
 server.use(routes.error);
 routes.process(server);
 
-var port = settings.port;
+var port = settings.portadmin;
 server.set('port', port);
 server.listen(port, function() {
 log.debug('Service started.\n' +

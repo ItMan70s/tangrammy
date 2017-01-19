@@ -35,6 +35,7 @@ var foptions = {
 "id": [],
 "text": ["maxLength", "minLength", "length", "max", "min", "required", "unique", "placeholder"],
 "textarea": ["maxLength", "minLength", "length", "cols", "rows", "required", "unique", "placeholder"],
+"richtext": ["rows", "placeholder"],
 "password": ["maxLength", "minLength", "length", "max", "min", "required", "placeholder"],
 "number": ["maxLength", "minLength", "length", "max", "min", "required", "unique", "placeholder"],
 "radio": ["required"],
@@ -224,7 +225,7 @@ function toList(json) {
 			if (sub.contains('Fid="' + i + '"')) {
 				val = (label == "" ? "": "<label class='pull-left'>" + label + ":</label>") + "<span class='pull-left spanval'>" + val + "</span>";
 			}
-			trs[j] = trs[j].replace(new RegExp("(.*Fid=['\"]" + i + "['\"].*>)(.*)(</td>)", "ig"), "$1" + val + "$3");
+			trs[j] = trs[j].replace(new RegExp("(.*Fid=['\"]" + i + "['\"])(.*>)(.*)(</td>)", "ig"), "$1" + ' val="<%= getShortVal(data[item]["' + i + '"]) %>" $2' + val + "$4");
 		}
 		trs = trs.join("<td ");
 	}
@@ -233,7 +234,20 @@ function toList(json) {
 		
 	var func = "";
 	var linkAdd = ((json.raw["New"] || "") + "").replace(/(name=['"]new['"]|href=['"][^'"]+['"])/gi, 'href="/' + json.url + '/new"').replace(/(.*)(<a .*<\/a>)(.*)/gi, "$2"); 
-	var html = "<h1>" + json.title + "  <small>" + linkAdd + "</small></h1>\n";
+	var html = "<h1>" + json.title + "  <small>" + linkAdd + "</small>";
+	html += "<div class='btn-group pull-right'>\n";
+	html += "<a class='btn btn-lg btn-link glyphicon glyphicon-save dropdown-toggle' data-toggle='dropdown' ></a>\n";
+	html += "<ul class='dropdown-menu' role='menu'>\n";
+	html += "<li><a href='#' download='.csv' title='Save current page as csv file' >Save as CSV file</a></li>\n";
+	html += "<li><a href='#' download='.xls' title='Save current page as Excel file' >Save as Excel file</a></li>\n";
+	html += "</ul>\n";
+	html += "<a class='pull-right btn btn-lg green glyphicon glyphicon-edit' name='EditMode' title='List with edit buttons'></a>\n";
+	html += "</div>\n";
+	html += "</h1>\n";
+
+	
+	html += "<% function getShortVal(val) { if (!val || typeof val != 'string') return val; return (val.length > 10 ? val.substr(0,10) : val).replace(/\"/g, '&#34;').replace(/'/g, '&#39;');} %>\n";
+	html += (json.raw["Header"] ? json.raw["Header"] + "\n" : "");
 //	html += "<form class='navbar-form navbar-left' action='javascrip:doFilter();'>\n<div class='form-group input-group-sm'>Search <input type='text' name='filterstring' class='form-control data-filter' placeholder=''></div><div class='form-group small'><ul class='pager nomargin'><li><a href='javascript:;' filter='' title='Clear'>Clear</a></li></ul></div><div class='form-group small'>" + json.raw["Filter"] + "</div>\n	</form>";
 	html += "<form class='navbar-form navbar-left' action='javascrip:doFilter();'>\n";
 	html += "<div class='form-group small' style='width:230px'><div class='input-group'><input type='text' name='filterstring' class='form-control data-filter' value='<%= (request.u.data[\"condition\"] || \"\") %>' placeholder='Search in page'>\n";
@@ -381,7 +395,7 @@ function toList(json) {
 	"	<script type='text/javascript'>  \n" +
 	"	$('.datesection').each(function() { $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pickTime: false, pick12HourFormat: false});  $(this).change(); }); \n" +
 	"	$('.timesection').each(function() { $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pickDate: false, pick12HourFormat: false});  $(this).change();}); \n" +
-	"	$('.datetimesection').each(function() { var pk = $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pick12HourFormat: false}); $(this).val(new Date().format($(this).attr('data-format')));  $(this).change();}); \n" +
+	"	$('.datetimesection').each(function() { var pk = $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pick12HourFormat: false}); if ($(this).val() == '') $(this).val(new Date().format($(this).attr('data-format')));  $(this).change();}); \n" +
 	"\n" +
 	" </script>\n";
 	}
@@ -392,6 +406,8 @@ function toList(json) {
 "		if (empty) {this.parentNode.removeChild(this);} else {$(this).removeClass('hidden');}\n" + 
 "	});\n summary();" + 
 "</script>\n";
+
+	html += (json.raw["Footer"] ? json.raw["Footer"] + "\n" : "");
 	return html;
 }
 
@@ -880,7 +896,7 @@ if ( html.contains("datesection") || html.contains("timesection")) {
 "	<script type='text/javascript'>  \n" +
 "	$('.datesection').each(function() { $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pickTime: false, pick12HourFormat: false});  $(this).change(); }); \n" +
 "	$('.timesection').each(function() { $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pickDate: false, pick12HourFormat: false});  $(this).change();}); \n" +
-"	$('.datetimesection').each(function() { var pk = $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pick12HourFormat: false}); $(this).val(new Date().format($(this).attr('data-format')));  $(this).change();}); \n" +
+"	$('.datetimesection').each(function() { var pk = $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pick12HourFormat: false}); if ($(this).val() == '') $(this).val(new Date().format($(this).attr('data-format')));  $(this).change();}); \n" +
 "\n" +
 " </script>\n";
 }

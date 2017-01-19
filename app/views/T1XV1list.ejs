@@ -11,6 +11,11 @@
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="/css/font-awesome-ie7.min.css">
 	<![endif]-->
+	<!--[if lte IE 9]>
+	<script src="/js/html5shiv.min.js"></script>
+	<script src="/js/respond.min.js"></script>
+	<script src="/js/json2.min.js"></script>
+	<![endif]-->
 	<link rel='stylesheet' href='/css/style.css' />
 	<script src="/js/jquery.js"></script>
 	<script src="/js/jquery.cookie.js"></script>
@@ -21,19 +26,18 @@
     <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
-<body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body style="background-color: #f7f7f9">
+<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
 			<a name="top" />
-          <a class="navbar-brand" href="/tangrammy">Tangrammy</a>
+          <a class="navbar-brand" href="/">精益管理</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
-            			<li ><a href='/' title=''>Home</a></li>
-			<li ><a href='/issues/list' title=''>Issues</a></li>
+            			<li class='active'><a href='/zcar/list' title=''>ZCar</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
-			<li class='active'><a href='/zcar/list' title=''>ZCar</a></li>
+			<li ><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -62,10 +66,20 @@
         </div><!--/.nav-collapse -->
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
-    </div>
-	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
+</header>
+<div style="background-color: #FFF; padding-top:60px;"><div id="container" class="container">
 	
-<h1>ZCar  <small><a class="btn btn-link" href="/zcar/new" name="submit"><img src="/img/add.png">新任务</a></small></h1>
+<h1>ZCar  <small><a class="btn btn-link" href="/zcar/new" name="submit"><img src="/img/add.png">新任务</a></small><div class='btn-group pull-right'>
+<a class='btn btn-lg btn-link glyphicon glyphicon-save dropdown-toggle' data-toggle='dropdown' ></a>
+<ul class='dropdown-menu' role='menu'>
+<li><a href='#' download='.csv' title='Save current page as csv file' >Save as CSV file</a></li>
+<li><a href='#' download='.xls' title='Save current page as Excel file' >Save as Excel file</a></li>
+</ul>
+<a class='pull-right btn btn-lg green glyphicon glyphicon-edit' name='EditMode' title='List with edit buttons'></a>
+</div>
+</h1>
+<% function getShortVal(val) { if (!val || typeof val != 'string') return val; return (val.length > 10 ? val.substr(0,10) : val).replace(/"/g, '&#34;').replace(/'/g, '&#39;');} %>
+<div style="text-align: right;"><span style="line-height: 1.42857143;"><font color="#800000">sdfasdf</font></span></div>
 <form class='navbar-form navbar-left' action='javascrip:doFilter();'>
 <div class='form-group small' style='width:230px'><div class='input-group'><input type='text' name='filterstring' class='form-control data-filter' value='<%= (request.u.data["condition"] || "") %>' placeholder='Search in page'>
 <div class='input-group-btn'><a class='btn btn-default' filter='' title='Clear search text'>X</a></div></div></div>
@@ -74,14 +88,7 @@
 </div>
 	</form><div class='col-md-6 hidden'>
 <div class='input-group'><input type='text' name='condition' class='form-control'><span name='search' class='input-group-addon glyphicon glyphicon-search'></span></div>
-	</div><% function getF3(val) { 
-  var opts = ""; 
-  val = "," + (val || "") + ","; 
-  if (val.contains( "," + "0" + ",")) {    opts += "<img src=' /img/s/f7.png '> "; } 
-   if (val.contains( "," + "1" + ",")) {    opts += "<img src='/img/s/f4.png'> "; } 
-   if (val.contains( "," + "2" + ",")) {    opts += "<img src='/img/s/f5.png'> "; } 
-   return opts; } %>
-<% function getF2(val) { 
+	</div><% function getF2(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
   if (val.contains( "," + "0" + ",")) {    opts += "<img src='/img/s/b1.png'> "; } 
@@ -93,16 +100,12 @@
 <div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='zcar'></div><table class='table table-hover'>
   <thead>
 	<tr><th class='wid30' Fid='F5'>ID</th>
-<th class='wid20' Fid='F3'>P</th>
 <th class='wid20' Fid='F2'>S</th>
 <th class='wid90' Fid='diy'></th>
-<th Fid='F0'>任务</th>
-<th class='col-md-2' Fid='F4' width='undefined'>Owner</th>
-<th Fid='F6' class='' width='90px'>发布日期</th>
-<th Fid='F7' class='' width='90px'>开始日期</th>
+<th Fid='F0' class=''>任务</th>
+<th Fid='F6' class='' width='150px'>预计完成日期</th>
+<th class='' Fid='F7'>开始日期</th>
 <th Fid='F8' class='' width='90px'>结束日期</th>
-<th class='number ' Fid='F10' width='60px'>代码量</th>
-<th class='number ' Fid='F11' width='60px'>Bug量</th>
 <th class='wid30' Fid='edit'></th>
 <th class='wid30' Fid='copy'></th>
 <th class='wid30' Fid='remove'></th>
@@ -111,33 +114,29 @@
   </thead>
   <tbody>
 	<% if(data.length < 1) { %>
-	<tr><td colspan="14">No recorder yet. Add one now? <a class="btn btn-link" href="/zcar/new" name="submit"><img src="/img/add.png">新任务</a></td></tr>	<% }
+	<tr><td colspan="10">No recorder yet. Add one now? <a class="btn btn-link" href="/zcar/new" name="submit"><img src="/img/add.png">新任务</a></td></tr>	<% }
  var group = ""; for(var item in data) { 
-if (data[item]["F6"] != group) { group = data[item]["F6"]; %> <tr class="group"><th colspan="14"><b class="glyphicon glyphicon-minus-sign"></b> 发布日期: <%= group %> </th></tr> <% } %><tr Rid='<%= data[item]["Rid"] %>'><td class="wid30" Fid="F5"><%- (data[item]["F5"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
-<td class="wid20" Fid="F3"><%- getF3(data[item]["F3"]) %></td>
-<td class="wid20" Fid="F2"><%- getF2(data[item]["F2"]) %></td>
-<td class="wid90"><div class='btn-group btn-group-xs'><a class="btn btn-default" name="submit" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=3"><font color="#555555">完成</font></a>
+ %><tr Rid='<%= data[item]["Rid"] %>'><td class="wid30" Fid="F5" val="<%= getShortVal(data[item]["F5"]) %>" ><%- (data[item]["F5"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
+<td class="wid20" Fid="F2" val="<%= getShortVal(data[item]["F2"]) %>" ><%- getF2(data[item]["F2"]) %></td>
+<td class="wid90"><div class='btn-group btn-group-xs'><a class="btn btn-default" name="oneupdate" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=3"><font color="#555555">完成</font></a>
 
 <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">&#20;<span class="caret"></span></a>
 
 <ul class="dropdown-menu" role="menu">
 <li><a name="oneupdate" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=1" class="green"><font color="#008000">实施</font></a>
 </li>
-<li><a name="submit" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=2" class="orange"><font color="#ff6600">暂停</font></a>
+<li><a name="oneupdate" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=2" class="orange"><font color="#ff6600">暂停</font></a>
 </li>
-<li><a name="oneupdate" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=4" class=""><font color="#000000">关闭</font></a>
+<li><a name="oneremove" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=4" class=""><font color="#000000">关闭</font></a>
 </li>
-<li><a name="submit" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=0" class="blue"><font color="#000080">规划</font></a>
+<li><a name="oneupdate" url="/zcar/update?Rid=<%= data[item]["Rid"] %>&format=json&F2=0" class="blue"><font color="#000080">规划</font></a>
 </li></ul>
 </div>
 </td>
-<td Fid="F0"><a  class="" href="/zcar/show?Rid=<%= data[item]["Rid"] %>" title="Click for detail information"><%= ("F0" in data[item]) ? data[item]["F0"] : "" %></a></td>
-<td class="col-md-2" Fid="F4" width="undefined"><%- (data[item]["F4"] || "").replace(/(\r\n)|(\r)|(\n)/g, "<br />") %></td>
-<td Fid="F6" class="" width="90px"><%= (data[item]["F6"] || "") %></td>
-<td Fid="F7" class="" width="90px"><%= (data[item]["F7"] || "") %></td>
-<td Fid="F8" class="" width="90px"><%= (data[item]["F8"] || "") %></td>
-<td class="" Fid="F10" width="60px"><%= ("F10" in data[item]) ? data[item]["F10"] : "" %></td>
-<td class="" Fid="F11" width="60px"><%= ("F11" in data[item]) ? data[item]["F11"] : "" %></td>
+<td Fid="F0" val="<%= getShortVal(data[item]["F0"]) %>"  class=""><a  class="" href="/zcar/show?Rid=<%= data[item]["Rid"] %>" title="Click for detail information"><%= ("F0" in data[item]) ? data[item]["F0"] : "" %></a></td>
+<td Fid="F6" val="<%= getShortVal(data[item]["F6"]) %>"  class="" width="150px"><%= (data[item]["F6"] || "") %></td>
+<td class="" Fid="F7" val="<%= getShortVal(data[item]["F7"]) %>" ><%= (data[item]["F7"] || "") %></td>
+<td Fid="F8" val="<%= getShortVal(data[item]["F8"]) %>"  class="" width="90px"><%= (data[item]["F8"] || "") %></td>
 <td class="wid30"><a href="/zcar/update?Rid=<%= data[item]["Rid"] %>" title=""><img src="/img/edit.png"></a></td>
 <td class="wid30"><a href="/zcar/copy?Rid=<%= data[item]["Rid"] %>" title=""><img src="/img/copy.png"></a></td>
 <td class="wid30"><a name="remove" href="javascript:;" url="/zcar/remove?Rid=<%= data[item]["Rid"] %>" name="delete" title=""><img src="/img/remove.png"></a></td>
@@ -156,6 +155,7 @@ if (data[item]["F6"] != group) { group = data[item]["F6"]; %> <tr class="group">
 		if (empty) {this.parentNode.removeChild(this);} else {$(this).removeClass('hidden');}
 	});
  summary();</script>
+<br>
 
 	<div class="go-top">
 	<div class="btn-group">
@@ -187,21 +187,40 @@ if (data[item]["F6"] != group) { group = data[item]["F6"]; %> <tr class="group">
     </div>
   </div>
 </div>
-	<hr />
-	<footer>
+	<a name="bottom" > </a>
+</div></div>
+	
+<footer style="border-top: 1px solid #e1e1e8; padding: 15px 0;">
+<div class="container padding0">
 	<div class="col-md-12 form-group small">
-		<ul class="pager nomargin pull-left">
-		<li><label>推荐网站:</label></li>
-		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
-		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>推荐网站: </label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#" target="_blank" title="">Angular Strap</a></li>
+		<li><a href="http://www.apjs.net/" target="_blank" >Angular中文网</a></li>
+		<li><a href="http://docs.ngnice.com/api/ng/service/$q" target="_blank" >Angular API</a></li>
+		<li><a href="http://www.whycss.com/" target="_blank" >前端网址导航</a></li>
+		<li><a href="http://ionichina.cn/docs/components/" target="_blank" >Ionic</a></li>
+		<li><a href="http://codepen.io/ionic/public-list/" target="_blank" >Ionic Codes</a></li>
+		<li><a href="http://www.bootcss.com/p/layoutit/#" target="_blank" >Bootstrap布局</a></li>
+		</ul>
+	</div>
+	<div class="col-md-12 form-group small">
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>友情链接: </label></li>
+		<li><a href="http://kunkkawu.com" target="_blank" title="吴坤的博客">吴坤的博客</a></li>
+		<li><a href="http://www.yaozihao.cn" target="_blank" title="子豪的博客">子豪的博客</a></li>
+		<li><a href="http://www.cnblogs.com/itman70s" target="_blank">Job的博客</a></li>
+		<li><a href="http://itman70s.github.io/richtext/" target="_blank">富文本控件</a></li>
+		<li><label>小工具: </label></li>
+		<li><a href="/base64.html" target="_blank">Base64转换</a></li>
+		<li><a href="/super.html" title="代码同步等小工具">小工具</a></li>		
+		<li><a href="#" download=".xls" title="尝试下载当前页面数据">下载</a></li>		
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2016
 	</div>
-	</footer>
-	</div>
-	<a name="bottom" > </a>
+</div>
+</footer>
 </body>
 </html>
-

@@ -4,6 +4,7 @@ logs/
 *.bak
 app/node_modules/
 
+app/views/
 *.pydevproject
 .project
 .metadata

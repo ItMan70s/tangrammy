@@ -11,6 +11,11 @@
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="/css/font-awesome-ie7.min.css">
 	<![endif]-->
+	<!--[if lte IE 9]>
+	<script src="/js/html5shiv.min.js"></script>
+	<script src="/js/respond.min.js"></script>
+	<script src="/js/json2.min.js"></script>
+	<![endif]-->
 	<link rel='stylesheet' href='/css/style.css' />
 	<script src="/js/jquery.js"></script>
 	<script src="/js/jquery.cookie.js"></script>
@@ -21,19 +26,18 @@
     <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
-<body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body style="background-color: #f7f7f9">
+<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
 			<a name="top" />
-          <a class="navbar-brand" href="/tangrammy">Tangrammy</a>
+          <a class="navbar-brand" href="/">精益管理</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
-            			<li ><a href='/' title=''>Home</a></li>
-			<li ><a href='/issues/list' title=''>Issues</a></li>
+            			<li class='active'><a href='/zcar/list' title=''>ZCar</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
-			<li class='active'><a href='/zcar/list' title=''>ZCar</a></li>
+			<li ><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -62,8 +66,8 @@
         </div><!--/.nav-collapse -->
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
-    </div>
-	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
+</header>
+<div style="background-color: #FFF; padding-top:60px;"><div id="container" class="container">
 	
 <h1>任务详细</h1>
 
@@ -79,13 +83,13 @@
 <div class='form-show' readonly=true><% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left col-md-auto'><img src='/img/s/b1.png'><span class='blue'>Initial</span></span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left col-md-auto'><img src='/img/s/b2.png'><span class='green'>In progress</span></span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left col-md-auto'><span class='orange'><img src=' /img/s/b4.png '>Paused</span></span> <% } %><% if (val.contains( "," + "3" + ",")) { %> <span class='pull-left col-md-auto'><span class='black'><img src=' /img/s/b7.png '>Finished</span></span> <% } %><% if (val.contains( "," + "4" + ",")) { %> <span class='pull-left col-md-auto'><img src=' /img/s/b6.png '> Released</span> <% } %></div></div>
 <div class="col-md-12"><label class='control-label title-label'>Priority<B class='red'>*</B></label>
 <div class='form-show' readonly=true><% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><% if (val.contains( "," + "0" + ",")) { %> <span class='pull-left col-md-auto'><img src=' /img/s/f7.png '>Low</span> <% } %><% if (val.contains( "," + "1" + ",")) { %> <span class='pull-left col-md-auto'><img src='/img/s/f4.png'><span class='orange'>Medium</span></span> <% } %><% if (val.contains( "," + "2" + ",")) { %> <span class='pull-left col-md-auto'><img src='/img/s/f5.png'><span class='red'>High</span></span> <% } %></div></div>
-<div class="col-md-12"><label class='control-label title-label'>Owner<B class='red'>*</B></label>
+<div class="col-md-12"><label class='control-label title-label'>Owner</label>
 		<div class='form-show' readonly=true><%- ((data["F4"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div>
-<div class="col-md-12"><label class='control-label title-label'>发布日期<B class='red'>*</B></label>
+<div class="col-md-4"><label class='control-label title-label'>发布日期<B class='red'>*</B></label>
 		<div class='form-show' readonly=true ><%= (data["F6"] || '') %></div></div>
-<div class="col-md-12"><label class='control-label title-label'>开始日期</label>
+<div class="col-md-4"><label class='control-label title-label'>开始日期</label>
 		<div class='form-show' readonly=true ><%= (data["F7"] || '') %></div></div>
-<div class="col-md-12"><label class='control-label title-label'>完成日期</label>
+<div class="col-md-4"><label class='control-label title-label'>完成日期</label>
 		<div class='form-show' readonly=true ><%= (data["F8"] || '') %></div></div>
 <div class="col-md-12"><label class='control-label title-label'>说明</label>
 		<div class='form-show' readonly=true><%- ((data["F9"] || '') + '').replace(/(\r\n)|(\r)|(\n)/g, '<br />') %></div></div><div class="col-md-12"><label class='control-label title-label'>代码行数</label>
@@ -99,7 +103,7 @@
 <div class="col-md-0"><a class="btn btn-default"  href="/zcar/new" style="min-width:80px;" title=""><img src="/img/add.png">Add new</a></div>
 </div></div>
 <span name='history' class='col-md-12'></span>
-	</div></div>
+<script type='text/javascript'>getOPLogs('T1', 'V1', '<%= data["Rid"] %>');</script>	</div></div>
 
 	<div class="go-top">
 	<div class="btn-group">
@@ -131,21 +135,40 @@
     </div>
   </div>
 </div>
-	<hr />
-	<footer>
+	<a name="bottom" > </a>
+</div></div>
+	
+<footer style="border-top: 1px solid #e1e1e8; padding: 15px 0;">
+<div class="container padding0">
 	<div class="col-md-12 form-group small">
-		<ul class="pager nomargin pull-left">
-		<li><label>推荐网站:</label></li>
-		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
-		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>推荐网站: </label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#" target="_blank" title="">Angular Strap</a></li>
+		<li><a href="http://www.apjs.net/" target="_blank" >Angular中文网</a></li>
+		<li><a href="http://docs.ngnice.com/api/ng/service/$q" target="_blank" >Angular API</a></li>
+		<li><a href="http://www.whycss.com/" target="_blank" >前端网址导航</a></li>
+		<li><a href="http://ionichina.cn/docs/components/" target="_blank" >Ionic</a></li>
+		<li><a href="http://codepen.io/ionic/public-list/" target="_blank" >Ionic Codes</a></li>
+		<li><a href="http://www.bootcss.com/p/layoutit/#" target="_blank" >Bootstrap布局</a></li>
+		</ul>
+	</div>
+	<div class="col-md-12 form-group small">
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>友情链接: </label></li>
+		<li><a href="http://kunkkawu.com" target="_blank" title="吴坤的博客">吴坤的博客</a></li>
+		<li><a href="http://www.yaozihao.cn" target="_blank" title="子豪的博客">子豪的博客</a></li>
+		<li><a href="http://www.cnblogs.com/itman70s" target="_blank">Job的博客</a></li>
+		<li><a href="http://itman70s.github.io/richtext/" target="_blank">富文本控件</a></li>
+		<li><label>小工具: </label></li>
+		<li><a href="/base64.html" target="_blank">Base64转换</a></li>
+		<li><a href="/super.html" title="代码同步等小工具">小工具</a></li>		
+		<li><a href="#" download=".xls" title="尝试下载当前页面数据">下载</a></li>		
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2016
 	</div>
-	</footer>
-	</div>
-	<a name="bottom" > </a>
+</div>
+</footer>
 </body>
 </html>
-

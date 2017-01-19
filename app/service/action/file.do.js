@@ -5,8 +5,10 @@ var fs = require('fs');
 var path = require('path');
 var mongo = require('../core/mongo.db.js');
 var cps = require('../core/components.js');
-var setting = require('../../settings.js');
+var settings = require('../../settings.js');
 var zlib = require("zlib");
+var multiparty = require('multiparty');
+
 /*
 
 var field = require('../core/fields.js');
@@ -225,100 +227,78 @@ function get(req, res) {
 	}
 }
 function upload(req, res) {
-	
-    var name = req.files.file.name;
-	if (name.lastIndexOf(".") > 0) {
-		name = name.substr(name.lastIndexOf("."));
-	} else {
-		name = "";
-	}
-	 
-	name = ((new Date() - 1400371200000) + "").toN32() + name;
-	var root = "web/u";
-	if (name.match(/^.*\.(gif|png|jpg|jpeg|ico|bmp|tif|tiff|tga|svg|ai|hdri)$/ig)) {
-		name = root + "/img/" + name;
-	} else if (name.match(/^.*\.(wmv|asf|asx|rm|rmvb|mpg|mpeg|mpe|dat|vob|dv|3gp|3g2|mov|avi|mkv|mp4|m4v|flv)$/ig)) {
-		name = root + "/mv/" + name;
-	} else if (name.match(/^.*\.(js|css|txt|tsv|csv|doc|docx|docm|hlp|xps|wps|rtf|htm|html|pdf|xml|xslt|xsd|odt|chm|ppt|pptx|xls|xlsx)$/ig)) {
-		name = root + "/doc/" + name;
-	} else if (name.match(/^.*\.(exe|com|bat|sh|cmd)$/ig)) {
-		name = root + "/bin/" + name;
-	} else if (name.match(/^.*\.(rar|zip|arj|gz|z|7z)$/ig)) {
-		name = root + "/zip/" + name;
-	} else {
-		name = root + "/unk/" + name;
-	}
-	var app = req.url.mid("/upload/");
-	var data = {};
-	data["app"] = app;
-	data["filepath"] = name;
-	data["url"] = name.substr(3);
-	data["realname"] = req.files.file.name;
-	data["size"] = req.files.file.size;
-	data["owner"] = req.u.user.name + "(" + req.u.user.email + ")";
-	data["ownerid"] = req.u.user.Rid;
-	data["timestamp"] = (new Date() - 0);
-	
-	fs.appendFileSync( root + "/list.txt", JSON.stringify(data) + "\r\n");
-	log.info("ssid[" + req.u.ssid + "] " + req.method + "  " + name + "\norignal file:" + req.files.file.path);
+	//生成multiparty对象，并配置上传目标路径
+	var form = new multiparty.Form({uploadDir: settings.files.uploadDir});
+	//上传完成后处理
+	form.parse(req, function(err, fields, files) {
+		var filesTmp = JSON.stringify(files,null,2);
 /*
-	files: Object
-file: Object
-fieldName: "file"
-headers: Object
-name: "pics4.cxf"
-originalFilename: "pics4.cxf"
-path: "public\upload\11904-1s5xqgu.cxf"
-size: 2155
-type: "application/octet-stream"
-*/
+  "file": [
+    {
+      "fieldName": "file",
+      "originalFilename": "3.PNG",
+      "path": "web\\u\\-aUThxoihSbDZntxDOzoVU7w.PNG",
+      "headers": {
+        "content-disposition": "form-data; name=\"file\"; filename=\"3.PNG\"",
+        "content-type": "image/png"
+      },
+      "size": 191235
+    }
+  ]
+  */
+		if(err){
+		  console.log('parse error: ' + err);
+			res.end(JSON.stringify(err));
+		} else {
+			console.log('parse files: ' + filesTmp);
+			var inputFile = files.file[0];
+			var uploadedPath = inputFile.path;
+			var dstPath = settings.files.uploadDir + inputFile.originalFilename;    
+			
+			var name = inputFile.originalFilename;
+			if (name.lastIndexOf(".") > 0) {
+				name = name.substr(name.lastIndexOf("."));
+			} else {
+				name = "";
+			}
+			 
+			name = ((new Date() - 1400371200000) + "").toN32() + name;
+			var root = "web/u";
+			if (name.match(/^.*\.(gif|png|jpg|jpeg|ico|bmp|tif|tiff|tga|svg|ai|hdri)$/ig)) {
+				name = root + "/img/" + name;
+			} else if (name.match(/^.*\.(wmv|asf|asx|rm|rmvb|mpg|mpeg|mpe|dat|vob|dv|3gp|3g2|mov|avi|mkv|mp4|m4v|flv)$/ig)) {
+				name = root + "/mv/" + name;
+			} else if (name.match(/^.*\.(js|css|txt|tsv|csv|doc|docx|docm|hlp|xps|wps|rtf|htm|html|pdf|xml|xslt|xsd|odt|chm|ppt|pptx|xls|xlsx)$/ig)) {
+				name = root + "/doc/" + name;
+			} else if (name.match(/^.*\.(exe|com|bat|sh|cmd)$/ig)) {
+				name = root + "/bin/" + name;
+			} else if (name.match(/^.*\.(rar|zip|arj|gz|z|7z)$/ig)) {
+				name = root + "/zip/" + name;
+			} else {
+				name = root + "/unk/" + name;
+			}
+			var app = req.url.mid("/upload/");
+			var data = {};
+			data["app"] = app;
+			data["filepath"] = name;
+			data["url"] = name.substr(3);
+			data["realname"] = inputFile.originalFilename;
+			data["size"] = inputFile.size;
+			data["owner"] = req.u.user.name + "(" + req.u.user.email + ")";
+			data["ownerid"] = req.u.user.Rid;
+			data["timestamp"] = (new Date() - 0);
 
-	// 移动文件
-    fs.rename(req.files.file.path, name, function(err) {
-      // if (err) throw err;
-		//res.json(data);
-		res.end(JSON.stringify(data));
-	  /*
-      // 删除临时文件夹文件, 
-      fs.unlink(req.files.file.path, function() {
-         if (err) throw err;
-         res.send('File uploaded to: ' + name + ' - ' + req.files.file.size + ' bytes');
-		res.end();
-      });
-	  */
-	})
-	
-	/*
-	  最后回答文章开头的那几个问题：
+			fs.appendFileSync( root + "/list.txt", JSON.stringify(data) + "\r\n");
+			log.info("ssid[" + req.u.ssid + "] " + req.method + "  " + name + "\norignal file:" + inputFile.path);
 
-问：如何限制图片大小
-if(req.files.image.size >307200)// 300 * 1024{
-    msg +='File size no accepted. Max: 300k;
-}
- 
-
-问：如何显示上传进度
-req.form.on('progress',function(bytesReceived, bytesExpected){
-    console.log(((bytesReceived / bytesExpected)*100)+"% uploaded");});
- 
-
-问：如何修改文件名
-var fs =require('fs');
-fs.renameSync(req.files.image.path,'public/files/img'+ new_name);
-本文同时也发布在我的个人博客qingbob
-
-app.configure(function(){
-    app.use(express.bodyParser({
-          keepExtensions:true,
-          limit:10000000,// 10M limit
-          defer:true//enable event            }));})
-
-app.post('/upload',function(req, res){//bind event handler
-    req.form.on('progress',function(bytesReceived, bytesExpected){});
-    req.form.on('end',function(){
-        console.log(req.files);
-        res.send("done");});})
-	  */
+			// 移动文件
+			fs.rename(uploadedPath, name, function(err) {
+			  // if (err) throw err;
+				//res.json(data);
+				res.end(JSON.stringify(data));
+			})
+		}
+	});
 }
 
 

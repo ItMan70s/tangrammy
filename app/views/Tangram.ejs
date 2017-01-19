@@ -11,6 +11,11 @@
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="/css/font-awesome-ie7.min.css">
 	<![endif]-->
+	<!--[if lte IE 9]>
+	<script src="/js/html5shiv.min.js"></script>
+	<script src="/js/respond.min.js"></script>
+	<script src="/js/json2.min.js"></script>
+	<![endif]-->
 	<link rel='stylesheet' href='/css/style.css' />
 	<script src="/js/jquery.js"></script>
 	<script src="/js/jquery.cookie.js"></script>
@@ -21,19 +26,18 @@
     <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
-<body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body style="background-color: #f7f7f9">
+<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header active">
 			<a name="top" />
-          <a class="navbar-brand" href="/tangrammy">Tangrammy</a>
+          <a class="navbar-brand" href="/">精益管理</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
-            			<li><a href='/' title=''>Home</a></li>
-			<li><a href='/issues/list' title=''>Issues</a></li>
-			<li><a href='/todo/list' title=''>Todo</a></li>
-			<li><a href='/zcar/list' title=''>ZCar</a></li>
+            			<li><a href='/zcar/list' title=''>ZCar</a></li>
+			<li><a href='/todo/list' title=''>任务<br></a></li>
+			<li><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -62,11 +66,11 @@
         </div><!--/.nav-collapse -->
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
-    </div>
-	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
+</header>
+<div style="background-color: #FFF; padding-top:60px;"><div id="container" class="container">
 	
 	<div class="well">
-		<h1 class="text-center" style="font-size: 48px;">TangramMy</h1>
+		<h2 style="margin-top: 0px;">Tangrammy</h2>
 		<p>The tangrammy is a system enable DIY your own services. Its idea comes from <a target="_blank" href="http://en.wikipedia.org/wiki/Tangram"><img src="/img/favicon.ico">tangram</a>, and is implemented by NodeJS, Bootstrap, jQuery.
  		<ul><li>Builds service fast - it takes <0.5 hour to build a new service.</li>
 		<li>Changes with needs - it is easy to make changes to achive new requirement.</li>
@@ -75,11 +79,13 @@
 <div class="col-md-12"><div class="row">
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=4BC523J&Title=" contenteditable="true">Booking</span> <small>(T9.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=4BC523J&Title=" contenteditable="true" orginal="Title4BC523J">Booking</span> <small>(T9.V1)</small> </h3>
+		<p name="Title4BC523J" class="hide" >Booking</p>
 		<small><a href="/booking/list">http://~/booking/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=4BC523J&Description=" contenteditable="true">Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p>
+		<p name="blurupdate" url="/T/update?Rid=4BC523J&Description=" contenteditable="true" orginal="Description4BC523J">Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p>
+		<p name="Description4BC523J" class="hide" >Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=4BC523J" title="Rebuild application[Booking] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=4BC523J&format=json" title="Rebuild application[Booking] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=4BC523J" title="View define detail of application[Booking]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=4BC523J" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=4BC523J&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -90,11 +96,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V3")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=13BEJ2AU&Title=" contenteditable="true">Booking3</span> <small>(T9.V3)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=13BEJ2AU&Title=" contenteditable="true" orginal="Title13BEJ2AU">Booking3</span> <small>(T9.V3)</small> </h3>
+		<p name="Title13BEJ2AU" class="hide" >Booking3</p>
 		<small><a href="/booking3/list">http://~/booking3/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=13BEJ2AU&Description=" contenteditable="true">Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p>
+		<p name="blurupdate" url="/T/update?Rid=13BEJ2AU&Description=" contenteditable="true" orginal="Description13BEJ2AU">Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p>
+		<p name="Description13BEJ2AU" class="hide" >Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=13BEJ2AU" title="Rebuild application[Booking3] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=13BEJ2AU&format=json" title="Rebuild application[Booking3] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=13BEJ2AU" title="View define detail of application[Booking3]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=13BEJ2AU" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=13BEJ2AU&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -105,11 +113,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T6/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=3WCH4TG&Title=" contenteditable="true">Books</span> <small>(T6.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=3WCH4TG&Title=" contenteditable="true" orginal="Title3WCH4TG">Books</span> <small>(T6.V1)</small> </h3>
+		<p name="Title3WCH4TG" class="hide" >Books</p>
 		<small><a href="/books/list">http://~/books/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=3WCH4TG&Description=" contenteditable="true">读书</p>
+		<p name="blurupdate" url="/T/update?Rid=3WCH4TG&Description=" contenteditable="true" orginal="Description3WCH4TG">读书</p>
+		<p name="Description3WCH4TG" class="hide" >读书</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3WCH4TG" title="Rebuild application[Books] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3WCH4TG&format=json" title="Rebuild application[Books] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=3WCH4TG" title="View define detail of application[Books]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=3WCH4TG" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=3WCH4TG&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -120,11 +130,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TB/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=8II9UQ5&Title=" contenteditable="true">Issues</span> <small>(TB.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=8II9UQ5&Title=" contenteditable="true" orginal="Title8II9UQ5">Issues</span> <small>(TB.V1)</small> </h3>
+		<p name="Title8II9UQ5" class="hide" >Issues</p>
 		<small><a href="/issues/list">http://~/issues/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=8II9UQ5&Description=" contenteditable="true">跟踪照护系统的问题</p>
+		<p name="blurupdate" url="/T/update?Rid=8II9UQ5&Description=" contenteditable="true" orginal="Description8II9UQ5">跟踪照护系统的问题</p>
+		<p name="Description8II9UQ5" class="hide" >跟踪照护系统的问题</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=8II9UQ5" title="Rebuild application[Issues] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=8II9UQ5&format=json" title="Rebuild application[Issues] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=8II9UQ5" title="View define detail of application[Issues]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=8II9UQ5" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=8II9UQ5&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -135,11 +147,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T3/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=3N825D1&Title=" contenteditable="true">Links</span> <small>(T3.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=3N825D1&Title=" contenteditable="true" orginal="Title3N825D1">Links</span> <small>(T3.V1)</small> </h3>
+		<p name="Title3N825D1" class="hide" >Links</p>
 		<small><a href="/links/list">http://~/links/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=3N825D1&Description=" contenteditable="true">links</p>
+		<p name="blurupdate" url="/T/update?Rid=3N825D1&Description=" contenteditable="true" orginal="Description3N825D1">links</p>
+		<p name="Description3N825D1" class="hide" >links</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3N825D1" title="Rebuild application[Links] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3N825D1&format=json" title="Rebuild application[Links] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=3N825D1" title="View define detail of application[Links]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=3N825D1" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=3N825D1&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -148,28 +162,15 @@
 		</div>
 	</div>
 <% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("t/V1")) { %>
-	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=3U8H0L7&Title=" contenteditable="true">Money</span> <small>(t.V1)</small> </h3>
-		<small><a href="/Money/list">http://~/Money/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=3U8H0L7&Description=" contenteditable="true">记账</p>
-		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3U8H0L7" title="Rebuild application[Money] to active changes">Rebuild</a>
-			<a href="/T/show?Rid=3U8H0L7" title="View define detail of application[Money]"><img class="icon15" src="/img/detail.png"></a>
-			<a href="/T/update?Rid=3U8H0L7" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
-			<a href="/T/update?Rid=3U8H0L7&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
-			<a href="/T/copy?Rid=3U8H0L7" title="Create a new one based on application[Money]"><img class="icon15" src="/img/copy.png"></a>
-			<a name="remove" href="javascript:;" url="/T/remove?Rid=3U8H0L7" title="Remove application[Money]"><img class="icon15" src="/img/remove.png"></a>
-		</div>
-	</div>
-<% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF0/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=24A6M35&Title=" contenteditable="true">Roles</span> <small>(TF0.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=24A6M35&Title=" contenteditable="true" orginal="Title24A6M35">Roles</span> <small>(TF0.V1)</small> </h3>
+		<p name="Title24A6M35" class="hide" >Roles</p>
 		<small><a href="/roles/list">http://~/roles/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=24A6M35&Description=" contenteditable="true">用于定义系统内的用户角色已经相应的应用访问权限。</p>
+		<p name="blurupdate" url="/T/update?Rid=24A6M35&Description=" contenteditable="true" orginal="Description24A6M35">用于定义系统内的用户角色已经相应的应用访问权限。</p>
+		<p name="Description24A6M35" class="hide" >用于定义系统内的用户角色已经相应的应用访问权限。</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=24A6M35" title="Rebuild application[Roles] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=24A6M35&format=json" title="Rebuild application[Roles] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=24A6M35" title="View define detail of application[Roles]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=24A6M35" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=24A6M35&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -179,11 +180,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V2")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=55IF1LE&Title=" contenteditable="true">Servers</span> <small>(T9.V2)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=55IF1LE&Title=" contenteditable="true" orginal="Title55IF1LE">Servers</span> <small>(T9.V2)</small> </h3>
+		<p name="Title55IF1LE" class="hide" >Servers</p>
 		<small><a href="/servers/list">http://~/servers/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=55IF1LE&Description=" contenteditable="true">Define servers (SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote) in Houston and China to enable make reservation.</p>
+		<p name="blurupdate" url="/T/update?Rid=55IF1LE&Description=" contenteditable="true" orginal="Description55IF1LE">Define servers (SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote) in Houston and China to enable make reservation.</p>
+		<p name="Description55IF1LE" class="hide" >Define servers (SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote) in Houston and China to enable make reservation.</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=55IF1LE" title="Rebuild application[Servers] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=55IF1LE&format=json" title="Rebuild application[Servers] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=55IF1LE" title="View define detail of application[Servers]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=55IF1LE" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=55IF1LE&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -192,28 +195,15 @@
 		</div>
 	</div>
 <% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
-	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=16WRUTP&Title=" contenteditable="true">Todo</span> <small>(T4.V1)</small> </h3>
-		<small><a href="/todo/list">http://~/todo/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=16WRUTP&Description=" contenteditable="true">用于管理项目的各种属于我的事项。 </p>
-		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=16WRUTP" title="Rebuild application[Todo] to active changes">Rebuild</a>
-			<a href="/T/show?Rid=16WRUTP" title="View define detail of application[Todo]"><img class="icon15" src="/img/detail.png"></a>
-			<a href="/T/update?Rid=16WRUTP" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
-			<a href="/T/update?Rid=16WRUTP&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
-			<a href="/T/copy?Rid=16WRUTP" title="Create a new one based on application[Todo]"><img class="icon15" src="/img/copy.png"></a>
-			<a name="remove" href="javascript:;" url="/T/remove?Rid=16WRUTP" title="Remove application[Todo]"><img class="icon15" src="/img/remove.png"></a>
-		</div>
-	</div>
-<% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF1/V3")) { %>
 	<div class="list-app">
-		<h3><small>[Disabled]</small><span name="blurupdate" url="/T/update?Rid=25S65R7&Title=" contenteditable="true">UserLogin</span> <small>(TF1.V3)</small> </h3>
+		<h3><small>[Disabled]</small><span name="blurupdate" url="/T/update?Rid=25S65R7&Title=" contenteditable="true" orginal="Title25S65R7">UserLogin</span> <small>(TF1.V3)</small> </h3>
+		<p name="Title25S65R7" class="hide" >UserLogin</p>
 		<small><a href="/login/list">http://~/login/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=25S65R7&Description=" contenteditable="true">系统内的用户登陆</p>
+		<p name="blurupdate" url="/T/update?Rid=25S65R7&Description=" contenteditable="true" orginal="Description25S65R7">系统内的用户登陆</p>
+		<p name="Description25S65R7" class="hide" >系统内的用户登陆</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=25S65R7" title="Rebuild application[UserLogin] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=25S65R7&format=json" title="Rebuild application[UserLogin] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=25S65R7" title="View define detail of application[UserLogin]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=25S65R7" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=25S65R7&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -223,11 +213,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF1/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=25RFV24&Title=" contenteditable="true">Users</span> <small>(TF1.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=25RFV24&Title=" contenteditable="true" orginal="Title25RFV24">Users</span> <small>(TF1.V1)</small> </h3>
+		<p name="Title25RFV24" class="hide" >Users</p>
 		<small><a href="/users/list">http://~/users/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=25RFV24&Description=" contenteditable="true">Users in current system</p>
+		<p name="blurupdate" url="/T/update?Rid=25RFV24&Description=" contenteditable="true" orginal="Description25RFV24">Users in current system</p>
+		<p name="Description25RFV24" class="hide" >Users in current system</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=25RFV24" title="Rebuild application[Users] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=25RFV24&format=json" title="Rebuild application[Users] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=25RFV24" title="View define detail of application[Users]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=25RFV24" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=25RFV24&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -237,11 +229,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TA/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=4BV5H6K&Title=" contenteditable="true">VMs</span> <small>(TA.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=4BV5H6K&Title=" contenteditable="true" orginal="Title4BV5H6K">VMs</span> <small>(TA.V1)</small> </h3>
+		<p name="Title4BV5H6K" class="hide" >VMs</p>
 		<small><a href="/vms/list">http://~/vms/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=4BV5H6K&Description=" contenteditable="true">VM using by BCS team</p>
+		<p name="blurupdate" url="/T/update?Rid=4BV5H6K&Description=" contenteditable="true" orginal="Description4BV5H6K">VM using by BCS team</p>
+		<p name="Description4BV5H6K" class="hide" >VM using by BCS team</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=4BV5H6K" title="Rebuild application[VMs] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=4BV5H6K&format=json" title="Rebuild application[VMs] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=4BV5H6K" title="View define detail of application[VMs]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=4BV5H6K" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=4BV5H6K&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -252,11 +246,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T7/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=3WFWJJ9&Title=" contenteditable="true">Words</span> <small>(T7.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=3WFWJJ9&Title=" contenteditable="true" orginal="Title3WFWJJ9">Words</span> <small>(T7.V1)</small> </h3>
+		<p name="Title3WFWJJ9" class="hide" >Words</p>
 		<small><a href="/words/list">http://~/words/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=3WFWJJ9&Description=" contenteditable="true">名词解释2</p>
+		<p name="blurupdate" url="/T/update?Rid=3WFWJJ9&Description=" contenteditable="true" orginal="Description3WFWJJ9">名词解释2</p>
+		<p name="Description3WFWJJ9" class="hide" >名词解释2</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3WFWJJ9" title="Rebuild application[Words] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3WFWJJ9&format=json" title="Rebuild application[Words] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=3WFWJJ9" title="View define detail of application[Words]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=3WFWJJ9" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=3WFWJJ9&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -267,11 +263,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V1")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=1GIDHPMA&Title=" contenteditable="true">ZCar</span> <small>(T1.V1)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=1GIDHPMA&Title=" contenteditable="true" orginal="Title1GIDHPMA">ZCar</span> <small>(T1.V1)</small> </h3>
+		<p name="Title1GIDHPMA" class="hide" >ZCar</p>
 		<small><a href="/zcar/list">http://~/zcar/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=1GIDHPMA&Description=" contenteditable="true">用于管理项目的各种属于我的事项。 </p>
+		<p name="blurupdate" url="/T/update?Rid=1GIDHPMA&Description=" contenteditable="true" orginal="Description1GIDHPMA">用于管理项目的各种属于我的事项。 </p>
+		<p name="Description1GIDHPMA" class="hide" >用于管理项目的各种属于我的事项。 </p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=1GIDHPMA" title="Rebuild application[ZCar] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=1GIDHPMA&format=json" title="Rebuild application[ZCar] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=1GIDHPMA" title="View define detail of application[ZCar]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=1GIDHPMA" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=1GIDHPMA&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -282,11 +280,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T1/V2")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=1GJIHC1B&Title=" contenteditable="true">ZCarRelease</span> <small>(T1.V2)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=1GJIHC1B&Title=" contenteditable="true" orginal="Title1GJIHC1B">ZCarRelease</span> <small>(T1.V2)</small> </h3>
+		<p name="Title1GJIHC1B" class="hide" >ZCarRelease</p>
 		<small><a href="/release/list">http://~/release/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=1GJIHC1B&Description=" contenteditable="true">用于管理项目的各种属于我的事项。 </p>
+		<p name="blurupdate" url="/T/update?Rid=1GJIHC1B&Description=" contenteditable="true" orginal="Description1GJIHC1B">用于管理项目的各种属于我的事项。 </p>
+		<p name="Description1GJIHC1B" class="hide" >用于管理项目的各种属于我的事项。 </p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=1GJIHC1B" title="Rebuild application[ZCarRelease] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=1GJIHC1B&format=json" title="Rebuild application[ZCarRelease] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=1GJIHC1B" title="View define detail of application[ZCarRelease]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=1GJIHC1B" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=1GJIHC1B&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -297,11 +297,13 @@
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T5/V2")) { %>
 	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=3W8AQQW&Title=" contenteditable="true">lend</span> <small>(T5.V2)</small> </h3>
+		<h3><span name="blurupdate" url="/T/update?Rid=3W8AQQW&Title=" contenteditable="true" orginal="Title3W8AQQW">lend</span> <small>(T5.V2)</small> </h3>
+		<p name="Title3W8AQQW" class="hide" >lend</p>
 		<small><a href="/lend/list">http://~/lend/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=3W8AQQW&Description=" contenteditable="true">房贷</p>
+		<p name="blurupdate" url="/T/update?Rid=3W8AQQW&Description=" contenteditable="true" orginal="Description3W8AQQW">房贷</p>
+		<p name="Description3W8AQQW" class="hide" >房贷</p>
 		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3W8AQQW" title="Rebuild application[lend] to active changes">Rebuild</a>
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=3W8AQQW&format=json" title="Rebuild application[lend] to active changes">Rebuild</a>
 			<a href="/T/show?Rid=3W8AQQW" title="View define detail of application[lend]"><img class="icon15" src="/img/detail.png"></a>
 			<a href="/T/update?Rid=3W8AQQW" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=3W8AQQW&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
@@ -310,8 +312,25 @@
 		</div>
 	</div>
 <% } %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
 	<div class="list-app">
-		<h3><small>Rebuild: </small><a name="onemsg" href="javascript:;" url="/T/create">All Applications</a></h3><br />
+		<h3><span name="blurupdate" url="/T/update?Rid=16WRUTP&Title=" contenteditable="true" orginal="Title16WRUTP">任务<br></span> <small>(T4.V1)</small> </h3>
+		<p name="Title16WRUTP" class="hide" >任务<br></p>
+		<small><a href="/todo/list">http://~/todo/list </a> </small> <br /> 
+		<p name="blurupdate" url="/T/update?Rid=16WRUTP&Description=" contenteditable="true" orginal="Description16WRUTP">用于管理项目的各种属于我的事项。 </p>
+		<p name="Description16WRUTP" class="hide" >用于管理项目的各种属于我的事项。 </p>
+		<div class="text-right">
+			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=16WRUTP&format=json" title="Rebuild application[任务<br>] to active changes">Rebuild</a>
+			<a href="/T/show?Rid=16WRUTP" title="View define detail of application[任务<br>]"><img class="icon15" src="/img/detail.png"></a>
+			<a href="/T/update?Rid=16WRUTP" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
+			<a href="/T/update?Rid=16WRUTP&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
+			<a href="/T/copy?Rid=16WRUTP" title="Create a new one based on application[任务<br>]"><img class="icon15" src="/img/copy.png"></a>
+			<a name="remove" href="javascript:;" url="/T/remove?Rid=16WRUTP" title="Remove application[任务<br>]"><img class="icon15" src="/img/remove.png"></a>
+		</div>
+	</div>
+<% } %>
+	<div class="list-app">
+		<h3><small>Rebuild: </small><a name="onemsg" href="javascript:;" url="/T/create?format=json">All Applications</a></h3><br />
 		<p class="text-center"><a href="/T/new" class="btn btn-lg btn-default" title="Add New Application"><img src="/img/add.png"> Application</a></p>
 		<div class="text-right"><a href="https://github.com/ItMan70s/Tangrammy/">View TangramMy on GitHub</a></div>
 </div>
@@ -347,21 +366,40 @@
     </div>
   </div>
 </div>
-	<hr />
-	<footer>
+	<a name="bottom" > </a>
+</div></div>
+	
+<footer style="border-top: 1px solid #e1e1e8; padding: 15px 0;">
+<div class="container padding0">
 	<div class="col-md-12 form-group small">
-		<ul class="pager nomargin pull-left">
-		<li><label>推荐网站:</label></li>
-		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
-		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>推荐网站: </label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#" target="_blank" title="">Angular Strap</a></li>
+		<li><a href="http://www.apjs.net/" target="_blank" >Angular中文网</a></li>
+		<li><a href="http://docs.ngnice.com/api/ng/service/$q" target="_blank" >Angular API</a></li>
+		<li><a href="http://www.whycss.com/" target="_blank" >前端网址导航</a></li>
+		<li><a href="http://ionichina.cn/docs/components/" target="_blank" >Ionic</a></li>
+		<li><a href="http://codepen.io/ionic/public-list/" target="_blank" >Ionic Codes</a></li>
+		<li><a href="http://www.bootcss.com/p/layoutit/#" target="_blank" >Bootstrap布局</a></li>
+		</ul>
+	</div>
+	<div class="col-md-12 form-group small">
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>友情链接: </label></li>
+		<li><a href="http://kunkkawu.com" target="_blank" title="吴坤的博客">吴坤的博客</a></li>
+		<li><a href="http://www.yaozihao.cn" target="_blank" title="子豪的博客">子豪的博客</a></li>
+		<li><a href="http://www.cnblogs.com/itman70s" target="_blank">Job的博客</a></li>
+		<li><a href="http://itman70s.github.io/richtext/" target="_blank">富文本控件</a></li>
+		<li><label>小工具: </label></li>
+		<li><a href="/base64.html" target="_blank">Base64转换</a></li>
+		<li><a href="/super.html" title="代码同步等小工具">小工具</a></li>		
+		<li><a href="#" download=".xls" title="尝试下载当前页面数据">下载</a></li>		
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2016
 	</div>
-	</footer>
-	</div>
-	<a name="bottom" > </a>
+</div>
+</footer>
 </body>
 </html>
-

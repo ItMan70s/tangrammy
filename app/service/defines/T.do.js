@@ -99,6 +99,14 @@ function __new(res, recorder) {
 	if (!recorder.action) {
 		recorder.action = "/T/update";
 	}
+	var encodeFields = ["JSNew", "JSEdit", "JSShow", "JSSave"];
+	for (var i in encodeFields) {
+		var fid = encodeFields[i];
+		if (!recorder.data[fid]) {
+			continue;
+		}
+		recorder.data[fid] = recorder.data[fid].replace(/&/g, "&amp;").replace(/"/g, "&#34;").replace(/'/g, "&#39;").replace(/\r/g, "&#10;").replace(/\n/g, "&#13;").replace(/\</g, "&lt;").replace(/\>/g, "&gt;").replace(/\\/g, "&#92;");
+	}
 	recorder.app = "/tangrammy";
 	recorder.fields = __fields(recorder.data["Tid"]);
 	recorder.total = recorder.fields["total"] + 4;
@@ -706,16 +714,23 @@ function __refreshAppList(lst) {
 			cols = 0;
 		}
 	}
+	items += '<% if (request.u.apps && request.u.apps.contains("*")) { %>\r\n	<div class="col-md-3" style="border: 1px solid #ccc;">\r\n' + 
+			'		<h2><a href="/tangrammy">Tangrammy</a></h2>\r\n' + 
+			'		<div style="height: 60px; overflow: hidden;"><p>Define/edit/rebuild applications.</p></div>\r\n' + 
+			'		<p class="text-right"><a href="/tangrammy" role="button">Details »</a></p>\r\n' + 
+			'	</div>\r\n<% } %>\r\n';
 	items += '</div></div>\r\n';
 	cols = 0;
 	for (var it = lst.length - 1; it > -1; it--) {
 		// items for Tangrammy page
 		defines += '<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("' + lst[it]["Tid"] + '/' + lst[it]["Vid"] + '")) { %>\r\n	<div class="list-app">\r\n' + 						
-'		<h3>' + (lst[it]["Status"] == "disabled" ? "<small>[Disabled]</small>" : (lst[it]["Status"] == "hidden" ? "<small>[Hidden]</small>" : "")) + '<span name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Title=" contenteditable="true">' + lst[it]["Title"] + '</span> <small>(' + lst[it]["Tid"] + '.' + lst[it]["Vid"] + ')</small> </h3>\r\n' + 
+'		<h3>' + (lst[it]["Status"] == "disabled" ? "<small>[Disabled]</small>" : (lst[it]["Status"] == "hidden" ? "<small>[Hidden]</small>" : "")) + '<span name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Title=" contenteditable="true" orginal="Title' + lst[it]["Rid"] + '">' + lst[it]["Title"] + '</span> <small>(' + lst[it]["Tid"] + '.' + lst[it]["Vid"] + ')</small> </h3>\r\n' + 
+'		<p name="Title' + lst[it]["Rid"] + '" class="hide" >' + lst[it]["Title"] + '</p>\r\n' + 
 '		<small><a href="/' + lst[it]["URL"] + '/list">http://~/' + lst[it]["URL"] + '/list </a> </small> <br /> \r\n' + 
-'		<p name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Description=" contenteditable="true">' + lst[it]["Description"] + '</p>\r\n' + 
+'		<p name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Description=" contenteditable="true" orginal="Description' + lst[it]["Rid"] + '">' + lst[it]["Description"] + '</p>\r\n' + 
+'		<p name="Description' + lst[it]["Rid"] + '" class="hide" >' + lst[it]["Description"] + '</p>\r\n' + 
 '		<div class="text-right">\r\n' + 
-'			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
+'			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '&format=json" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
 '			<a href="/T/show?Rid=' + lst[it]["Rid"] + '" title="View define detail of application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/detail.png"></a>\r\n' + 
 '			<a href="/T/update?Rid=' + lst[it]["Rid"] + '" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>\r\n' + 
 '			<a href="/T/update?Rid=' + lst[it]["Rid"] + '&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>\r\n' + 
@@ -729,13 +744,13 @@ function __refreshAppList(lst) {
 	}
 
 	defines += '	<div class="list-app">\r\n' + 	 						
-'		<h3><small>Rebuild: </small><a name="onemsg" href="javascript:;" url="/T/create">All Applications</a></h3><br />\r\n' + 
+'		<h3><small>Rebuild: </small><a name="onemsg" href="javascript:;" url="/T/create?format=json">All Applications</a></h3><br />\r\n' + 
 '		<p class="text-center"><a href="/T/new" class="btn btn-lg btn-default" title="Add New Application"><img src="/img/add.png"> Application</a></p>\r\n' + 
 '		<div class="text-right"><a href="https://github.com/ItMan70s/Tangrammy/">View TangramMy on GitHub</a></div>\r\n' + 
 			'</div>\r\n';
 	defines += '</div>\r\n';
 var hed = '	<div class="well">\r\n' + 
-'		<h1 class="text-center" style="font-size: 48px;">TangramMy</h1>\r\n' + 
+'		<h2 style="margin-top: 0px;">Tangrammy</h2>\r\n' + 
 '		<p>The tangrammy is a system enable DIY your own services. Its idea comes from <a target="_blank" href="http://en.wikipedia.org/wiki/Tangram"><img src="/img/favicon.ico">tangram</a>, and is implemented by NodeJS, Bootstrap, jQuery.\r\n ' + 
 '		<ul><li>Builds service fast - it takes <0.5 hour to build a new service.</li>\r\n' + 
 '		<li>Changes with needs - it is easy to make changes to achive new requirement.</li>\r\n' + 
@@ -749,8 +764,8 @@ var hed = '	<div class="well">\r\n' +
 		}
 	}
 	fs.writeFile(vpath + 'Tangram.ejs', template.replace('navbar-header', 'navbar-header active').replace("TOP_LINKS", links).replace("FIELDS", hed + defines).replace("HEAD_TITLE - ", ""), function(err){ if (err) log.error(err); });
-hed = '	<div class="jumbotron homepage">\r\n' + 
-'		<h1>' + settings.home.welcome + '</h1>\r\n' + 
+hed = '	<div class="well">\r\n' + 
+(settings.home.welcome ? '		<h2 style="margin-top: 0px;">' + settings.home.welcome + '</h2>\r\n' : '') + 
 '		<p>' + settings.home.content + '</p>\r\n' + 
 '</div>\r\n';
 	fs.writeFile(vpath + 'welcome.ejs', template.replace("TOP_LINKS", links.replace("<li><a href='/'", "<li class='active'><a href='/'")).replace("FIELDS", hed + items).replace("HEAD_TITLE", settings.home.name), function(err){ if (err) log.error(err); });
@@ -902,10 +917,10 @@ function process(req, res) {
 		mongo.list("T", "V", null, {}, "Tid Vid Rid Title Status URL", {"sort": {"Title": -1}}, function (recorder) {
 			var lst = recorder.data;
 			for (var it = lst.length - 1; it > -1; it--) {
-				if (lst[it]["Status"] == "disabled" || lst[it]["Status"] == "hidden") {
+				if (lst[it]["Status"] == "disabled") {
 					continue; 
 				}
-				options.app += ', {"caption": "' + lst[it]["Title"] + '", "value": "' + lst[it]["Tid"] + '/' + lst[it]["Vid"] + '"}';
+				options.app += ', {"caption": "' + (lst[it]["Status"] == "hidden" ? "[hidden]" : "") + lst[it]["Title"] + '", "value": "' + lst[it]["Tid"] + '/' + lst[it]["Vid"] + '"}';
 			}
 			options.app = "[" + options.app + "]";
 		});
@@ -934,7 +949,7 @@ function process(req, res) {
 			return A.welcome(req, res, "", true);
 		break
 	}
-	var warning = "<B>404 EVENT!</B><br/>Tangram made a lot of applications except " + tid + ". <br/>Google tangram then DIY one _(._.)_";
+	var warning = "<B>404 EVENT!</B><br/>Tangrammy made a lot of applications except " + tid + ". <br/>Google tangrammy then DIY one _(._.)_";
 	A.welcome(req, res, warning);
 	log.warn("ssid[" + req.u.ssid + "] " + " access invalidated URL by " + req.info().replace(/[\r\n]+/g, " "));
 }

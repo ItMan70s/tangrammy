@@ -1,6 +1,6 @@
 #!/bin/sh
 cd cmd
-chmod +x 7z mongod mongoimport npm  mongoexport node
+pwd
 
 ./node T.js install
 

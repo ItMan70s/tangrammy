@@ -11,6 +11,11 @@
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="/css/font-awesome-ie7.min.css">
 	<![endif]-->
+	<!--[if lte IE 9]>
+	<script src="/js/html5shiv.min.js"></script>
+	<script src="/js/respond.min.js"></script>
+	<script src="/js/json2.min.js"></script>
+	<![endif]-->
 	<link rel='stylesheet' href='/css/style.css' />
 	<script src="/js/jquery.js"></script>
 	<script src="/js/jquery.cookie.js"></script>
@@ -21,19 +26,18 @@
     <script src="/js/richtext.js"></script>
 	<script src="/js/tangrammy.js"></script>
 </head>
-<body>
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body style="background-color: #f7f7f9">
+<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
 			<a name="top" />
-          <a class="navbar-brand" href="/tangrammy">Tangrammy</a>
+          <a class="navbar-brand" href="/">精益管理</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
-            			<li ><a href='/' title=''>Home</a></li>
-			<li ><a href='/issues/list' title=''>Issues</a></li>
+            			<li class='active'><a href='/zcar/list' title=''>ZCar</a></li>
 			<li ><a href='/todo/list' title=''>Todo</a></li>
-			<li class='active'><a href='/zcar/list' title=''>ZCar</a></li>
+			<li ><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
           <ul class="nav navbar-nav pull-right">
@@ -62,8 +66,8 @@
         </div><!--/.nav-collapse -->
 		<a target="_blank" href="https://github.com/ItMan70s/tangrammy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/img/forkme.png" alt="Fork me on GitHub"></a>
       </div>
-    </div>
-	<div id="container" class="container" style="padding-top:60px;padding-bottom:60px;">
+</header>
+<div style="background-color: #FFF; padding-top:60px;"><div id="container" class="container">
 	
 <h1>更新任务</h1>
 
@@ -80,7 +84,7 @@
 <input type='text' class='form-control' name='F0' value='<%= data["F0"] || "" %>' maxlength=200 minlength=3 required=true unique=true placeholder='Todo name'></div><span class='errormsg'>3~200 chars</span></div>
 </div>
 <div class="col-md-12">		<div><label class='control-label title-label'>Detail<B class='red'>*</B></label><div class='controls'>
-<textarea class='form-control richtext' name='F1' ><%= data["F1"] || "" %></textarea></div></div>
+<textarea class='form-control richtext' name='F1'  rows=5 placeholder='Todo detail despcription'><%= data["F1"] || "" %></textarea></div></div>
 </div>
 <div class="col-md-12">		<div><label class='control-label title-label'>Status<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
@@ -96,33 +100,33 @@
 			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> ><img src='/img/s/f4.png'><span class='orange'>Medium</span></label>
 			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='2'  <%= (val.contains( "," + "2" + ",")) ? "checked=true" : "" %> ><img src='/img/s/f5.png'><span class='red'>High</span></label></div></div></div></div>
 </div>
-<div class="col-md-12">		<div><label class='control-label title-label'>Owner<B class='red'>*</B></label><div class='controls'>
-<input type='text' class='form-control' name='F4' value='<%= data["F4"] || "" %>' required=true unique=true placeholder='Todo detail despcription'></div></div>
+<div class="col-md-12">		<div><label class='control-label title-label'>Owner</label><div class='controls'>
+<input type='text' class='form-control' name='F4' value='<%= data["F4"] || "" %>' placeholder='Todo detail despcription'></div></div>
 </div>
-<div class="col-md-12">		<div><label class='control-label title-label'>发布日期<B class='red'>*</B></label><div class='controls'>
+<div class="col-md-4">		<div><label class='control-label title-label'>发布日期<B class='red'>*</B></label><div class='controls'>
 <div><input type='text' name='F6' value='<%= data["F6"] || "" %>' class='form-control datesection' data-format='YYYY-MM-DD' maxlength=10 required=true placeholder='如果是非上线任务，则填完成日期'></input></div></div></div>
 </div>
-<div class="col-md-12">		<div><label class='control-label title-label'>开始日期</label><div class='controls'>
-<div><input type='text' name='F7' value='<%= data["F7"] || "" %>' class='form-control datesection' data-format='YYYY-MM-DD' maxlength=10></input></div></div></div>
+<div class="col-md-4">		<div><label class='control-label title-label'>开始日期</label><div class='controls'>
+<div><input type='text' name='F7' value='<%= data["F7"] || "" %>' class='form-control datesection' data-format='YYYY-MM-DD' maxlength=10 placeholder='如果是非上线任务，则填完成日期'></input></div></div></div>
 </div>
-<div class="col-md-12">		<div><label class='control-label title-label'>完成日期</label><div class='controls'>
-<div><input type='text' name='F8' value='<%= data["F8"] || "" %>' class='form-control datesection' data-format='YYYY-MM-DD' maxlength=10></input></div></div></div>
+<div class="col-md-4">		<div><label class='control-label title-label'>完成日期</label><div class='controls'>
+<div><input type='text' name='F8' value='<%= data["F8"] || "" %>' class='form-control datesection' data-format='YYYY-MM-DD' maxlength=10 placeholder='如果是非上线任务，则填完成日期'></input></div></div></div>
 </div>
 <div class="col-md-12">		<div><label class='control-label title-label'>说明</label><div class='controls'>
-<textarea class='form-control richtext' name='F9' ><%= data["F9"] || "" %></textarea></div></div>
+<textarea class='form-control richtext' name='F9'  rows=5 placeholder='如果是非上线任务，则填完成日期'><%= data["F9"] || "" %></textarea></div></div>
 </div><div class="col-md-auto col-md-12">		<div><label class='control-label title-label'>代码行数</label><div class='controls'>
 <div class='input-group'><span class='input-group-addon'><b >%</b></span><input type='text' class='form-control' name='F10' value='<%= data["F10"] || "" %>' placeholder='代码量，预估或实践'><span class='input-group-addon'>.00</span></div></div></div>
 </div><div class="col-md-auto col-md-12">		<div><label class='control-label title-label'>Bug量</label><div class='controls'>
 <div class='input-group'><span class='input-group-addon'><b >%</b></span><input type='text' class='form-control' name='F11' value='<%= data["F11"] || "" %>' placeholder='出现bug数'><span class='input-group-addon'>.00</span></div></div></div>
 </div><div class="col-md-12">		<div><label class='control-label title-label'>Bug信息</label><div class='controls'>
-<textarea class='form-control richtext' name='F12' ><%= data["F12"] || "" %></textarea></div><span class='errormsg'>bug的等级，描述，对应状态，或者是bug的链接</span></div>
+<textarea class='form-control richtext' name='F12'  rows=5 placeholder='出现bug对应的详细记录'><%= data["F12"] || "" %></textarea></div><span class='errormsg'>bug的等级，描述，对应状态，或者是bug的链接</span></div>
 </div>
-                                     <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
+                                                  <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
 <div class="col-md-0"><button type="submit" class="btn btn-primary"    style="min-width:80px;" title="">Save Changes </button></div>
 <div class="col-md-0"><a class="btn btn-link"  href="/zcar/list" style="min-width:80px;" title="">Cancel</a></div>
 </div></div>
 <span name='history' class='col-md-12'></span>
-</div>
+<script type='text/javascript'>getOPLogs('T1', 'V1', '<%= data["Rid"] %>');</script></div>
 </form>
 <iframe id='submitFrame' name='submitFrame' class='hidden'></iframe>
 <link rel='stylesheet' href='/css/bootstrap-datetimepicker.min.css'>
@@ -131,7 +135,7 @@
 	<script type='text/javascript'>  
 	$('.datesection').each(function() { $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pickTime: false, pick12HourFormat: false});  $(this).change(); }); 
 	$('.timesection').each(function() { $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pickDate: false, pick12HourFormat: false});  $(this).change();}); 
-	$('.datetimesection').each(function() { var pk = $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pick12HourFormat: false}); $(this).val(new Date().format($(this).attr('data-format')));  $(this).change();}); 
+	$('.datetimesection').each(function() { var pk = $(this).datetimepicker({ format: $(this).attr('data-format'), language: 'en', pick12HourFormat: false}); if ($(this).val() == '') $(this).val(new Date().format($(this).attr('data-format')));  $(this).change();}); 
 
  </script>
 
@@ -165,21 +169,40 @@
     </div>
   </div>
 </div>
-	<hr />
-	<footer>
+	<a name="bottom" > </a>
+</div></div>
+	
+<footer style="border-top: 1px solid #e1e1e8; padding: 15px 0;">
+<div class="container padding0">
 	<div class="col-md-12 form-group small">
-		<ul class="pager nomargin pull-left">
-		<li><label>推荐网站:</label></li>
-		<li><a href="http://mgcrea.github.io/angular-strap/#"  title="Share Point">Angular Strap</a></li>
-		<li><a href="http://www.whycss.com/" >前端网址导航</a></li>
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>推荐网站: </label></li>
+		<li><a href="http://mgcrea.github.io/angular-strap/#" target="_blank" title="">Angular Strap</a></li>
+		<li><a href="http://www.apjs.net/" target="_blank" >Angular中文网</a></li>
+		<li><a href="http://docs.ngnice.com/api/ng/service/$q" target="_blank" >Angular API</a></li>
+		<li><a href="http://www.whycss.com/" target="_blank" >前端网址导航</a></li>
+		<li><a href="http://ionichina.cn/docs/components/" target="_blank" >Ionic</a></li>
+		<li><a href="http://codepen.io/ionic/public-list/" target="_blank" >Ionic Codes</a></li>
+		<li><a href="http://www.bootcss.com/p/layoutit/#" target="_blank" >Bootstrap布局</a></li>
+		</ul>
+	</div>
+	<div class="col-md-12 form-group small">
+		<ul class="pager nomargin" style="text-align: left;">
+		<li><label>友情链接: </label></li>
+		<li><a href="http://kunkkawu.com" target="_blank" title="吴坤的博客">吴坤的博客</a></li>
+		<li><a href="http://www.yaozihao.cn" target="_blank" title="子豪的博客">子豪的博客</a></li>
+		<li><a href="http://www.cnblogs.com/itman70s" target="_blank">Job的博客</a></li>
+		<li><a href="http://itman70s.github.io/richtext/" target="_blank">富文本控件</a></li>
+		<li><label>小工具: </label></li>
+		<li><a href="/base64.html" target="_blank">Base64转换</a></li>
+		<li><a href="/super.html" title="代码同步等小工具">小工具</a></li>		
+		<li><a href="#" download=".xls" title="尝试下载当前页面数据">下载</a></li>		
 		</ul>
 	</div>
 	<div class="col-md-12 right">
-		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2015.
+		Created by <a href="https://github.com/ItMan70s/Tangrammy/">Tangrammy 0.3.0</a> at 2016
 	</div>
-	</footer>
-	</div>
-	<a name="bottom" > </a>
+</div>
+</footer>
 </body>
 </html>
-

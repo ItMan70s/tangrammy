@@ -82,8 +82,8 @@ function __tz() {
 	try {
 		var tzone = this.u.user;
 		tzone.utz = tzone.tz;
-		if (this.cookies['ctz']) {
-			tzone.ctz = new Number(this.cookies['ctz']) - 0;
+		if (this.getCookie('ctz')) {
+			tzone.ctz = new Number(this.getCookie('ctz')) - 0;
 			tz = tzone.ctz - tzone.utz;
 			if (tz == 60 || tz == 0) {
 				tz = mongo.dst(tzone.utz, tz);
@@ -109,20 +109,40 @@ function getTimeCost() {
 	}
 	return " " + (new Date() - this._start) + "ms ";
 }
-
+function getCookie(key) {
+	if (!this.port) {
+		this.res.port = this.port = this.get('host').split(":")[1] || "80";
+	}
+	// TODO remove this 
+	if (key == 'ctz') {
+		return this.cookies[key];
+	}
+	return this.cookies[key + this.port];
+}
+function setCookie(name, value, options) {
+	if (!this.port) {
+		this.port = this.req.port || this.req.get('host').split(":")[1] || "80";
+	}
+	if (value === undefined) {
+		return this.clearCookie(name + this.port);
+	}
+	return this.cookie(name + this.port, value, options);
+}
 function init(req, res) {
 	if (!req.u) {
 		req.u = {};
 		req.u.user = {};
 	}
 	req._start = (new Date()).now();
+	req.getCookie = getCookie;
+	res.setCookie = setCookie;
 	req.info = getInformation;
 	req.ms = getTimeCost;
 	req.refreshTimeZone = __tz;
 
 	req.u.ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) + "";
-	req.u.ssid = req.cookies['__sessionid'] || req.u.ip.replace(/[\.\:]/g, "i");
-	if (!req.cookies['__sessionid']) {
+	req.u.ssid = req.getCookie('__sessionid') || req.u.ip.replace(/[\.\:]/g, "i");
+	if (!req.getCookie('__sessionid')) {
 		// check unsupported browser
 	}
 	var url = req._parsedUrl.pathname;
@@ -225,6 +245,7 @@ function loadUserInfo(req, res) {
 
 function process(req, res) {
 	try {
+		res.setHeader("Access-Control-Allow-Origin", "*");
 		init(req, res);
 		if (req.u.Tid == "web") {
 			return file.get(req,res);
@@ -259,6 +280,7 @@ function process(req, res) {
 			break;
 		case "cmd":
 			cmd.exec(req,res);
+			break;
 		case "script":
 			cmd.start(req,res);
 			break;

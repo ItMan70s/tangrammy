@@ -325,6 +325,10 @@ div.list-app:focus  div {
 .btm200  {
 	bottom: 200px;
 }
+.downloading {
+  display: none !important;
+  visibility: hidden !important;
+}
 .ghidden {
   display: none !important;
   visibility: hidden !important;
@@ -492,14 +496,16 @@ fieldset[disabled] .form-show {
 	padding-right: 12px;
 }
 .between {
-    background: url('/img/between.png') no-repeat scroll right center transparent;
+    background: url('/img/between.png') no-repeat scroll right center white;
 	padding-right: 17px;
 }
 .title-label{
   margin-top: 8px;
   margin-bottom: 0px;
 }
-
+footer {
+  margin-top: 10px;
+}
 .icon16{padding-left:17px; background-repeat : no-repeat;}
 .icon15 {
 	padding:0px 0px;
@@ -627,29 +633,38 @@ div.glyphicon-char-xs {
 
 a.color-box:active, a.color-box:hover {
 	text-decoration: none;
+	border:1px solid #000;
 }
 
+.colorpickerplus-colors-row {
+	overflow: hidden;
+	width:100%;
+}
 .color-box {
+	width: 16px;
+	height: 16px;
+	margin:0;
+	padding:0;
+	float:left;
+	border:1px solid #eee;
+	
 	position: relative;
-	float: left;
-	width:24px;
-	height:24px;
-	margin: 2px;
 	display: inline-block;
-	margin-bottom: 0;
-	font-weight: 400;
-	text-align: center;
-	vertical-align: middle;
 	cursor: pointer;
-	background-image: none;
-	border: 1px solid transparent;
-	white-space: nowrap;
 	font-size: 14px;
 	color: black;
 	line-height: 1.42857143;
 	text-decoration: none;
 }
 
+.editable {
+	background-color: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	min-width: 30px;
+	min-height: 20px;
+	padding: 4px 10px;
+}
 .richtext {
 	max-height: 250px;
 	height: 250px;
@@ -666,6 +681,36 @@ a.color-box:active, a.color-box:hover {
 	overflow: scroll;
 	outline: none;
 }
+.richtext-zone {
+  position: relative;
+}
+.switch-icon>.active {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.switch-icon>.btn {
+	padding: 5px 12px;
+}
+
+.switch-icon {
+  background-color: #F5F5F5;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  color: #9DA0A4;
+  content: "Row";
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 2;
+  padding: 0px;
+  position: absolute;
+  right: 15px;
+  top: 0px;
+  z-index: 1;
+	-moz-opacity:0.8; 
+	filter:alpha(opacity=80);
+	opacity:0.8;
+ }
 #voiceBtn {
   width: 20px;
   color: transparent;
