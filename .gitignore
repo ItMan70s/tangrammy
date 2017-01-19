@@ -3,6 +3,7 @@ db/
 logs/
 *.bak
 app/node_modules/
+node_modules/
 
 app/views/
 *.pydevproject
