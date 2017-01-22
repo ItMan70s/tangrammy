@@ -119,6 +119,7 @@ function install() {
 //		backupDB();
 		restoreDB("dat/TangramDB.7z");
 		
+		// applications' service
 		exec('nssm stop Tangrammy');
 		exec('nssm remove Tangrammy confirm');
 		
@@ -129,6 +130,13 @@ function install() {
 		exec("nssm install Tangrammy " + fs.realpathSync("node.exe") + " index.js");
 		exec("nssm set Tangrammy AppDirectory " + fs.realpathSync(app));
 		exec('nssm restart Tangrammy');
+		
+		// applications' manager service
+		exec('nssm stop TangrammyAdmin');
+		exec('nssm remove TangrammyAdmin confirm');
+		exec("nssm install TangrammyAdmin " + fs.realpathSync("node.exe") + " admin.js");
+		exec("nssm set TangrammyAdmin AppDirectory " + fs.realpathSync(app));
+		exec('nssm restart TangrammyAdmin');
 	} else {
 		exec(fs.realpathSync("./mongod") + ' --smallfiles --dbpath "' + path + '" --logpath "' + fs.realpathSync("../logs/mongodb.log") + '"');
 		restoreDB("dat/TangramDB.7z");
