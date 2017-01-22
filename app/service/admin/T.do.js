@@ -9,7 +9,7 @@ var log = require('../core/log.js')('Z');
 var fnames = {"Title": "", "URL": "", "Fields": "", "New": "", "Copy": "", "Edit": "", "Remove": "", "Help": "", "Email": "", "OrderBy": "", "Order": "", "Group": "", "Filter": "", "History": "", "Status": "", "Header": "", "Footer": "", "Active": "", "update": "", "updater": ""};
 
 var vpath = "./views/";
-var tpath = "service/defines/";
+var tpath = "service/admin/";
 
 var template = "";
 
@@ -714,11 +714,13 @@ function __refreshAppList(lst) {
 			cols = 0;
 		}
 	}
-	items += '<% if (request.u.apps && request.u.apps.contains("*")) { %>\r\n	<div class="col-md-3" style="border: 1px solid #ccc;">\r\n' + 
+
+	items += '<% if (request.u.apps && request.u.apps.contains("*") && request.admin) { %>\r\n	<div class="col-md-3" style="border: 1px solid #ccc;">\r\n' + 
 			'		<h2><a href="/tangrammy">Tangrammy</a></h2>\r\n' + 
 			'		<div style="height: 60px; overflow: hidden;"><p>Define/edit/rebuild applications.</p></div>\r\n' + 
 			'		<p class="text-right"><a href="/tangrammy" role="button">Details »</a></p>\r\n' + 
 			'	</div>\r\n<% } %>\r\n';
+
 	items += '</div></div>\r\n';
 	cols = 0;
 	for (var it = lst.length - 1; it > -1; it--) {
@@ -771,7 +773,7 @@ hed = '	<div class="well">\r\n' +
 	fs.writeFile(vpath + 'welcome.ejs', template.replace("TOP_LINKS", links.replace("<li><a href='/'", "<li class='active'><a href='/'")).replace("FIELDS", hed + items).replace("HEAD_TITLE", settings.home.name), function(err){ if (err) log.error(err); });
 
 	// T show
-	var names = ["./service/defines/T_show.ejs", "./service/defines/T_new.ejs"];
+	var names = ["./service/admin/T_show.ejs", "./service/admin/T_new.ejs"];
 	for (var i in names) {
 		var contents = fs.readFileSync(names[i], {encoding: 'utf8'});
 		if (contents.length > 100) {

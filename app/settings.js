@@ -16,7 +16,7 @@ SMTP: {
 },
 defines: {
 	enable: true, 
-	template: "./service/defines/framework.ejs",
+	template: "./service/admin/framework.ejs",
 },
 logs: {
 	file: "../logs/mine.log", 

@@ -36,7 +36,7 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/zcar/list' title=''>ZCar</a></li>
-			<li><a href='/todo/list' title=''>任务<br></a></li>
+			<li><a href='/todo/list' title=''>Todo</a></li>
 			<li><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
@@ -74,27 +74,6 @@
 		<p>精益管理要求企业的各项活动都必须运用“精益思维” (Lean Thinking）。“精益思维”的核心就是以最小资源投入，包括人力、设备、资金、材料、时间和空间， 创造出尽可能多的价值，为顾客提供新产品和及时的服务。</p>
 </div>
 <div class="col-md-12"><div class="row">
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/booking/list">Booking</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p></div>
-		<p class="text-right"><a href="/booking/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V3")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/booking3/list">Booking3</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>Make reservation on<i> Integrity servers</i> (<b>SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote</b>) in Houston and China.</p></div>
-		<p class="text-right"><a href="/booking3/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T6/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/books/list">Books</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>读书</p></div>
-		<p class="text-right"><a href="/books/list" role="button">Details »</a></p>
-	</div>
-<% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TB/V1")) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
 		<h2><a href="/issues/list">Issues</a></h2>
@@ -102,39 +81,11 @@
 		<p class="text-right"><a href="/issues/list" role="button">Details »</a></p>
 	</div>
 <% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T3/V1")) { %>
+<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/links/list">Links</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>links</p></div>
-		<p class="text-right"><a href="/links/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF0/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/roles/list">Roles</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>用于定义系统内的用户角色已经相应的应用访问权限。</p></div>
-		<p class="text-right"><a href="/roles/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T9/V2")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/servers/list">Servers</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>Define servers (SD2, DH, OA, VC, Kauai, Tiger, Sentosa, Coyote) in Houston and China to enable make reservation.</p></div>
-		<p class="text-right"><a href="/servers/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TF1/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/users/list">Users</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>Users in current system</p></div>
-		<p class="text-right"><a href="/users/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("TA/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/vms/list">VMs</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>VM using by BCS team</p></div>
-		<p class="text-right"><a href="/vms/list" role="button">Details »</a></p>
+		<h2><a href="/todo/list">Todo</a></h2>
+		<div style="height: 60px; overflow: hidden;"><p>用于管理项目的各种属于我的事项。 </p></div>
+		<p class="text-right"><a href="/todo/list" role="button">Details »</a></p>
 	</div>
 <% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T7/V1")) { %>
@@ -165,14 +116,7 @@
 		<p class="text-right"><a href="/lend/list" role="button">Details »</a></p>
 	</div>
 <% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/todo/list">任务<br></a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>用于管理项目的各种属于我的事项。 </p></div>
-		<p class="text-right"><a href="/todo/list" role="button">Details »</a></p>
-	</div>
-<% } %>
-<% if (request.u.apps && request.u.apps.contains("*")) { %>
+<% if (request.u.apps && request.u.apps.contains("*") && request.admin) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
 		<h2><a href="/tangrammy">Tangrammy</a></h2>
 		<div style="height: 60px; overflow: hidden;"><p>Define/edit/rebuild applications.</p></div>

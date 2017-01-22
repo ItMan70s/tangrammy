@@ -2,16 +2,17 @@ var cmd = require('./action/cmd.do.js');
 var file = require('./action/file.do.js');
 var user = require('./action/user.do.js');
 var A = require('./action/app.do.js');
-var admin = require('./action/admin.js');
+var admin = require('./admin/admin.js');
 var log = require('./core/log.js')("Z");
 var util = require('util');
 var mongo = require('./core/mongo.db.js');
 var settings = require('../settings.js');
 var T = null;
 var fs = require('fs');
+var type = "";
 
-fs.exists('./defines/T.do.js', function (exists) {
-	T = require('./defines/T.do.js');
+fs.exists('./admin/T.do.js', function (exists) {
+	T = require('./admin/T.do.js');
 });
 
 /**
@@ -110,9 +111,6 @@ function getTimeCost() {
 	return " " + (new Date() - this._start) + "ms ";
 }
 function getCookie(key) {
-	if (!this.port) {
-		this.res.port = this.port = this.get('host').split(":")[1] || "80";
-	}
 	// TODO remove this 
 	if (key == 'ctz') {
 		return this.cookies[key];
@@ -120,9 +118,6 @@ function getCookie(key) {
 	return this.cookies[key + this.port];
 }
 function setCookie(name, value, options) {
-	if (!this.port) {
-		this.port = this.req.port || this.req.get('host').split(":")[1] || "80";
-	}
 	if (value === undefined) {
 		return this.clearCookie(name + this.port);
 	}
@@ -134,12 +129,22 @@ function init(req, res) {
 		req.u.user = {};
 	}
 	req._start = (new Date()).now();
+	
+	if (!req.port) {
+		req.res.port = req.port = req.get('host').split(":")[1] || "80";
+	}
 	req.getCookie = getCookie;
 	res.setCookie = setCookie;
 	req.info = getInformation;
 	req.ms = getTimeCost;
 	req.refreshTimeZone = __tz;
 
+	if (type == "") {
+		type = (req.port == settings.portadmin) ? "admin" : "service";
+	}
+	req.res.admin = req.admin = (type == "admin");
+	log.info("req.admin" + req.admin + " req.port: " + req.port + " type: " + type);
+	
 	req.u.ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) + "";
 	req.u.ssid = req.getCookie('__sessionid') || req.u.ip.replace(/[\.\:]/g, "i");
 	if (!req.getCookie('__sessionid')) {
@@ -252,7 +257,7 @@ function process(req, res) {
 		}
 		loadUserInfo(req, res);
 		
-		if (req.u.Tid == "404" || (req.u.Tid == "t" && !settings.defines.enable)) {
+		if (req.u.Tid == "404" || ((req.u.Tid == "t" || req.u.Tid == "admin" || req.u.Tid == "tangrammy") && !req.admin)) {
 			var warning = "<B>404 EVENT!</B><br/>Tangrammy was surprised by " + req.url + "  _(._.)_";
 			return A.welcome(req, res, warning);
 		}		
