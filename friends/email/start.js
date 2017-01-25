@@ -34,6 +34,9 @@ app.all('*', function (req, res) {
 			if (req.url.match(/\/(js|css|font|img)\//gi) || req.url.match(/\.html/gi)) {
 				return file.get(req, res);
 			}
+			if (req.url == "/") {
+				return res.redirect("/mail.html");
+			}
 		}
 		
 		var mail = getEmailRequest(req);
