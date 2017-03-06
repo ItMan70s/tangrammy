@@ -71,7 +71,7 @@
 	
 	<div class="well">
 		<h2 style="margin-top: 0px;">Tangrammy</h2>
-		<p>The tangrammy is a system enable DIY your own services. Its idea comes from <a target="_blank" href="http://en.wikipedia.org/wiki/Tangram"><img src="/img/favicon.ico">tangram</a>, and is implemented by NodeJS, Bootstrap, jQuery.
+		<p>The tangrammy is a system enable DIY your own services. Its idea comes from <a target="_blank" href="http://en.wikipedia.org/wiki/Tangram"><img style="height: 20px;" src="/img/favicon.ico">tangram</a>, and is implemented by NodeJS, Bootstrap, jQuery.
  		<ul><li>Builds service fast - it takes <0.5 hour to build a new service.</li>
 		<li>Changes with needs - it is easy to make changes to achive new requirement.</li>
 		<li>Gets start easily - all services are displayed in one view and simple.</li></ul></p>
@@ -107,23 +107,6 @@
 			<a href="/T/update?Rid=24A6M35" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
 			<a href="/T/update?Rid=24A6M35&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
 			<a href="/T/copy?Rid=24A6M35" title="Create a new one based on application[Roles]"><img class="icon15" src="/img/copy.png"></a>
-		</div>
-	</div>
-<% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
-	<div class="list-app">
-		<h3><span name="blurupdate" url="/T/update?Rid=16WRUTP&Title=" contenteditable="true" orginal="Title16WRUTP">Todo</span> <small>(T4.V1)</small> </h3>
-		<p name="Title16WRUTP" class="hide" >Todo</p>
-		<small><a href="/todo/list">http://~/todo/list </a> </small> <br /> 
-		<p name="blurupdate" url="/T/update?Rid=16WRUTP&Description=" contenteditable="true" orginal="Description16WRUTP">用于管理项目的各种属于我的事项。 </p>
-		<p name="Description16WRUTP" class="hide" >用于管理项目的各种属于我的事项。 </p>
-		<div class="text-right">
-			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=16WRUTP&format=json" title="Rebuild application[Todo] to active changes">Rebuild</a>
-			<a href="/T/show?Rid=16WRUTP" title="View define detail of application[Todo]"><img class="icon15" src="/img/detail.png"></a>
-			<a href="/T/update?Rid=16WRUTP" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>
-			<a href="/T/update?Rid=16WRUTP&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>
-			<a href="/T/copy?Rid=16WRUTP" title="Create a new one based on application[Todo]"><img class="icon15" src="/img/copy.png"></a>
-			<a name="remove" href="javascript:;" url="/T/remove?Rid=16WRUTP" title="Remove application[Todo]"><img class="icon15" src="/img/remove.png"></a>
 		</div>
 	</div>
 <% } %>

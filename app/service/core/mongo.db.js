@@ -238,7 +238,9 @@ var Settings = {};
 
 function refresh() {
 	//mongoose.connection.close();
-	mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + DB.name + '');
+	
+	// TODO temp port set 
+	mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + ( process.argv[3] || DB.name) + '');
 	Schemas = {"T": mongoose.model('T', TSchema), "Reservation": mongoose.model('Reservation', ReservationSchema), "Settings": mongoose.model('Settings', SettingSchema), "Op": mongoose.model("Op", OpSchema)};
 	Settings = {"User": {}, "Role": {}, "IDDefines": {}, "ActiveUsers": {}};
 	loadSettings();
@@ -495,7 +497,9 @@ function  __now() {
 function list(tid, vid, user, condition, fields, options, callback) {
 	var con = condition;
 	var fids = null;
-	var opt = options;
+	// TODO coupled with the official “next“, “prev“, “first” and “last” link relation types.
+	// size , page/pages
+	var opt = options; // Object.assign({skip: 0, limit: 1000}, options);
 	if (typeof tid != 'string') log.debug("tid is missing for function findOne.");
 	if (typeof callback != 'function') log.debug("callback function is missing for function findOne.");
 	if (typeof condition == 'function') {callback = condition; con = {};}

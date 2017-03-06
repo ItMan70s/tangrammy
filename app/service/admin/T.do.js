@@ -753,7 +753,7 @@ function __refreshAppList(lst) {
 	defines += '</div>\r\n';
 var hed = '	<div class="well">\r\n' + 
 '		<h2 style="margin-top: 0px;">Tangrammy</h2>\r\n' + 
-'		<p>The tangrammy is a system enable DIY your own services. Its idea comes from <a target="_blank" href="http://en.wikipedia.org/wiki/Tangram"><img src="/img/favicon.ico">tangram</a>, and is implemented by NodeJS, Bootstrap, jQuery.\r\n ' + 
+'		<p>The tangrammy is a system enable DIY your own services. Its idea comes from <a target="_blank" href="http://en.wikipedia.org/wiki/Tangram"><img style="height: 20px;" src="/img/favicon.ico">tangram</a>, and is implemented by NodeJS, Bootstrap, jQuery.\r\n ' + 
 '		<ul><li>Builds service fast - it takes <0.5 hour to build a new service.</li>\r\n' + 
 '		<li>Changes with needs - it is easy to make changes to achive new requirement.</li>\r\n' + 
 '		<li>Gets start easily - all services are displayed in one view and simple.</li></ul></p>\r\n' + 

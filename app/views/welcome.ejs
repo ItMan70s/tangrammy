@@ -81,13 +81,6 @@
 		<p class="text-right"><a href="/issues/list" role="button">Details »</a></p>
 	</div>
 <% } %>
-<% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T4/V1")) { %>
-	<div class="col-md-3" style="border: 1px solid #ccc;">
-		<h2><a href="/todo/list">Todo</a></h2>
-		<div style="height: 60px; overflow: hidden;"><p>用于管理项目的各种属于我的事项。 </p></div>
-		<p class="text-right"><a href="/todo/list" role="button">Details »</a></p>
-	</div>
-<% } %>
 <% if (!request.u.apps || request.u.apps.contains("*") || request.u.apps.contains("T7/V1")) { %>
 	<div class="col-md-3" style="border: 1px solid #ccc;">
 		<h2><a href="/words/list">Words</a></h2>

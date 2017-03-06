@@ -33,7 +33,8 @@ server.use(routes.notfound);
 server.use(routes.error);
 routes.process(server);
 
-var port = settings.portadmin;
+// TODO temp port set. cli sample: node admin 3333 z
+var port = process.argv[2] || settings.portadmin;
 server.set('port', port);
 server.listen(port, function() {
 log.debug('Service started.\n' +
