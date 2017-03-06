@@ -2,11 +2,12 @@ var log = require('../core/log.js')('Z');
 var callExe = require('child_process').exec;
 var callScript = require('child_process').execFile;
 var fs = require('fs');
+var path = require('path');
 
 var util = require('util');
 var mailer = require("nodemailer");
 var settings = require('../../settings.js');
-var pathScripts = fs.realpathSync("../scripts/");
+var pathScripts = fs.realpathSync(path.join(__dirname, "../../../scripts/"));
 var pathChar = pathScripts.charAt(0) == "/" ? "/" : "\\";
 pathScripts += pathChar;
 var path = process.env.PATH + (pathChar == "/" ? ":" : ";") + pathScripts;
