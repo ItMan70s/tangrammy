@@ -35,7 +35,9 @@ server.use(routes.notfound);
 server.use(routes.error);
 routes.process(server);
 // TODO temp port set. cli sample: node index 3000 z
-var port = process.argv[2] || settings.port;
+process.argv[2] && settings.setPort(process.argv[2]);
+process.argv[3] && settings.setDB(process.argv[3]);
+var port = settings.port;
 server.set('port', port);
 server.listen(port, function() {
 log.debug('Service started.\n' +

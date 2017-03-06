@@ -6,13 +6,20 @@ var cli = require('child_process');
 var util = require('util');
 var settings = require('../app/settings');
 var dbName = settings.db.name;
+// TODO temp changes for DB name
+if(process.argv.length > 3) {
+	var n = process.argv[process.argv.length - 1];
+	if (n == "z" || n == "mine") {
+		dbName = n;
+	}
+}
 var cmds = null;
 var cmds_win = {exportDB: "mongoexport --db " + dbName + " -c name -o folder/name.json", 
 				importDB: "mongoimport --db " + dbName + " --drop -c name -file folder/name.json",
 				zip: "7z u name folder",
 				unzip: "7z x name -ofolder -r -y"};
-var cmds_lin = {exportDB: "./mongoexport --db z -c name -o folder/name.json", 
-				importDB: "./mongoimport --db z --drop -c name -file folder/name.json",
+var cmds_lin = {exportDB: "./mongoexport --db " + dbName + " -c name -o folder/name.json", 
+				importDB: "./mongoimport --db " + dbName + " --drop -c name -file folder/name.json",
 				zip: "./7za a -t7z -r name folder",
 				unzip: "./7za x name -r -y -ofolder"};
 				
@@ -51,7 +58,7 @@ if (process.platform == "win32") {
 }
 
 if(process.argv.length < 3) {
-	console.log('Usage: node T commands');
+	console.log('Usage: node T commands [dbname]');
 	console.log('commands: ');
 	console.log('    backupdb - backup DB data.');
 	console.log('    backup - backup DB data and application files.');

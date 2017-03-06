@@ -34,6 +34,8 @@ server.use(routes.error);
 routes.process(server);
 
 // TODO temp port set. cli sample: node admin 3333 z
+process.argv[2] && settings.setPort(process.argv[2]);
+process.argv[3] && settings.setDB(process.argv[3]);
 var port = process.argv[2] || settings.portadmin;
 server.set('port', port);
 server.listen(port, function() {

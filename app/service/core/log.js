@@ -1,6 +1,10 @@
-var conf = require('../../settings.js').logs;
+var settings = require('../../settings.js');
 var log4js = require('log4js'); 
 var util = require('util');
+
+process.argv[2] && settings.setPort(process.argv[2]);
+process.argv[3] && settings.setDB(process.argv[3]);
+var conf = settings.logs;
 
 log4js.configure({
 appenders: [  

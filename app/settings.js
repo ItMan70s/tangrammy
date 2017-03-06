@@ -73,6 +73,7 @@ function setDB(name) {
 	if (!name) {
 		return;
 	}
+	console.error("db.name: ", name);
 	settings.db.name = name;
 	settings.logs.file = "../logs/" + name + ".log";
 }
@@ -80,13 +81,15 @@ function setPort(port) {
 	if (!port) {
 		return;
 	}
+	console.error("port: ", port);
 	settings.port = port;
 	settings.files.port = port;
 }
-
+/*
 setDB(process.argv[2]);   // DB数据库名称
 setPort(process.argv[3]);   // web服务端口号
-
 settings.portadmin = process.argv[4] || settings.portadmin;   // web服务管理员端口号
-
+*/
+settings.setPort = setPort;
+settings.setDB = setDB;
 module.exports = settings;

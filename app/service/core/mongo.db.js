@@ -2,10 +2,13 @@ var mongoose = require('mongoose');
 var log = require('./log.js')('Z');
 var util = require('util');
 var fs = require('fs');
-var DB = require('../../settings.js').db;
+var settings = require('../../settings.js');
 require('./components.js');
 
+process.argv[2] && settings.setPort(process.argv[2]);
+process.argv[3] && settings.setDB(process.argv[3]);
 
+var DB = settings.db;
 
 /*
 
@@ -239,8 +242,7 @@ var Settings = {};
 function refresh() {
 	//mongoose.connection.close();
 	
-	// TODO temp port set 
-	mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + ( process.argv[3] || DB.name) + '');
+	mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + DB.name + '');
 	Schemas = {"T": mongoose.model('T', TSchema), "Reservation": mongoose.model('Reservation', ReservationSchema), "Settings": mongoose.model('Settings', SettingSchema), "Op": mongoose.model("Op", OpSchema)};
 	Settings = {"User": {}, "Role": {}, "IDDefines": {}, "ActiveUsers": {}};
 	loadSettings();
