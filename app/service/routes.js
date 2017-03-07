@@ -9,7 +9,7 @@ var mongo = require('./core/mongo.db.js');
 var settings = require('../settings.js');
 var T = null;
 var fs = require('fs');
-var type = "";
+var type = "service";
 
 fs.exists('./admin/T.do.js', function (exists) {
 	T = require('./admin/T.do.js');
@@ -139,11 +139,8 @@ function init(req, res) {
 	req.ms = getTimeCost;
 	req.refreshTimeZone = __tz;
 
-	if (type == "") {
-		type = (req.port == settings.portadmin) ? "admin" : "service";
-	}
 	req.res.admin = req.admin = (type == "admin");
-	log.info("req.admin" + req.admin + " req.port: " + req.port + " type: " + type);
+	log.info("req.admin " + req.admin + " req.port: " + req.port + " type: " + type);
 	
 	req.u.ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) + "";
 	req.u.ssid = req.getCookie('__sessionid') || req.u.ip.replace(/[\.\:]/g, "i");
@@ -314,6 +311,9 @@ function process(req, res) {
 	}
 }
 
+module.exports.admin = function() {
+	type = "admin";
+}
 module.exports.process = function(server) {
 	server.get('*', process);
 	server.post('*', process);

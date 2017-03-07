@@ -31,6 +31,7 @@ server.use(server.router);
 
 server.use(routes.notfound);
 server.use(routes.error);
+routes.admin();
 routes.process(server);
 
 // TODO temp port set. cli sample: node admin 3333 z
