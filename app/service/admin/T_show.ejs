@@ -36,7 +36,7 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav tops">
             			<li><a href='/zcar/list' title=''>ZCar</a></li>
-			<li><a href='/todo/list' title=''>Todo</a></li>
+			<li><a href='/todo/list' title=''>Unknown</a></li>
 			<li><a href='/release/list' title=''>ZCarRelease</a></li>
 
           </ul>
@@ -193,6 +193,13 @@
 					<% } %>
 				  </div>
 				<% } %>
+				</div>
+				</div></div>
+				<div class='col-md-12'><div><label>Pagging</label>
+				<div class='input-group'>
+				<div class='col-md-auto'>
+					<%= (data["Pagging"]) ? data["Pagging"] : "NO Pagging" %>
+				  </div>
 				</div>
 				</div></div>
 				<div class='col-md-12'><%- data["Footer"] || "" %></div>

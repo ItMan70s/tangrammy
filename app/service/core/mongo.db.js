@@ -195,6 +195,7 @@ var TSchema = new Schema({
   EmailCc: {type: String},
   OrderBy: {type: String},
   Order: {type: String},
+  Pagging: {type: String},
   Group: {type: String},
   Filter: {type: String},
   History: {type: String},

@@ -367,9 +367,9 @@ function __list(res, define, tid, vid, user, cond, orignal) {
 		// TODO coupled with the official “next“, “prev“, “first” and “last” link relation types.
 		// size , page/pages
 		// Object.assign({skip: 0, limit: 1000}, options);
-		if (true && "page" in orignal) {
-			opt["limit"] = define["size"] || 10;
-			opt["skip"] = orignal["page"] * (define["size"] || 10);
+		if (define["pagging"] && "page" in orignal) {
+			opt["limit"] = define["pagging"] || 10;
+			opt["skip"] = orignal["page"] * (define["pagging"] || 10);
 		}
 	} catch (msg) {
 		log.debug(msg);
