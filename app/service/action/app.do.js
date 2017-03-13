@@ -349,7 +349,7 @@ function remove(req, res, uData) {
 	});
 }
 
-function __list(res, define, tid, vid, user, cond, json) {
+function __list(res, define, tid, vid, user, cond, orignal) {
 	var opt = {};
 	try {
 		if ("OrderBy" in define && "Order" in define) {
@@ -363,6 +363,13 @@ function __list(res, define, tid, vid, user, cond, json) {
 				}
 			}
 			opt["sort"] = sort;
+		}
+		// TODO coupled with the official “next“, “prev“, “first” and “last” link relation types.
+		// size , page/pages
+		// Object.assign({skip: 0, limit: 1000}, options);
+		if (true && "page" in orignal) {
+			opt["limit"] = define["size"] || 10;
+			opt["skip"] = orignal["page"] * (define["size"] || 10);
 		}
 	} catch (msg) {
 		log.debug(msg);
@@ -386,7 +393,7 @@ function __list(res, define, tid, vid, user, cond, json) {
 			}
 			recorder.data = data;
 		}
-		if (json) {
+		if (orignal.json) {
 			res.json(recorder);
 			return;
 		}
@@ -396,7 +403,7 @@ function __list(res, define, tid, vid, user, cond, json) {
 }
 function list(req, res, uData, define, tid, vid) {
 	var con = __safe((define["Condition"] || "").replace(".*ME.*", ".*" + uData["user"]["Rid"] + ":.*").toJSON());
-	__list(res, define, tid, vid, uData["user"], con, (uData.json));
+	__list(res, define, tid, vid, uData["user"], con, uData);
 }
 
 function search(req, res, uData, define, tid, vid, cond) {
@@ -429,7 +436,7 @@ function search(req, res, uData, define, tid, vid, cond) {
 	} else {
 		res.req.szone = "";
 	}
-	__list(res, define, tid, vid, uData["user"], con, (uData.json));
+	__list(res, define, tid, vid, uData["user"], con, uData);
 }
 function welcome(req, res, warning, tangram) {
 	if (warning && warning.length > 0) {
