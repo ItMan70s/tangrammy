@@ -393,7 +393,7 @@
 			<div class='input-group'>
 			<div class='col-md-auto'>
 				<select name='Pagging' class='input-sm'>
-					<option value=100 <%= (!data["Pagging"]) ? "selected=true" : "" %> > NO Pagging</option>
+					<option value=0 <%= (!data["Pagging"]) ? "selected=true" : "" %> > NO Pagging</option>
 					<option value=10  <%= (10 == data["Pagging"]) ? "selected=true" : "" %> >10/page</option>
 					<option value=20  <%= (20 == data["Pagging"]) ? "selected=true" : "" %> >20/page</option>
 					<option value=50  <%= (50 == data["Pagging"]) ? "selected=true" : "" %> >50/page</option>

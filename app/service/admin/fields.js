@@ -386,7 +386,14 @@ function toList(json) {
 	html += trs + "\n" +
 		"	<% } %>\n" +
 		"  </tbody>\n</table>\n\n" ;
-	
+
+	if ("Pagging" in json && json["Pagging"] > 0) {
+		html += '<nav aria-label="..."><ul class="pager">' + 
+				'<li class="previous <%= request.page > 0 ? \'\' : \'hide\' %>"><a href="#" onclick="javascrip:gotoPage(<%= request.page - 1 %>);"><span aria-hidden="true">&larr;</span> Previous</a></li>' + 
+				'<li class="next <%= (data.length >= ' + json["Pagging"] + ') ? \'\' : \'hide\' %>"><a href="#" onclick="javascrip:gotoPage(<%= request.page - 0 + 1 %>);">Next <span aria-hidden="true">&rarr;</span></a></li>' +
+				'</ul></nav>';
+	}
+
 	html += "<span class='input-group hidden'><input type='hidden' class='hidden' name='ids' value='" + ids + "'></span><span class='col-md-12 summaryarea'></span>";
 	if ( html.contains("datesection") || html.contains("timesection")) {
 		html += "<link rel='stylesheet' href='/css/bootstrap-datetimepicker.min.css'>\n" +

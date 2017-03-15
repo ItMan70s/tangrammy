@@ -367,13 +367,18 @@ function __list(res, define, tid, vid, user, cond, orignal) {
 		// TODO coupled with the official “next“, “prev“, “first” and “last” link relation types.
 		// size , page/pages
 		// Object.assign({skip: 0, limit: 1000}, options);
-		if (define["pagging"] && "page" in orignal) {
-			opt["limit"] = define["pagging"] || 10;
-			opt["skip"] = orignal["page"] * (define["pagging"] || 10);
+		if ("Pagging" in define && define["Pagging"] > 0) {
+			res.req.page = res.page = orignal["page"] || 0;
+			opt["limit"] = define["Pagging"];
+			opt["skip"] = res.page * define["Pagging"];
 		}
 	} catch (msg) {
 		log.debug(msg);
 	}
+		log.debug("list option: ", define["Pagging"], opt, define);
+		log.debug(define["Pagging"], opt, define);
+		log.debug(opt, define);
+		log.debug(define);
 	mongo.list(tid, vid, user, cond, "", opt, function (recorder) {
 		if (recorder.code != 200) {
 			recorder.warning = "Internal error!<br/>" + util.inspect(recorder.error);
