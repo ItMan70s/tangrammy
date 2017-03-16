@@ -213,7 +213,7 @@ function exportDB(folder) {
 	exec(cmd.replace(/name/gi, "settings"));
 	exec(cmd.replace(/name/gi, "ts"));
 	
-	var ts = fs.readFileSync(folder + "/DB" + "\\ts.json", {encoding: 'utf8'}).replace(/(.+"Tid" : ")(T..?)(",.+)/gi, "$2");
+	var ts = fs.readFileSync(folder + "/DB" + "/ts.json", {encoding: 'utf8'}).replace(/(.+"Tid" : ")(T..?)(",.+)/gi, "$2");
 	ts = ts.replace(/[\r\n]/gi, " ").replace(/ +/g, " ").toLowerCase().split(" ");
 	var done = "";
 	for (var i in ts) {
