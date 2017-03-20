@@ -9,7 +9,7 @@ process.argv[2] && settings.setPort(process.argv[2]);
 process.argv[3] && settings.setDB(process.argv[3]);
 
 var DB = settings.db;
-
+var dbStatus = {success: "", failed: ""};
 /*
 
 var Q = require('q');
@@ -62,9 +62,25 @@ $.get("l10n", function (l10n) {
 
 
 */
+function now() {
+	return (new Date()).format("YYYY/MM/DD hh:mm:ss.S Z");
+}
 mongoose.connection.on('error', 
 function callback (err) {
-	log.fatal("connection error: " + err);
+	dbStatus.failed = now();
+	log.fatal("DB connection error: " + err);
+	refresh();
+});
+
+mongoose.connection.on('connected', 
+function callback () {
+	dbStatus.success = now();
+	log.info("DB connected.");
+});
+mongoose.connection.on('disconnected', 
+function callback () {
+	dbStatus.failed = now();
+	log.fatal("DB disconnected!");
 });
 mongoose.connection.once('open', function callback () {
 	log.info("Connected DB " + DB.host + ':' + DB.port + '/' + DB.name + " successfully.");
@@ -241,8 +257,11 @@ var Reservations = {};
 var Settings = {};
 
 function refresh() {
-	//mongoose.connection.close();
-	
+	try {
+		mongoose.close();
+	} catch(e) {
+		log.info(e);
+	}
 	mongoose.connect('mongodb://' + DB.host + ':' + DB.port + '/' + DB.name + '');
 	Schemas = {"T": mongoose.model('T', TSchema), "Reservation": mongoose.model('Reservation', ReservationSchema), "Settings": mongoose.model('Settings', SettingSchema), "Op": mongoose.model("Op", OpSchema)};
 	Settings = {"User": {}, "Role": {}, "IDDefines": {}, "ActiveUsers": {}};
@@ -461,6 +480,7 @@ function logOP(tid, vid, op, dataorg, datanew) {
 			log.debug("Failed to save op log: " + util.inspect(err));
 		}
 	});
+	dbStatus.success = now();
 	} catch (msg) {
 		log.debug("Unexpected Oplog Error: " + msg);
 	}
@@ -754,7 +774,7 @@ function newOne(tid, vid, condition, data, callback) {
 	var model = getTSchema(tid);
 	if (typeof data == 'function') {callback = data; data = condition; condition = {};}
 	data["Rid"] = uuid();
-	data["Update"] = (new Date()).format("YYYY/MM/DD hh:mm:ss.S Z");
+	data["Update"] = now();
 	data["Create"] = data["Update"];
 	data["CreateR"] = data["UpdateR"];
 	var unique = (tid == "T") ? {'$or' : []} : __getUnique(defines(tid)["Fields"], data);
@@ -834,7 +854,7 @@ function __update(tid, vid, condition, udata, callback) {
 		if (!doc && !err) {
 			callback({"code": 404, "message": "Not Found", "data": {}});
 		} else if (doc) {
-			udata["Update"] = (new Date()).format("YYYY/MM/DD hh:mm:ss.S Z");
+			udata["Update"] = now();
 			if("Reservation" in udata && !udata["user"]) {
 				log.debug("ignore current reservation no user.");
 			}
@@ -1035,6 +1055,7 @@ module.exports = {
 	matchRole: matchRole,
 	activeUser: active,
 	dst: dst,
+	health: function() {return dbStatus.success > dbStatus.failed},
 	getSetting: function(key) {return (key in Settings) ? Settings[key] : {};},
 	getAppList: function() {return liApps;},
 	getAppOptions: function() {return optApps;},

@@ -172,6 +172,7 @@ function init(req, res) {
 		case "tangrammy":
 		case "home":
 		case "admin":
+		case "h":
 		case "cmd":
 		case "script":/*
 		case "login":
@@ -270,6 +271,9 @@ function process(req, res) {
 			break;
 		case "upload":
 			file.upload(req,res);
+			break;
+		case "h":
+			A.welcome(req, res, "DB health: " + mongo.health(), true);
 			break;
 		case "home":
 			if (settings.home && settings.home.link && settings.home.link != "/") {
