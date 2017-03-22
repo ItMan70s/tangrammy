@@ -212,6 +212,7 @@ var TSchema = new Schema({
   OrderBy: {type: String},
   Order: {type: String},
   Pagging: {type: String},
+  Counting: {type: String},
   Group: {type: String},
   Filter: {type: String},
   History: {type: String},

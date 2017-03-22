@@ -339,16 +339,17 @@
 				if (dFields[i]["form"].match(/date/gi)) {
 			%>		
 					<tr><td><div class='col-md-1 line-header'><%= dFields[i]["label"] %>:</div><div class='col-md-11'>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-365d~0" <%= i %> >Last 365 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 30 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 7 Days</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-1d~">Yesterday</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0d~">Today</label>
-					<br />
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="1d~">Tomorrow</label>
-					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0w~">This Week</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="" >All</label>
 					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0m~">This Month</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0d~">Today</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-1d~">Yesterday</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 7 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-30d~0">Last 30 Days</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="-365d~0">Last 365 Days</label>
+					<br />
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0w~">This Week</label>
 					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0y~">This Year</label>
+					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="1d~">Tomorrow</label>
 					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 7 Days</label>
 					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~30d">Next 30 Days</label>
 					<label class="space20 check"> <input type="radio" name="opt_<%= i %>" target="<%= i %>" value="0~365d">Next 365 Days</label>
@@ -362,6 +363,7 @@
 			</div>
 			</div></div></div>
 			
+			<div class='row'><div class='col-md-10'>
 			<div class='col-md-12'><div><label>Order By</label>
 			<div class='input-group'>
 			<% var oby = (data["OrderBy"] + ",,").split(","); var order = (data["Order"] + ",,").split(",");
@@ -369,7 +371,7 @@
 			%>
 			<div class='col-md-auto'>
 				<select name='OrderBy' class='input-sm'>
-				<option value='null'>Select on Fields</option>
+				<option value='null'>Select?</option>
 				<% for (var fid in fields) { %>
 					<option value='<%= fid %>'  <%= (oby[i] == fid) ? "selected=true" : "" %>  ><%= fields[fid] %></option>
 				<% } %>
@@ -401,6 +403,21 @@
 				</select>
 			  </div>
 			</div>
+			</div></div>
+			</div><div class='col-md-2'>
+			<div class='col-md-12'><div><label>Summary</label>
+			<div class='input-group'>
+			<div class='col-md-auto'>
+				<select name='Counting' multiple=true size=4 class='input-sm'>
+				<% for (var fid in fields) { 
+					if (dFields[fid]["form"] == "number") {
+				%>
+					<option value='<%= fid %>'  <%= (data["Counting"] && data["Counting"].indexOf(fid) > -1) ? "selected=true" : "" %>  ><%= fields[fid] %></option>
+				<% } } %>
+				</select>		
+			  </div>
+			</div>
+			</div></div>
 			</div></div>
 			<div class='col-md-12'>
 				<textarea class='form-control richtextcode' name='Footer' cols=100 rows=2 validate="required" title="Message in list page"><%= data["Footer"] || "" %></textarea>

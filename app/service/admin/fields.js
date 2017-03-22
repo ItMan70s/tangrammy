@@ -77,10 +77,11 @@ function toList(json) {
 				var th = head.mid(head.lastIndexOf("<", pos), head.indexOf("<", pos));
 				var nth = th;
 				if (data[i] && data[i]["form"] == "number") {
+					var summary = (json.raw["Counting"] && json.raw["Counting"].indexOf(i) > -1) ? " summary" : "";
 					if (nth.contains("class=")) {
-						nth = nth.replace("class='", "class='number ");
+						nth = nth.replace("class='", "class='number" + summary + " ");
 					} else {
-						nth = nth.replace("<th", "<th class='number'");
+						nth = nth.replace("<th", "<th class='number" + summary + "'");
 					}
 				}
 				head = head.replace(th, nth + label);
@@ -406,7 +407,7 @@ function toList(json) {
 	"\n" +
 	" </script>\n";
 	}
-	html += "<script type='text/javascript'>\n  var summaryid = '';\n" + func + "\n" + 
+	html += "<script type='text/javascript'>\n  var summaryid = '" + (json["Counting"] || "") + "';\n" + func + "\n" + 
 "	$(\"[sub='true']\").each(function () {\n" + 
 "		var empty = true;\n" + 
 "		$(this).find('.spanval').each(function () { if ($(this).html().length > 1) empty = false; });\n" + 
