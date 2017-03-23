@@ -1,0 +1,99 @@
+<html>
+<head>
+<meta charset="utf-8">
+<link rel='stylesheet' href='./css/bootstrap.min.css' />
+<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+<link rel='stylesheet' href='./css/font-awesome.min.css' />
+<!--[if IE 7]>
+<link rel="stylesheet" href="./css/font-awesome-ie7.min.css">
+<![endif]-->
+<title>意见反馈</title>
+<script src="./js/jquery.js"></script>
+<script src="./js/jquery.hotkeys.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script type='text/javascript' src='./js/richtext.js' ></script>
+ <style type="text/css">
+	.row+.row {
+		margin-top: 15px;
+	}
+	.editable {
+		border: 1px solid #ccc;
+	}
+</style>   
+<script type='text/javascript'>
+	function sendMail() {
+		var data = {"cc": $("#cc").val(), "subject": $("#subject").val()};
+		data.body = window.location.href + "\n\n" +  $("#body").val() + "\nAddition: " + $("#other").val();
+		$.post("/feedback", data,			
+			function(result){
+				$(".alert").addClass("alert-warning").html(result);
+			}
+		);
+		return false;
+	}
+</script>
+</head>
+
+<body class="col-md-12">
+<form method="post" class="col-lg-offset-2"  >
+<h1>意见反馈</h1>
+
+<div class="row" >
+	<div class="col-lg-8 text-right">
+		<button type="button" onclick="sendMail()" title="send" class="btn btn-success">　发送　</button>
+		<button type="reset" title="reset" class="btn">　重置　</button>
+	</div>
+</div>
+
+<div class="row hide">
+  <div class="col-lg-8">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <label class="btn btn-default" for="subject">主　题 ：</label>
+      </span>
+      <input type="text" id="subject" name="subject" class="form-control" value='Feedback'>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="margin-top: 50px">
+	<textarea class='richtext well col-lg-8' id="body" name='body' cols=100 rows=15 options='"autohide":"no", "position":"top left"'> 写点什么吧 / type something</textarea>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <label class="btn btn-primary" for="to" >联系邮箱 ：</label>
+      </span>
+      <input type="text" id="cc" name="cc" class="form-control" title="your email address for us to contact" placeholder='sample: reportor@feedback.com; team@feedback.com'>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <label class="btn btn-primary" for="to" >其他联系方式 ：</label>
+      </span>
+      <input type="text" id="other" name="other" class="form-control" title="to contact you in other way" placeholder='QQ: 1234567; Skype: sd33; weixin; facebook...'>
+    </div>
+  </div>
+</div>
+<div class="row" >
+	<div class="col-lg-8">
+		<button type="button" onclick="sendMail()" title="send" class="btn btn-success">　发送　</button>
+		<button type="reset" title="reset" class="btn">　重置　</button>
+	</div>
+</div>
+<div class="row" >
+	<div class="col-lg-8">
+		<p class="alert" ></p>
+	</div>
+</div>
+
+</form>
+
+</body>
+</html>

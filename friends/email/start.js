@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+const EMAIL_FEEDBACK = "itboy70s@gmail.com";
 var port = 3001;
 
 function getEmailRequest(req) {
@@ -28,6 +28,19 @@ function getEmailRequest(req) {
 	return mail;
 }
 
+function getInformation() {
+	if (!this.headers) {
+		return {};
+	}
+	var info = this.headers;
+	info.method = this.method;
+	info.url = this.url;
+	info.pathname = this._parsedUrl ? this._parsedUrl.pathname : "";
+	info.remote = (this.headers['x-forwarded-for'] || this.connection.remoteAddress || this.socket.remoteAddress || this.connection.socket.remoteAddress) + "";
+	info.body = this.body;
+	
+	return info;
+}
 app.all('*', function (req, res) {
 	try {
 		if (req.method == "GET") {
@@ -37,9 +50,19 @@ app.all('*', function (req, res) {
 			if (req.url == "/") {
 				return res.redirect("/mail.html");
 			}
+			if (req.url == "/feedback") {
+				req.info = getInformation;
+				var uuid = ((new Date() - 0) + "").substr(8);
+				var mail = {to: EMAIL_FEEDBACK, subject: "Feedback [" + uuid + "] is comming", text: "", html: JSON.stringify(req.info)};
+				email.send(null, mail);
+				// TODO how to handle this information???
+				return res.redirect("/feedback.html?uuid=" + uuid);
+			}
 		}
-		
 		var mail = getEmailRequest(req);
+		if (req.url == "/feedback" && req.method == "POST") {
+			mail.to = EMAIL_FEEDBACK;
+		}
 		if (!mail.to) {
 			res.end("no recipients defined");
 		} else {
@@ -54,6 +77,6 @@ var server = app.listen(port, function () {
   console.log(
 	'*************************************************************************\n' +
 	'Server listening on port http://localhost:' + port + '\n' +
-	'sample email url: http://localhost:' + port + '/cmd/?to=itboy70s@gmail.com&title=test&body=haha\n' +
+	'sample email url: http://localhost:' + port + '/send?to=itboy70s@gmail.com&title=test&body=haha\n' +
 	'*************************************************************************');
 });

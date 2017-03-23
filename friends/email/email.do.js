@@ -35,10 +35,10 @@ function sendMail(res, mail, config) {
 		mail["from"] = settings.SMTP.auth.user;
 		smtp.sendMail(mail, function(error, response){
 			if(error){
-				res.end("", error);
+				res && res.end("", error);
 				console.error(error);
 			} else {
-				res.end("sent.");
+				res && res.end("sent.");
 				console.log("Message sent: " + response.message);
 			}
 			//smtp.close();
