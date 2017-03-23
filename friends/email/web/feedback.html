@@ -26,6 +26,10 @@
 		data.body = window.location.href + "\n\n" +  $("#body").val() + "\nAddition: " + $("#other").val();
 		$.post("/feedback", data,			
 			function(result){
+				if (result == "sent.") {
+					$(".feedback").hide();
+					result = "Thanks for your feedback, we will go over it and try to make some improve.";
+				}
 				$(".alert").addClass("alert-warning").html(result);
 			}
 		);
@@ -37,7 +41,7 @@
 <body class="col-md-12">
 <form method="post" class="col-lg-offset-2"  >
 <h1>意见反馈</h1>
-
+<div class="feedback" >
 <div class="row" >
 	<div class="col-lg-8 text-right">
 		<button type="button" onclick="sendMail()" title="send" class="btn btn-success">　发送　</button>
@@ -86,6 +90,7 @@
 		<button type="button" onclick="sendMail()" title="send" class="btn btn-success">　发送　</button>
 		<button type="reset" title="reset" class="btn">　重置　</button>
 	</div>
+</div>
 </div>
 <div class="row" >
 	<div class="col-lg-8">
