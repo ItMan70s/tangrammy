@@ -33,6 +33,7 @@ function sendMail(res, mail, config) {
 	initSmtp();
 	try {
 		mail["from"] = settings.SMTP.auth.user;
+		mail["html"] = (mail["html"] || "").replace(/\<script/gi, "&lt;script");
 		smtp.sendMail(mail, function(error, response){
 			if(error){
 				res && res.end("", error);

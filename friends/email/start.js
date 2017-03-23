@@ -53,7 +53,7 @@ app.all('*', function (req, res) {
 			if (req.url == "/feedback") {
 				req.info = getInformation;
 				var uuid = ((new Date() - 0) + "").substr(8);
-				var mail = {to: EMAIL_FEEDBACK, subject: "Feedback [" + uuid + "] is comming", text: "", html: JSON.stringify(req.info)};
+				var mail = {to: EMAIL_FEEDBACK, subject: "Feedback [" + uuid + "] is comming", text: "", html: JSON.stringify(req.info())};
 				email.send(null, mail);
 				// TODO how to handle this information???
 				return res.redirect("/feedback.html?uuid=" + uuid);
