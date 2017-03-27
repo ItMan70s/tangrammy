@@ -732,7 +732,7 @@ function __refreshAppList(lst) {
 '		<p name="blurupdate" url="/T/update?Rid=' + lst[it]["Rid"] + '&Description=" contenteditable="true" orginal="Description' + lst[it]["Rid"] + '">' + lst[it]["Description"] + '</p>\r\n' + 
 '		<p name="Description' + lst[it]["Rid"] + '" class="hide" >' + lst[it]["Description"] + '</p>\r\n' + 
 '		<div class="text-right">\r\n' + 
-'			<a class="btn btn-xs" name="onemsg" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '&format=json" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
+'			<a class="btn btn-xs" name="onereload" href="javascript:;" url="/T/create?Rid=' + lst[it]["Rid"] + '&format=json" title="Rebuild application[' + lst[it]["Title"] + '] to active changes">Rebuild</a>\r\n' + 
 '			<a href="/T/show?Rid=' + lst[it]["Rid"] + '" title="View define detail of application[' + lst[it]["Title"] + ']"><img class="icon15" src="/img/detail.png"></a>\r\n' + 
 '			<a href="/T/update?Rid=' + lst[it]["Rid"] + '" title="Edit Define"><img class="icon15" src="/img/edit.png"></a>\r\n' + 
 '			<a href="/T/update?Rid=' + lst[it]["Rid"] + '&dl=layout" title="Edit Layout"><img class="icon15" src="/img/edit2.png"></a>\r\n' + 
@@ -746,7 +746,7 @@ function __refreshAppList(lst) {
 	}
 
 	defines += '	<div class="list-app">\r\n' + 	 						
-'		<h3><small>Rebuild: </small><a name="onemsg" href="javascript:;" url="/T/create?format=json">All Applications</a></h3><br />\r\n' + 
+'		<h3><small>Rebuild: </small><a name="onereload" href="javascript:;" url="/T/create?format=json">All Applications</a></h3><br />\r\n' + 
 '		<p class="text-center"><a href="/T/new" class="btn btn-lg btn-default" title="Add New Application"><img src="/img/add.png"> Application</a></p>\r\n' + 
 '		<div class="text-right"><a href="https://github.com/ItMan70s/Tangrammy/">View TangramMy on GitHub</a></div>\r\n' + 
 			'</div>\r\n';
