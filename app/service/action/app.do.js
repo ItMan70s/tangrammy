@@ -58,7 +58,7 @@ function getDefault(json) {
 }
 
 function add(req, res, uData, define, tid, vid) {
-	var fields = (define["Fields"] || "").toJSON();
+	var fields = (define && define["Fields"] || "").toJSON();
 	if (req.method == "GET") {
 		var recorder = {};
 		recorder.data = getDefault(fields);
@@ -173,7 +173,7 @@ function __new(res, recorder, tid, vid, define) {
 		recorder.data = Function("data", fun)(recorder.data);
 	}
 	
-	var fields = (define["Fields"] || "").toJSON();
+	var fields = (define && define["Fields"] || "").toJSON();
 	for (var i in fields) {
 		if ("id" == fields[i]["form"]) {
 			recorder.data[i] = mongo.getIDPreview(((fields[i]["key"]) ? fields[i]["key"] : tid)) + " ?";
@@ -209,7 +209,7 @@ function __verify(data, define) {
 	return (error.length > 0) ? error.substr(1) : error;
 }
 function __winnow(data, define) {
-	var fields = (define["Fields"] || "").toJSON();
+	var fields = (define && define["Fields"] || "").toJSON();
 	if (fields["error"]) {
 		log.warn(util.inspect(fields));
 		return data;

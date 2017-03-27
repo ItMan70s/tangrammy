@@ -212,7 +212,7 @@ function register(req, res) {
 			var htm = "Email: <b>" + uData["email"] + "</b><br/>";
 			htm += "User Password: <b>" + pass + "</b><br/>";
 			
-			var define = mongo.defines(utid, uvid);
+			var define = mongo.defines(utid, uvid) || {};
 			var fields = (define["Fields"] || "").toJSON();
 			for (var i in fields) {
 				if (i != umail && i != upasswd) {

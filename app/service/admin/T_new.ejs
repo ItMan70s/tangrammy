@@ -668,6 +668,12 @@ var chks = " required unique hidden readonly disabled trim exist pk htm multiple
 $(document).on("change", "[name='form']", onChangeForm);
 function init(json) {
 	var fields = {};
+	// inital all fields first.
+	var $zone = $('#FieldEditModal');
+	$zone.find('[type="text"]').val("");
+	$zone.find('select').val("");
+	showOptions([], "radio", 5, "diy");
+
 	for (var i in json) {
 		$("[name=kid]").val(i);
 		$("[name=kid]").attr("org", i);
@@ -675,15 +681,17 @@ function init(json) {
 	}
 	for (var i in fields) {
 		if (chks.indexOf(i) > 0) {
-			if ($("[value=" + i + "]")[0]) $("[value=" + i + "]")[0].checked=true;
+			if ($("[value=" + i + "]")[0]) {
+				$("[value=" + i + "]").attr("checked", true).addClass("checked");
+			}
 		} else if (i == "attribute") {
 			//if ($("[value=" + i + "]")[0]) $("[value=" + i + "]")[0].checked=true;
 			$("[name=attribute]").each(function() {
 				if (fields[i].indexOf("," + this.value + ",") > -1) {
-					$(this.parentNode).removeClass("hidden");
+					$(this.parentNode).removeClass("hidden").addClass("checked");
 					this.checked = true;
 				} else {
-					$(this.parentNode).addClass("hidden");
+					$(this.parentNode).addClass("hidden").removeClass("checked");
 					this.checked = false;
 				}
 			});

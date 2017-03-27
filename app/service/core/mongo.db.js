@@ -301,7 +301,7 @@ list("T", "V", null, {}, "", {sort: {Tid: 1, Vid: 1}}, function (recorder) {
 	liApps = "";
 	optApps = '{"caption": "All", "value": "*"}';
 	for (var item in recorder.data) {
-		var td = recorder.data[item]; 
+		var td = recorder.data[item] || {}; 
 		if (td["Visible"] == "on" && td["Enable"] == "on")  {
 			liApps += "<li><a href='/" + td["URL"] + "/list'>" + td["Title"] + "</a></li>\n";
 			optApps += ', {"caption": "' + td["Title"] + '", "value": "' + td["Tid"] + '/' + td["Vid"] + '"}';
@@ -778,7 +778,7 @@ function newOne(tid, vid, condition, data, callback) {
 	data["Update"] = now();
 	data["Create"] = data["Update"];
 	data["CreateR"] = data["UpdateR"];
-	var unique = (tid == "T") ? {'$or' : []} : __getUnique(defines(tid)["Fields"], data);
+	var unique = (tid == "T") ? {'$or' : []} : __getUnique(defines(tid, vid)["Fields"], data);
 	if (condition && ('$or' in condition)) {
 		unique['$or'] = unique['$or'].concat(condition['$or']);
 	}
@@ -910,7 +910,11 @@ function __update(tid, vid, condition, udata, callback) {
 
 function defines(tid, vid) {
 	if (!vid) vid = "V1"; 
-	return (tid) ? TDefines[tid+vid] : TDefines;
+	var def = (tid) ? TDefines[tid+vid] : TDefines;
+	if (!def) {
+		log.error("Not found define: " + tid + " " + vid);
+	}
+	return def;
 }
 function matchRole(role, tid, vid) {
 	var apps = "";
