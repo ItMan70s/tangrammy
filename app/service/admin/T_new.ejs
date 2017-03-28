@@ -564,9 +564,7 @@
 		<select name='otype' class='input-sm col-md-auto' style="margin-top: 8px;">
 			<option value='diy'  <%= (data["otype"] != "applications" && data["otype"] != "users" ) ? "selected=true" : "" %>  >Options: User Define</option>
 			<option value='applications'  <%= (data["otype"] == "applications") ? "selected=true" : "" %>  >Options: Application List</option>
-<%
-			// <option value='users'  <%= (data["otype"] == "users") ? "selected=true" : "" %>  >Options:  System Users List</option>
-%>
+			<option value='users'  <%= (data["otype"] == "users") ? "selected=true" : "" %>  >Options:  System Users List</option>
 		</select>
 		</label>
 		<div class='col-md-12 tab-content'>

@@ -53,6 +53,7 @@ function add(req, res) {
 			}
 		}
 		uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
+		uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "users"/g, '"otype": "users", "options": ' + options.users);
 		mongo.newOne("T", "V", cond, uData, function (recorder) {
 			if (recorder.code != 200) {
 				log.error(recorder.message);
@@ -210,6 +211,7 @@ function copy(req, res) {
 				}
 			}
 			uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
+			uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "users"/g, '"otype": "users", "options": ' + options.users);
 			mongo.newOne("T", "V", cond, uData, function (recorder) {
 				if ((recorder.code) != 200 || recorder.num < 1) {
 					log.error(recorder.message);
@@ -261,6 +263,7 @@ function modify(req, res) {
 			}
 			*/
 			uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "applications"/g, '"otype": "applications", "options": ' + options.app);
+			uData["Fields"] = (uData["Fields"] + "").replace(/"otype": "users"/g, '"otype": "users", "options": ' + options.users);
 		}
 		mongo.update("T", "V", condition, uData, function (recorder) {
 			if ((recorder.code) != 200 || recorder.num < 1) {
@@ -926,6 +929,16 @@ function process(req, res) {
 				options.app += ', {"caption": "' + (lst[it]["Status"] == "hidden" ? "[hidden]" : "") + lst[it]["Title"] + '", "value": "' + lst[it]["Tid"] + '/' + lst[it]["Vid"] + '"}';
 			}
 			options.app = "[" + options.app + "]";
+		});
+	}
+	if (options.users.length < 1) {
+		options.users += '{"caption": "All", "value": "*"}';
+		mongo.list("TF1", "V1", null, {"F4": "1"}, "Rid F0 F1", {}, function (recorder) {
+			var lst = recorder.data;
+			for (var it = lst.length - 1; it > -1; it--) {
+				options.users += ', {"caption": "' + lst[it]["F0"] + ' (' + lst[it]["F1"] + ')", "value": "' + lst[it]["Rid"] + ':' + lst[it]["F0"] + '"}';
+			}
+			options.users = "[" + options.users + "]";
 		});
 	}
 	switch(req.u.op) {
