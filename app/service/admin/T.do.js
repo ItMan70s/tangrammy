@@ -932,11 +932,11 @@ function process(req, res) {
 		});
 	}
 	if (options.users.length < 1) {
-		options.users += '{"caption": "All", "value": "*"}';
+	//	options.users += '{"caption": "All", "value": "*"}';
 		mongo.list("TF1", "V1", null, {"F4": "1"}, "Rid F0 F1", {}, function (recorder) {
 			var lst = recorder.data;
 			for (var it = lst.length - 1; it > -1; it--) {
-				options.users += ', {"caption": "' + lst[it]["F0"] + ' (' + lst[it]["F1"] + ')", "value": "' + lst[it]["Rid"] + ':' + lst[it]["F0"] + '"}';
+				options.users += ', {"caption": "' + lst[it]["F0"] + ' (' + lst[it]["F1"] + ')", "value": "' + lst[it]["Rid"] + '"}';
 			}
 			options.users = "[" + options.users + "]";
 		});

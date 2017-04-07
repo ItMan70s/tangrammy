@@ -174,6 +174,7 @@ function toList(json) {
 					if (opt.caption == undefined) {
 						opt.caption = opt.value;
 					}
+					// (opt.value + "").split(",")[0]
 					options += "  if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { ";
 					options += "   opts += \"" + (opt["css"] ? "<span class='" + opt["css"] + "'>":"");
 					var tmp = (opt.icon ? "<img class='icon15' src='" + opt.icon + "' alt='" + opt.caption + "' title='" + opt.caption + "'> " : "") + opt.caption;
