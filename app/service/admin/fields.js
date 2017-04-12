@@ -176,8 +176,8 @@ function toList(json) {
 					}
 					// (opt.value + "").split(",")[0]
 					options += "  if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { ";
-					options += "   opts += \"" + (opt["css"] ? "<span class='" + opt["css"] + "'>":"");
-					var tmp = (opt.icon ? "<img class='icon15' src='" + opt.icon + "' alt='" + opt.caption + "' title='" + opt.caption + "'> " : "") + opt.caption;
+					options += "   opts += \"<span title='" + (opt.title || opt.caption) + "' " + (opt["css"] ? "class='" + opt["css"] + "'" :"") + ">";
+					var tmp = (opt.icon ? "<img class='icon15' src='" + opt.icon + "' alt='" + opt.caption + "' > " : "") + opt.caption;
 					if (iconly) {
 						if (tmp.contains("<img ")) {
 							tmp = "<img " + tmp.mid("<img ", ">") + ">";
@@ -188,7 +188,7 @@ function toList(json) {
 					if (textonly) {
 						tmp = tmp.replace(/<img [^>]+>/gi, "");
 					}
-					options += tmp + (opt["css"] ? "</span>":"") + " \"; } \n ";
+					options += tmp + "</span>" + " \"; } \n ";
 					// options += iconly ?  + (!iconly ? opt.caption : "") + (opt["css"] ? "</span>":"") + " \"; } \n ";
 					//options += (!iconly ? opt.caption : "") + (opt["css"] ? "</span>":"") + " \"; } \n ";
 				}
@@ -283,7 +283,7 @@ function toList(json) {
 						opt.caption = opt.value;
 					}
 					// data-toggle='buttons' btn list-item 
-					html += "<label class='space20 " + (opt["css"] ? opt["css"]:"") + "'> <input type='checkbox' target='" + fid + "' value='" + opt.value + "'>" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "' >": "") + opt.caption + "</label>";
+					html += "<label class='space20 " + (opt["css"] ? opt["css"]:"") + "' title='" + (opt.title || "") + "'> <input type='checkbox' target='" + fid + "' value='" + opt.value + "'>" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "' >": "") + opt.caption + "</label>";
 					//html += "<a name='" + fid + "' href='javascript:;' " + (opt["css"] ? "class='" + opt["css"] + "'>":">") + (opt.icon ? "<img class='icon15' src='" + opt.icon + "' > ": "") + opt.caption + "</a>";
 				}
 				if (conds[i]["selectall"] == true) {
@@ -687,7 +687,7 @@ function ___show(json, name, def) {
 				if (opt.caption == undefined) {
 					opt.caption = opt.value;
 				}
-				html += "<% if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { %> <span class='pull-left " + (opt["css"] || "col-md-auto") + "'>" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "' title='" + opt.caption + "'> ": "") + opt.caption + "</span> <% } %>";
+				html += "<% if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { %> <span class='pull-left " + (opt["css"] || "col-md-auto") + "' title='" + (opt["title"] || "") + "'>" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "' title='" + opt.caption + "'> ": "") + opt.caption + "</span> <% } %>";
 			}
 			html += "</div>";
 		break;
@@ -991,7 +991,7 @@ function ___edit(json, name, def) {
 				if (i % cols == 0) {
 					html += "<div class='min-h20'>";
 				}
-				html += "\n			<label class='" + json.form + "-inline " + (((i + 1) % cols == 0) ? "" : md) + (opt["css"] || "") + "'><input type='" + json.form + "' name='" + name + "' value='" + opt.value + "' " + toEF(json, foptions[json.form]).replace(" required=true", "") + " <%= (val.contains( \",\" + \"" + opt.value + "\" + \",\")) ? \"checked=true\" : \"\" %> >" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "'>": "") + opt.caption + "</label>";
+				html += "\n			<label class='" + json.form + "-inline " + (((i + 1) % cols == 0) ? "" : md) + (opt["css"] || "") + "' title='" + (opt.title || "") + "'><input type='" + json.form + "' name='" + name + "' value='" + opt.value + "' " + toEF(json, foptions[json.form]).replace(" required=true", "") + " <%= (val.contains( \",\" + \"" + opt.value + "\" + \",\")) ? \"checked=true\" : \"\" %> >" + (opt.icon ? "<img class='icon15' src='" + opt.icon + "'>": "") + opt.caption + "</label>";
 				if ((i + 1) % cols == 0) {
 					html += "</div>";
 				}
@@ -1009,7 +1009,7 @@ function ___edit(json, name, def) {
 				if (opt.caption == undefined) {
 					opt.caption = opt.value;
 				}
-				html += "\n			<option value='" + opt.value + "'  <%= (val.contains( \",\" + \"" + opt.value + "\" + \",\")) ? \"selected=true\" : \"\" %>  >" + opt.caption + "</option>";
+				html += "\n			<option value='" + opt.value + "' title='" + (opt.title || "") + "'  <%= (val.contains( \",\" + \"" + opt.value + "\" + \",\")) ? \"selected=true\" : \"\" %>  >" + opt.caption + "</option>";
 			}
 			html += "\n			</select>"
 		break;

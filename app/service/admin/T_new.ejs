@@ -569,12 +569,13 @@
 		</select>
 		<span id="reference_zone">
 			<input type="text" class="input-sm form-control col-md-0" style="width: auto" name="ourl" placeholder="/todo/search?Fids=F1,F2,F5&size=100&F5=Do052" />
-			<input type="text" class="input-sm form-control col-md-0" style="width: 40px" name="olabel" placeholder="F5" title="field id to display in option" />
-			<input type="text" class="input-sm form-control col-md-0" style="width: 40px" name="otitle" placeholder="F2" title="field id to display in hint/title" />
+			<input type="text" class="input-sm form-control col-md-0 wid30" name="olabel" placeholder="F5" title="field id for option text" />
+			<input type="text" class="input-sm form-control col-md-0 wid30" name="ovalue" placeholder="F1" title="field id for option value" />
+			<input type="text" class="input-sm form-control col-md-0 wid30" name="otitle" placeholder="F2" title="field id for hint/title" />
 		</span>
-		<select name='ofixed' class='input-sm col-md-auto '>
-			<option value='1' title="Options won't change even if data in application changed" >Fixed</option>
-			<option value='-1' title="Options change if data in application changed" >Flex</option>
+		<select name='ofixed' title="Options to decide whether change or not if data in application changed" class='input-sm col-md-auto '>
+			<option value='1' title="Options won't change even if data in application changed" >Static</option>
+			<option value='-1' title="Options will change if data in application changed" >Dynamic</option>
 		</select>
 		<a name='oreload' class="input-group-addon wid50 btn btn-success" href="javascript:reloadOptions();" title="reload data to reset current options" >Reload</a>
 		</label>
@@ -681,7 +682,7 @@ function init(json) {
 	var $zone = $('#FieldEditModal');
 	$zone.find('[type="text"]').val("");
 	$zone.find('select').val("");
-	showOptions([], "radio", 5, "diy");
+	showOptions([]);
 
 	for (var i in json) {
 		$("[name=kid]").val(i);
@@ -717,10 +718,18 @@ function init(json) {
 }
 
 function showOptions(opts, form, cols, type) {
-
+	if (form === undefined) {
+		form = $('[name="form"]').val() || "radio";
+	}
+	if (cols === undefined) {
+		cols = $('[name="size"]').val() || $('[name="cols"]').val() || 5;
+	}
+	if (type === undefined) {
+		type = $('[name="otype"]').val() || "diy";
+	}
 	var htm = "";
 	for (var i in opts) {
-		htm += '{"value": "' + opts[i]["value"] + '", "caption": "' + (opts[i]["icon"] ? "<img src='" + opts[i]["icon"] + "'>" : "") +
+		htm += '{"value": "' + opts[i]["value"] + '", "title": "' + (opts[i]["title"] || "") + '", "caption": "' + (opts[i]["icon"] ? "<img src='" + opts[i]["icon"] + "'>" : "") +
 			(opts[i]["css"] ? "<span class='" + opts[i]["css"] + "'>" : "") + (opts[i]["caption"] || "") + (opts[i]["css"] ? "</span>" : "")  + '"},\n';
 	}
 	$('[name="options"]').val("[" + htm + "]");
@@ -805,61 +814,105 @@ function showOptions(opts, form, cols, type) {
 		if (!json["options"]) {
 			error("Failed to parse options into JSON! <br />Close current page to drop changes then try to make change in view mode.<br />or Find out what's wrong at <a target='_blank' href='http://jsonlint.com/' >JsonLint</a>.");
 		} else {
-			showOptions(json["options"], form, cols, type);
+			showOptions(json["options"]);
 		}
 	});
-	$(document).on("click", '[name="oreload"]', function() {
+	
+	$(document).on("change", '[name="ofixed"]', autoShowOptFields);
+	$(document).on("change", '[name="otype"]', autoShowOptFields);
+	function autoShowOptFields() {
 		var val = $('[name="otype"]').val();
-		var url = "";
-		switch(val) {
-		case "applications":
-			url = "/T/V1/search?format=json";
-			break;
-		case "users":
-			url = "/users/search?format=json";
-			break;
-		case "reference":
-			url = $('[name="ourl"]').val();
-			if (url.indexOf("?") > 0) {
-				url = url.replace("?", "?format=json&");
-			} else {
-				url += "?format=json";
-			}
-			break;
-		default:
-		}
-		alert(url);
-	});
-	$(document).on("change", '[name="ofixed"]', autoShowReloadBtn);
-	$(document).on("change", '[name="otype"]', autoShowReloadBtn);
-	function autoShowReloadBtn() {
-		if ($('[name="ofixed"]').val() == 1 && $('[name="otype"]').val() != "diy") {
-			$('[name="oreload"]').show();
-		} else {
-			$('[name="oreload"]').hide();
-		}
-	}
-	$(document).on("change", '[name="otype"]', function() {
-		var val = $(this).val();
 		switch(val) {
 		case "applications":
 		case "users":
-			$(".f-options > .tab-content").hide();
 			$('[name="ofixed"]').show();
 			$('#reference_zone').hide();
 			break;
 		case "reference":
-			$(".f-options > .tab-content").show();
 			$('[name="ofixed"]').show();
 			$('#reference_zone').show();
 			break;
 		default:
-			$(".f-options > .tab-content").show();
-			$('[name="ofixed"]').hide();
+			$('[name="ofixed"]').hide().val(1);
 			$('#reference_zone').hide();
 		}
-	});
+		if ($('[name="ofixed"]').val() != -1) {
+			$(".f-options > .tab-content").show();
+		} else {
+			$(".f-options > .tab-content").hide();
+		}
+		if ($('[name="ofixed"]').val() != -1 && val != "diy") {
+			$('[name="oreload"]').show();;
+		} else {
+			$('[name="oreload"]').hide();
+		}
+	}
 	//bindRichText();
+}
+function reloadOptions() {
+	var type = $('[name="otype"]').val();
+	if (type == "diy" || $('[name="ofixed"]').val() != 1) {
+		return;
+	}
+	
+	var url = "";
+	var fidLabel = "";
+	var fidTitle = "";
+	var fidValue = "";
+	switch(type) {
+	case "applications":
+		url = "/T/V1/search?";
+		fidLabel = "";
+		fidTitle = "";
+		fidValue = "";
+		break;
+	case "users":
+		url = "/users/search?";
+		fidLabel = "F0";
+		fidTitle = "F1";
+		fidValue = "F1";
+	/*
+      "F0": "Job",
+      "F1": "zao-bao.zhang@hp.com",
+	  "UpdateR": "6K4S18G:zao-bao.zhang@hp.com",
+	*/
+		break;
+	case "reference":
+		url = $('[name="ourl"]').val();
+		fidLabel = $('[name="olabel"]').val().toUpperCase();
+		fidTitle = $('[name="otitle"]').val().toUpperCase();
+		fidValue = $('[name="ovalue"]').val().toUpperCase();
+		if (url == "") {
+			error("input url first JSON! ");
+		} else {
+			if (url.indexOf("?") < 0) {
+				url += "?";
+			}
+		}
+		break;
+	default:
+		return;
+	}
+	
+	url = url.replace("?", "?fids=Rid " + fidLabel + " " + fidTitle + " " + fidValue + "&format=json&");
+	$.getJSON(url, function(response) {
+		if (!response.data || !Array.isArray(response.data)) {
+			return;
+		}
+		var opts = [];
+		fidLabel = fidLabel ? fidLabel : "Rid";
+		response.data.map(function(item, index) {
+			var option = {};
+			option.caption = getFieldData(item, fidLabel, "Rid", "NOT FOUND"); 
+			option.value = item["Rid"] + ":" + getFieldData(item, fidValue, "", option.caption);
+			if (fidTitle != "") {
+				option.title = getFieldData(item, fidTitle, "Rid", ""); 
+			}
+			opts.push(option);
+		});
+		// $('[name="options"]').val(JSON.stringify(opts));
+		showOptions(opts);
+	});
 }
 
 function syncOptions() {
@@ -915,9 +968,10 @@ function onCreate() {
 			json += '"ourl": "' + $("[name='ourl']").val() + '", ';
 			json += '"olabel": "' + $("[name='olabel']").val() + '", ';
 			json += '"otitle": "' + $("[name='otitle']").val() + '", ';
+			json += '"ovalue": "' + $("[name='ovalue']").val() + '", ';
 			json += '"ofixed": "' + $("[name='ofixed']").val() + '", ';
 			json += '"otype": "' + $("[name='otype']").val() + '", ';
-			if ($("[name=otype]").val() == "diy") {
+			if ($('[name="otype"]').val() == "diy" || $("[name='ofixed']").val() == 1) {
 				// TODO check why? shouldn't run due to condition "[name=otype]" 
 				val = (val)? val.replace(/[\r\n]/g, ""): "[]";
 			} else {

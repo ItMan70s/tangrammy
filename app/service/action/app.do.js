@@ -379,7 +379,8 @@ function __list(res, define, tid, vid, user, cond, orignal) {
 		log.debug(define["Pagging"], opt, define);
 		log.debug(opt, define);
 		log.debug(define);
-	mongo.list(tid, vid, user, cond, "", opt, function (recorder) {
+		
+	mongo.list(tid, vid, user, cond, orignal["fids"] || "", opt, function (recorder) {
 		if (recorder.code != 200) {
 			recorder.warning = "Internal error!<br/>" + util.inspect(recorder.error);
 		} else {
