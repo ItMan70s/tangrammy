@@ -613,21 +613,28 @@ function remove(req, res) {
 		}
 	});
 }
-/*
 function search(req, res) {
 	var uData = req.u.data;
-	mongo.list("T", "V", null, {}, "Tid Vid Rid Title Description Visible Enable URL Help", {sort: {Tid: 1, Vid: 1}}, function (recorder) {
+	
+	mongo.list("T", "V", null, {}, "Tid Vid Rid Title Status URL", {sort: {Tid: 1, Vid: 1}}, function (recorder) {
 		if (recorder.code != 200) {
 			log.error(recorder.message);
 			res.end(recorder.message + util.inspect(recorder.error));
 		} else {
-			recorder.title = "Application List";
-			recorder.request = res.req;
-			return res.render(tpath + "T_list.ejs", recorder);
+			var lst = recorder.data;
+			var wrapper = [];
+			for (var it = lst.length - 1; it > -1; it--) {
+				if (lst[it]["Status"] == "disabled") {
+					continue; 
+				}
+				//  (lst[it]["Status"] == "hidden" ? "[hidden]" : "") +
+				wrapper.push({"Rid": lst[it]["Rid"],"F0": lst[it]["Title"], "F1": lst[it]["Tid"] + '/' + lst[it]["Vid"]})
+			}
+			recorder.data = wrapper;
+			res.json(recorder);
 		}
 	});
 }
-*/
 
 function svUpdateIDDefine(data) {
 	var fdata = (data["Fields"] + "").toJSON();
@@ -960,8 +967,12 @@ function process(req, res) {
 		case "remove":
 			return remove(req, res);
 		break;
+		case "search":
+			return search(req, res);
+		break;
 		default:
-			log.warn("ssid[" + req.u.ssid + "] no expected URL: " + req.url + ". Client information: " + req.info());
+		
+			log.warn("ssid[" + req.u.ssid + "] no expected URL: " + req.url + ", op: " + req.u.op + ". Client information: " + req.info());
 			return A.welcome(req, res, "", true);
 		break
 	}

@@ -116,7 +116,7 @@ function toList(json) {
 						if (links.length > 1) {
 							links[1] = links[1].replace(/<a /gi, "<li><a ").replace(/<\/a>/gi, "</a></li>\n");
 							var lst = links[1].lastIndexOf("</li>");
-							links[1] = '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown">&#20;<span class="caret"></span></a>\n' +
+							links[1] = '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-triangle-bottom" style="margin: 3px -3px"></span></a>\n' +
 										'<ul class="dropdown-menu" role="menu">\n' + links[1].mid(0, lst) + "</li></ul>\n</div>" + links[1].mid(lst + 5);
 						}
 						links[0] = links[0].replace(">", "><div class='btn-group btn-group-xs'>");
@@ -176,7 +176,7 @@ function toList(json) {
 					}
 					// (opt.value + "").split(",")[0]
 					options += "  if (val.contains( \",\" + \"" + opt.value + "\" + \",\")) { ";
-					options += "   opts += \"<span title='" + (opt.title || opt.caption) + "' " + (opt["css"] ? "class='" + opt["css"] + "'" :"") + ">";
+					options += "   opts += \"<span " + (opt.title ? "title='" + opt.title + "' " : "") + (opt["css"] ? "class='" + opt["css"] + "'" :"") + ">";
 					var tmp = (opt.icon ? "<img class='icon15' src='" + opt.icon + "' alt='" + opt.caption + "' > " : "") + opt.caption;
 					if (iconly) {
 						if (tmp.contains("<img ")) {
