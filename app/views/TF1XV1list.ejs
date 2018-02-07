@@ -89,14 +89,14 @@
 	</div><% function getF3(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "Administrator" + ",")) {    opts += "Administrator "; } 
-   if (val.contains( "," + "Default" + ",")) {    opts += "Default "; } 
+  if (val.contains( "," + "Administrator" + ",")) {    opts += "<span >Administrator</span> "; } 
+   if (val.contains( "," + "Default" + ",")) {    opts += "<span >Default</span> "; } 
    return opts; } %>
 <% function getF4(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "1" + ",")) {    opts += "Yes "; } 
-   if (val.contains( "," + "0" + ",")) {    opts += "No "; } 
+  if (val.contains( "," + "1" + ",")) {    opts += "<span >Yes</span> "; } 
+   if (val.contains( "," + "0" + ",")) {    opts += "<span >No</span> "; } 
    return opts; } %>
 <% function getF5(val) { 
   var opts = ""; 

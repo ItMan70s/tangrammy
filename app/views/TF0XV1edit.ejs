@@ -83,32 +83,32 @@
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Application<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F1"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F1' value='' checked=true class='hidden' ><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='*'  <%= (val.contains( "," + "*" + ",")) ? "checked=true" : "" %> >All</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T9/V1'  <%= (val.contains( "," + "T9/V1" + ",")) ? "checked=true" : "" %> >Booking</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T9/V3'  <%= (val.contains( "," + "T9/V3" + ",")) ? "checked=true" : "" %> >Booking3</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T6/V1'  <%= (val.contains( "," + "T6/V1" + ",")) ? "checked=true" : "" %> >Books</label>
-			<label class='checkbox-inline '><input type='checkbox' name='F1' value='TB/V1'  <%= (val.contains( "," + "TB/V1" + ",")) ? "checked=true" : "" %> >Issues</label></div><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T3/V1'  <%= (val.contains( "," + "T3/V1" + ",")) ? "checked=true" : "" %> >Links</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='t/V1'  <%= (val.contains( "," + "t/V1" + ",")) ? "checked=true" : "" %> >Money</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='TF0/V1'  <%= (val.contains( "," + "TF0/V1" + ",")) ? "checked=true" : "" %> >Roles</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T9/V2'  <%= (val.contains( "," + "T9/V2" + ",")) ? "checked=true" : "" %> >Servers</label>
-			<label class='checkbox-inline '><input type='checkbox' name='F1' value='T4/V1'  <%= (val.contains( "," + "T4/V1" + ",")) ? "checked=true" : "" %> >Todo</label></div><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='TF1/V1'  <%= (val.contains( "," + "TF1/V1" + ",")) ? "checked=true" : "" %> >Users</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='TA/V1'  <%= (val.contains( "," + "TA/V1" + ",")) ? "checked=true" : "" %> >VMs</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T7/V1'  <%= (val.contains( "," + "T7/V1" + ",")) ? "checked=true" : "" %> >Words</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T1/V1'  <%= (val.contains( "," + "T1/V1" + ",")) ? "checked=true" : "" %> >ZCar</label>
-			<label class='checkbox-inline '><input type='checkbox' name='F1' value='T1/V2'  <%= (val.contains( "," + "T1/V2" + ",")) ? "checked=true" : "" %> >ZCarRelease</label></div><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F1' value='T5/V2'  <%= (val.contains( "," + "T5/V2" + ",")) ? "checked=true" : "" %> >lend</label></div></div></div></div>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='*'  <%= (val.contains( "," + "*" + ",")) ? "checked=true" : "" %> >All</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T9/V1'  <%= (val.contains( "," + "T9/V1" + ",")) ? "checked=true" : "" %> >Booking</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T9/V3'  <%= (val.contains( "," + "T9/V3" + ",")) ? "checked=true" : "" %> >Booking3</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T6/V1'  <%= (val.contains( "," + "T6/V1" + ",")) ? "checked=true" : "" %> >Books</label>
+			<label class='checkbox-inline ' title=''><input type='checkbox' name='F1' value='TB/V1'  <%= (val.contains( "," + "TB/V1" + ",")) ? "checked=true" : "" %> >Issues</label></div><div class='min-h20'>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T3/V1'  <%= (val.contains( "," + "T3/V1" + ",")) ? "checked=true" : "" %> >Links</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='t/V1'  <%= (val.contains( "," + "t/V1" + ",")) ? "checked=true" : "" %> >Money</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='TF0/V1'  <%= (val.contains( "," + "TF0/V1" + ",")) ? "checked=true" : "" %> >Roles</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T9/V2'  <%= (val.contains( "," + "T9/V2" + ",")) ? "checked=true" : "" %> >Servers</label>
+			<label class='checkbox-inline ' title=''><input type='checkbox' name='F1' value='T4/V1'  <%= (val.contains( "," + "T4/V1" + ",")) ? "checked=true" : "" %> >Todo</label></div><div class='min-h20'>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='TF1/V1'  <%= (val.contains( "," + "TF1/V1" + ",")) ? "checked=true" : "" %> >Users</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='TA/V1'  <%= (val.contains( "," + "TA/V1" + ",")) ? "checked=true" : "" %> >VMs</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T7/V1'  <%= (val.contains( "," + "T7/V1" + ",")) ? "checked=true" : "" %> >Words</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T1/V1'  <%= (val.contains( "," + "T1/V1" + ",")) ? "checked=true" : "" %> >ZCar</label>
+			<label class='checkbox-inline ' title=''><input type='checkbox' name='F1' value='T1/V2'  <%= (val.contains( "," + "T1/V2" + ",")) ? "checked=true" : "" %> >ZCarRelease</label></div><div class='min-h20'>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F1' value='T5/V2'  <%= (val.contains( "," + "T5/V2" + ",")) ? "checked=true" : "" %> >lend</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Enable</label><div class='controls'>
 <% var val = data["F2"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F2' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Enable</label>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F2' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >Disable</label></div></div></div></div>
+			<label class='radio-inline col-md-2 ' title=''><input type='radio' name='F2' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Enable</label>
+			<label class='radio-inline col-md-2 ' title=''><input type='radio' name='F2' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >Disable</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Default Role</label><div class='controls'>
 <% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><div class='min-h20'>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='radio-inline col-md-2 '><input type='radio' name='F3' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
+			<label class='radio-inline col-md-2 ' title=''><input type='radio' name='F3' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
+			<label class='radio-inline col-md-2 ' title=''><input type='radio' name='F3' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
 </div>
   <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>
 <div class="col-md-0"><button type="submit" class="btn btn-primary"    style="min-width:80px;" title="">Save Changes </button></div>

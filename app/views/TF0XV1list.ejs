@@ -89,34 +89,34 @@
 	</div><% function getF1(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "*" + ",")) {    opts += "All "; } 
-   if (val.contains( "," + "T9/V1" + ",")) {    opts += "Booking "; } 
-   if (val.contains( "," + "T9/V3" + ",")) {    opts += "Booking3 "; } 
-   if (val.contains( "," + "T6/V1" + ",")) {    opts += "Books "; } 
-   if (val.contains( "," + "TB/V1" + ",")) {    opts += "Issues "; } 
-   if (val.contains( "," + "T3/V1" + ",")) {    opts += "Links "; } 
-   if (val.contains( "," + "t/V1" + ",")) {    opts += "Money "; } 
-   if (val.contains( "," + "TF0/V1" + ",")) {    opts += "Roles "; } 
-   if (val.contains( "," + "T9/V2" + ",")) {    opts += "Servers "; } 
-   if (val.contains( "," + "T4/V1" + ",")) {    opts += "Todo "; } 
-   if (val.contains( "," + "TF1/V1" + ",")) {    opts += "Users "; } 
-   if (val.contains( "," + "TA/V1" + ",")) {    opts += "VMs "; } 
-   if (val.contains( "," + "T7/V1" + ",")) {    opts += "Words "; } 
-   if (val.contains( "," + "T1/V1" + ",")) {    opts += "ZCar "; } 
-   if (val.contains( "," + "T1/V2" + ",")) {    opts += "ZCarRelease "; } 
-   if (val.contains( "," + "T5/V2" + ",")) {    opts += "lend "; } 
+  if (val.contains( "," + "*" + ",")) {    opts += "<span >All</span> "; } 
+   if (val.contains( "," + "T9/V1" + ",")) {    opts += "<span >Booking</span> "; } 
+   if (val.contains( "," + "T9/V3" + ",")) {    opts += "<span >Booking3</span> "; } 
+   if (val.contains( "," + "T6/V1" + ",")) {    opts += "<span >Books</span> "; } 
+   if (val.contains( "," + "TB/V1" + ",")) {    opts += "<span >Issues</span> "; } 
+   if (val.contains( "," + "T3/V1" + ",")) {    opts += "<span >Links</span> "; } 
+   if (val.contains( "," + "t/V1" + ",")) {    opts += "<span >Money</span> "; } 
+   if (val.contains( "," + "TF0/V1" + ",")) {    opts += "<span >Roles</span> "; } 
+   if (val.contains( "," + "T9/V2" + ",")) {    opts += "<span >Servers</span> "; } 
+   if (val.contains( "," + "T4/V1" + ",")) {    opts += "<span >Todo</span> "; } 
+   if (val.contains( "," + "TF1/V1" + ",")) {    opts += "<span >Users</span> "; } 
+   if (val.contains( "," + "TA/V1" + ",")) {    opts += "<span >VMs</span> "; } 
+   if (val.contains( "," + "T7/V1" + ",")) {    opts += "<span >Words</span> "; } 
+   if (val.contains( "," + "T1/V1" + ",")) {    opts += "<span >ZCar</span> "; } 
+   if (val.contains( "," + "T1/V2" + ",")) {    opts += "<span >ZCarRelease</span> "; } 
+   if (val.contains( "," + "T5/V2" + ",")) {    opts += "<span >lend</span> "; } 
    return opts; } %>
 <% function getF2(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "1" + ",")) {    opts += "Enable "; } 
-   if (val.contains( "," + "0" + ",")) {    opts += "Disable "; } 
+  if (val.contains( "," + "1" + ",")) {    opts += "<span >Enable</span> "; } 
+   if (val.contains( "," + "0" + ",")) {    opts += "<span >Disable</span> "; } 
    return opts; } %>
 <% function getF3(val) { 
   var opts = ""; 
   val = "," + (val || "") + ","; 
-  if (val.contains( "," + "1" + ",")) {    opts += "Yes "; } 
-   if (val.contains( "," + "0" + ",")) {    opts += "No "; } 
+  if (val.contains( "," + "1" + ",")) {    opts += "<span >Yes</span> "; } 
+   if (val.contains( "," + "0" + ",")) {    opts += "<span >No</span> "; } 
    return opts; } %>
 <div class='input-group hidden'><input type='hidden' class='hidden' name='app' value='roles'></div><table class='table table-hover'>
   <thead>

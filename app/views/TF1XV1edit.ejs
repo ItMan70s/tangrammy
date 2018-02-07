@@ -89,20 +89,20 @@
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Role</label><div class='controls'>
 <% var val = data["F3"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F3' value='' checked=true class='hidden' ><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Administrator'  <%= (val.contains( "," + "Administrator" + ",")) ? "checked=true" : "" %> >Administrator</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F3' value='Default'  <%= (val.contains( "," + "Default" + ",")) ? "checked=true" : "" %> >Default</label></div></div></div></div>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F3' value='Administrator'  <%= (val.contains( "," + "Administrator" + ",")) ? "checked=true" : "" %> >Administrator</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F3' value='Default'  <%= (val.contains( "," + "Default" + ",")) ? "checked=true" : "" %> >Default</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>Enable</label><div class='controls'>
 <% var val = data["F4"] || "";  val = "," + val.toString() + ",";%><div class='form-control min-h34'><input type='checkbox' name='F4' value='' checked=true class='hidden' ><div class='min-h20'>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
-			<label class='checkbox-inline col-md-2 '><input type='checkbox' name='F4' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F4' value='1'  <%= (val.contains( "," + "1" + ",")) ? "checked=true" : "" %> >Yes</label>
+			<label class='checkbox-inline col-md-2 ' title=''><input type='checkbox' name='F4' value='0'  <%= (val.contains( "," + "0" + ",")) ? "checked=true" : "" %> >No</label></div></div></div></div>
 </div>
 <div class='col-md-12'>		<div><label class='control-label title-label'>TimeZone<B class='red'>*</B></label><div class='controls'>
 <% var val = data["F5"] || "";  val = "," + val.toString() + ",";%>
 			<select class='form-control' name='F5'  required=true >
-			<option value='-360'  <%= (val.contains( "," + "-360" + ",")) ? "selected=true" : "" %>  >(UTC-06:00) Houston</option>
-			<option value='330'  <%= (val.contains( "," + "330" + ",")) ? "selected=true" : "" %>  >(UTC+05:30) India</option>
-			<option value='480'  <%= (val.contains( "," + "480" + ",")) ? "selected=true" : "" %>  >(UTC+08:00) China</option>
+			<option value='-360' title=''  <%= (val.contains( "," + "-360" + ",")) ? "selected=true" : "" %>  >(UTC-06:00) Houston</option>
+			<option value='330' title=''  <%= (val.contains( "," + "330" + ",")) ? "selected=true" : "" %>  >(UTC+05:30) India</option>
+			<option value='480' title=''  <%= (val.contains( "," + "480" + ",")) ? "selected=true" : "" %>  >(UTC+08:00) China</option>
 			</select></div></div>
 </div>
    <div class='col-md-12'><div class='panel-footer section-action' style='padding-top:20px;'>

@@ -6,15 +6,17 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "async": "^2.4.0",
+    "nodemailer": "^0.7.0",
     "body-parser": "~1.0.0",
     "commander": "^2.9.0",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
     "express": "~3.4.8",
+    "log4js": "~0.6.16",
     "mongoose": "~3.8.8",
     "morgan": "~1.0.0",
-    "nodemailer": "^0.7.0",
     "static-favicon": "~1.0.0"
   }
 }

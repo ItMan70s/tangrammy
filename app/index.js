@@ -7,6 +7,7 @@ var log = require('./service/core/log.js')('Z');
 var express = require('express');
 //var http = require('http');
 var path = require('path');
+var fs = require('fs');
 var favicon = require('static-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -18,6 +19,7 @@ var server = express();
 var views = new Array();
 server.set('views', __dirname);
 server.set('view engine', 'ejs');
+
 
 server.use(favicon(path.join(__dirname, 'web/img/favicon.ico')));
 server.use(bodyParser.json({limit: '50mb'}));

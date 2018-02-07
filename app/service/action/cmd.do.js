@@ -7,7 +7,32 @@ var path = require('path');
 var util = require('util');
 var mailer = require("nodemailer");
 var settings = require('../../settings.js');
-var pathScripts = fs.realpathSync(path.join(__dirname, "../../../scripts/"));
+var pathScripts = "";
+
+
+function mkdirs(fpath) {
+	if (!fpath) {
+		return;
+	}
+	try {
+		var jointor = fpath.indexOf("/") < 0 ? "\\" : "/"
+		var dirs = fpath.split(jointor);
+		var name = "";
+		for (var i = 0; i < dirs.length; i++) {
+			name += dirs[i] + jointor;
+			if (!fs.existsSync(name)) {
+			  try {fs.mkdirSync(name);} catch(e) {console.error('mkdirs error',e) }
+			}
+		}
+		
+	} catch(e) {
+		console.error('mkdirs error',e);
+	}
+}
+
+mkdirs("../scripts");
+mkdirs("../logs");
+athScripts = fs.realpathSync(path.join(__dirname, "../../../scripts/"));
 var pathChar = pathScripts.charAt(0) == "/" ? "/" : "\\";
 pathScripts += pathChar;
 var path = process.env.PATH + (pathChar == "/" ? ":" : ";") + pathScripts;
