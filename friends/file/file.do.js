@@ -113,9 +113,9 @@ function upload(req, res) {
 		return res.status(400).send('No files were uploaded.');
 	}
 	
-	let raw = null;
+	var raw = null;
 	var files = {};
-	for (let idx in req.files) {
+	for (var idx in req.files) {
 		raw = req.files[idx];
 		var owner = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) + "";
 		var fid = ((new Date() - 1400371200000) + "").split("").reverse().join("").toN32();
@@ -159,7 +159,7 @@ function uploaded(res, files) {
 		rtn[i].download = "http://" + res.req.headers.host + "/files?fid=" + files[i].fid;
 		rtn[i].timestamp = files[i].timestamp;
 	}
-	let content = JSON.stringify(files) + "";
+	var content = JSON.stringify(files) + "";
 	fs.appendFileSync(tree, content.substring(1, content.lastIndexOf("}")) + ",\r\n");
 	res.end(JSON.stringify(rtn));
 }
@@ -196,14 +196,14 @@ function mkdir(path) {
 		fs.mkdirSync(path);
 	}
 }
-const root = "public";
+var root = "public";
 var paths = [root, root + "/img/", root + "/mv/", root + "/doc/", root + "/bin/", root + "/zip/", root + "/unk/"];
 for (var i in paths) {
 	mkdir(paths[i]);
 }
 
 var jFiles = {};
-const tree = root + "/files.json";
+var tree = root + "/files.json";
 
 if (fs.existsSync(tree)) {
 	fs.readFile(tree, "binary", function (err, file) {

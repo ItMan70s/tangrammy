@@ -6,7 +6,7 @@ var file = require('./file.do.js');
 const fileUpload = require('express-fileupload');
 
 
-var port = process.argv[2] || 3009;
+var port = process.argv[2] || 3007;
 
 //app.use(express.static('./'));
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')));
