@@ -1,0 +1,14 @@
+{
+  "name": "ZC",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node start.js"
+  },
+  "dependencies": {
+    "express": "~3.4.8",
+    "express-fileupload": "^0.4.0",
+    "md5": "^2.2.1",
+    "static-favicon": "~1.0.0"
+  }
+}
