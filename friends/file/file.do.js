@@ -156,6 +156,7 @@ function uploaded(res, files) {
 		rtn[i].fid = files[i].fid;
 		rtn[i].name = files[i].name;
 		rtn[i].size = files[i].size;
+		rtn[i].download = "http://" + res.req.headers.host + "/files?fid=" + files[i].fid;
 		rtn[i].timestamp = files[i].timestamp;
 	}
 	let content = JSON.stringify(files) + "";
