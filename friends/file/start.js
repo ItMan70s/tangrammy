@@ -6,7 +6,7 @@ var file = require('./file.do.js');
 const fileUpload = require('express-fileupload');
 
 
-var port = 3009;
+var port = process.argv[2] || 3009;
 
 //app.use(express.static('./'));
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')));
@@ -33,6 +33,7 @@ var server = app.listen(port, function () {
   var host = server.address().address;
   console.log(
 	'*************************************************************************\n' +
+	'Run command: node start [port]\n' +
 	'Server listening on port http://localhost:' + port + '\n' +
 	'sample upload url: http://localhost:' + port + '/upload \n' +
 	'sample download url: http://localhost:' + port + '/files?fid=F5306X1ZSF221T8D \n' +
